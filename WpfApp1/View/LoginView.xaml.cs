@@ -107,5 +107,15 @@ namespace WpfApp1.View
                 MessageBox.Show(this, "用户名或密码错误", "登录提示");
             }
         }
+
+        private void Label_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            this.DragMove();
+        }
+
+        private void ButtonMini_Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
     }
 }

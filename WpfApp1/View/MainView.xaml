@@ -5,6 +5,48 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid/>
+        Title="MainWindow" Height="450" Width="800"
+        WindowStartupLocation="CenterScreen"  WindowStyle="None"
+        AllowsTransparency="True" Background="{x:Null}">
+    <Border Margin="5" Background="#EFEFEF">
+        <Border.Effect>
+            <DropShadowEffect Color="Blue" ShadowDepth="0" BlurRadius="5" Opacity="0.2" Direction="0"/>
+        </Border.Effect>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition/>
+                <RowDefinition Height="20"/>
+            </Grid.RowDefinitions>
+            <Menu VerticalAlignment="Top" Background="#EEEEEE" Grid.Row="0" Height="40" FontSize="16">
+                <MenuItem Header="文件" >
+                </MenuItem>
+                <MenuItem Header="编辑" >
+                </MenuItem>
+            </Menu>
+            
+            <TabControl Grid.Row="1">
+                <TabItem Header="添加" IsSelected="True">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="300" MinWidth="300"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                            <Grid.RowDefinitions>
+                            </Grid.RowDefinitions>
+                        </Grid>
+                        <GridSplitter Grid.Column="1" Width="3" Background="Gray"/>
+                        <DataGrid Grid.Column="2">
+                        </DataGrid>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+
+            <StatusBar Background="#E0E0E0" Grid.Row="2">
+            </StatusBar>
+            <Button x:Name="ButtonClose" Style="{StaticResource CloseWindowButtonStyle}" Click="ButtonClose_Click"/>
+        </Grid>
+    </Border>
 </Window>

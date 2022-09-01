@@ -27,5 +27,10 @@ namespace WpfApp1.View
             
 
         }
+
+        private void ButtonClose_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
-        Title="注册界面" Height="300" Width="300" ResizeMode="NoResize"
+        Title="注册界面" Height="400" Width="300" ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"  WindowStyle="None"
-        AllowsTransparency="True" Background="{x:Null}">
+        AllowsTransparency="True" Background="{x:Null}" >
 
     <Border Margin="5" Background="#EFEFEF" >
         <Border.Effect>
@@ -15,32 +15,37 @@
         </Border.Effect>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="4*"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="3*"/>
                 <RowDefinition Height="1.5*"/>
                 <RowDefinition Height="1.5*"/>
                 <RowDefinition Height="1.5*"/>
                 <RowDefinition Height="1.5*"/>
             </Grid.RowDefinitions>
-            <Label Content="欢迎注册" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="30" Grid.Row="0"/>
-            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="240" Grid.Row="1">
+            <Label VerticalAlignment="Top" Height="30" MouseDown="Label_MouseDown"/>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Row="0">
+                <Button x:Name="ButtonMini" Style="{StaticResource MinimizeWindowButtonStyle}" Click="ButtonMini_Click"/>
+                <Button x:Name="ButtonClose" Style="{StaticResource CloseWindowButtonStyle}" Click="ButtonClose_Click"/>
+            </StackPanel>
+            <Label Content="欢迎注册" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="30" Grid.Row="1"/>
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="240" Grid.Row="2">
                 <Label Content="新用户名" VerticalContentAlignment="Center"  Width="60"/>
                 <TextBox x:Name="TextBoxUsername" TextWrapping="Wrap"  Width="100" LostFocus="TextBoxUsername_LostFocus" />
                 <Label x:Name="LabelInfoUsername" VerticalContentAlignment="Center" Width="100" TextElement.Foreground="Red"/>
             </StackPanel>
-            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="240" Grid.Row="2">
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="240" Grid.Row="3">
                 <Label Content="新密码" VerticalContentAlignment="Center"  Width="60"/>
                 <PasswordBox x:Name="PasswordBoxPassword" Width="100" />
             </StackPanel>
-            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="240" Grid.Row="3">
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="240" Grid.Row="4">
                 <Label Content="确认密码" VerticalContentAlignment="Center"  Width="60"/>
                 <PasswordBox x:Name="PasswordBoxPasswordCheck"   Width="100" LostFocus="PasswordBoxPasswordCheck_LostFocus" />
                 <Label x:Name="LabelInfoPasswordCheck" VerticalContentAlignment="Center" Width="100" TextElement.Foreground="Red"/>
             </StackPanel>
-            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="200" Grid.Row="4">
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="200" Grid.Row="5">
                 <Button x:Name="ButtonSignin" Content="确认注册" Width="75" Margin="0 0 20 0" Click="ButtonSignin_Click"/>
                 <Button x:Name="ButtonBack" Content="返回" Width="75" Click="ButtonBack_Click"  />
             </StackPanel>
-            <Button x:Name="ButtonClose" VerticalAlignment="Top" HorizontalAlignment="Right" Width="30" Height="30" Click="ButtonClose_Click"/>
         </Grid>
 
     </Border>

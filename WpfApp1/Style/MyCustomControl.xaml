@@ -1,0 +1,81 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:WpfApp1.Style">
+    <!--  CustomTemplate  -->
+
+    <!--  Template: Button Minimize Window  -->
+    <ControlTemplate TargetType="Button" x:Key="MinimizeWindowButtonTemplate">
+        <Border Background="Transparent" Name="BorderBackground">
+            <Path Data="M0 14 14 14" Stroke="DarkGray" StrokeThickness="5" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="BorderBackground" Property="Background" Value="#FFFFFF"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="BorderBackground" Property="Background" Value="#0099FF"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    <!--  Template: Button Maximize Window  -->
+    <ControlTemplate TargetType="Button" x:Key="MaximizeWindowButtonTemplate">
+        <Border Background="Transparent" Name="BorderBackground">
+            <Path Data="M0 0 14 14M0 14 14 0" Stroke="DarkGray" StrokeThickness="2" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="BorderBackground" Property="Background" Value="#FFFFFF"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="BorderBackground" Property="Background" Value="#0099FF"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    <!--  Template: Button Close Window  -->
+    <ControlTemplate TargetType="Button" x:Key="CloseWindowButtonTemplate">
+        <Border Background="Transparent" Name="BorderBackground">
+            <Path Data="M0 0 14 14M0 14 14 0" Stroke="DarkGray" StrokeThickness="2" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="BorderBackground" Property="Background" Value="#FF0000"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="BorderBackground" Property="Background" Value="#66FF0000"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!--  CustomStyle  -->
+
+    <!--  Style: TextBox Username  -->
+    <Style x:Key="TextBoxUsernameStyle" TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+        
+    </Style>
+    <!--  Style: Button Minimize Window  -->
+    <Style x:Key="MinimizeWindowButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="Template" Value="{StaticResource MinimizeWindowButtonTemplate}"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="Width" Value="30"/>
+    </Style>
+    <!--  Style: Button Maximize Window  -->
+    <Style x:Key="MaximizeWindowButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="Template" Value="{StaticResource MaximizeWindowButtonTemplate}"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="Width" Value="30"/>
+    </Style>
+    <!--  Style: Button Close Window  -->
+    <Style x:Key="CloseWindowButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="Template" Value="{StaticResource CloseWindowButtonTemplate}"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="Width" Value="30"/>
+    </Style>
+    
+    
+</ResourceDictionary>

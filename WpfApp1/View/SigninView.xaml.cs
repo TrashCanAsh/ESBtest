@@ -95,6 +95,8 @@ namespace WpfApp1.View
 
         private void TextBoxUsername_LostFocus(object sender, RoutedEventArgs e)
         {
+            if(TextBoxUsername.Text == "")
+                LabelInfoUsername.Content = "请输入用户名";
             string cmd = "select * from user where username = '" + TextBoxUsername.Text + "'";
             MySqlCommand mycmd = new MySqlCommand(cmd, giricon);
             MySqlDataReader reader = mycmd.ExecuteReader();
@@ -124,6 +126,16 @@ namespace WpfApp1.View
                 LabelInfoPasswordCheck.Content = "密码不一致！";
                 isPasswordDifferent = true;
             }
+        }
+
+        private void Label_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            this.DragMove();
+        }
+
+        private void ButtonMini_Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
         }
     }
 }
