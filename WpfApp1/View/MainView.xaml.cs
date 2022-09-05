@@ -30,7 +30,41 @@ namespace WpfApp1.View
 
         private void ButtonClose_Click(object sender, RoutedEventArgs e)
         {
+            this.Close();
+        }
 
+        private void ButtonMini_Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
+
+        private void ButtonMax_Click(object sender, RoutedEventArgs e)
+        {
+            if(this.WindowState == WindowState.Maximized)
+            {
+                //var myResourceDictionary = new ResourceDictionary
+                //{
+                //    Source = new Uri("../Style/MyCustomControl.xaml", UriKind.RelativeOrAbsolute) 
+                //};
+                //var myButtonStyle = myResourceDictionary["MaximizeWindowButtonStyle1"] as Style;
+                //ButtonMax.Style = myButtonStyle;
+                this.WindowState = WindowState.Normal;
+            }
+            else
+            {
+                //var myResourceDictionary = new ResourceDictionary
+                //{
+                //    Source = new Uri("../Style/MyCustomControl.xaml", UriKind.RelativeOrAbsolute) 
+                //};
+                //var myButtonStyle = myResourceDictionary["MaximizeWindowButtonStyle2"] as Style;
+                //ButtonMax.Style = myButtonStyle;
+                this.WindowState = WindowState.Maximized;
+            }
+        }
+
+        private void Label_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            this.DragMove();
         }
     }
 }

@@ -15,14 +15,14 @@
         </Border.Effect>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
+                <RowDefinition Height="20"/>
                 <RowDefinition Height="3*"/>
                 <RowDefinition Height="1.5*"/>
                 <RowDefinition Height="1.5*"/>
                 <RowDefinition Height="1.5*"/>
                 <RowDefinition Height="1.5*"/>
             </Grid.RowDefinitions>
-            <Label VerticalAlignment="Top" Height="30" MouseDown="Label_MouseDown"/>
+            <Label VerticalAlignment="Top" Height="20" MouseDown="Label_MouseDown"/>
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Row="0">
                 <Button x:Name="ButtonMini" Style="{StaticResource MinimizeWindowButtonStyle}" Click="ButtonMini_Click"/>
                 <Button x:Name="ButtonClose" Style="{StaticResource CloseWindowButtonStyle}" Click="ButtonClose_Click"/>

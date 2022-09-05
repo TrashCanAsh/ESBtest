@@ -8,24 +8,37 @@
         Title="MainWindow" Height="450" Width="800"
         WindowStartupLocation="CenterScreen"  WindowStyle="None"
         AllowsTransparency="True" Background="{x:Null}">
+    
     <Border Margin="5" Background="#EFEFEF">
         <Border.Effect>
             <DropShadowEffect Color="Blue" ShadowDepth="0" BlurRadius="5" Opacity="0.2" Direction="0"/>
         </Border.Effect>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="40"/>
+                <RowDefinition Height="20"/>
                 <RowDefinition/>
                 <RowDefinition Height="20"/>
             </Grid.RowDefinitions>
-            <Menu VerticalAlignment="Top" Background="#EEEEEE" Grid.Row="0" Height="40" FontSize="16">
-                <MenuItem Header="文件" >
-                </MenuItem>
-                <MenuItem Header="编辑" >
-                </MenuItem>
-            </Menu>
-            
-            <TabControl Grid.Row="1">
+            <Grid Grid.Row="0" VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="30"/>
+                </Grid.ColumnDefinitions>
+                <Label VerticalAlignment="Top" Height="20" MouseDown="Label_MouseDown" Grid.Column="0"/>
+                <Menu VerticalAlignment="Top" Background="#EEEEEE"  Height="20" FontSize="16" Width="90" HorizontalAlignment="Left">
+                    <MenuItem Header="文件" Width="45">
+                    </MenuItem>
+                    <MenuItem Header="编辑" Width="45">
+                    </MenuItem>
+                </Menu>
+                <Button x:Name="ButtonMini" Style="{StaticResource MinimizeWindowButtonStyle}" Click="ButtonMini_Click" Grid.Column="1"/>
+                <Button x:Name="ButtonMax" Style="{StaticResource MaximizeWindowButtonStyle1}" Click="ButtonMax_Click" Grid.Column="2"/>
+                <Button x:Name="ButtonClose" Style="{StaticResource CloseWindowButtonStyle}" Click="ButtonClose_Click" Grid.Column="3"/>
+            </Grid>
+
+            <TabControl Grid.Row="1" >
                 <TabItem Header="添加" IsSelected="True">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -42,11 +55,13 @@
                         </DataGrid>
                     </Grid>
                 </TabItem>
+                <TabItem>
+
+                </TabItem>
             </TabControl>
 
             <StatusBar Background="#E0E0E0" Grid.Row="2">
             </StatusBar>
-            <Button x:Name="ButtonClose" Style="{StaticResource CloseWindowButtonStyle}" Click="ButtonClose_Click"/>
         </Grid>
     </Border>
 </Window>

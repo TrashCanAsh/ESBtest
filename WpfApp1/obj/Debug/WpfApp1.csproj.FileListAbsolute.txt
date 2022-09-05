@@ -40,6 +40,7 @@ D:\vs workspace\WpfApp1\WpfApp1\obj\Debug\View\SigninView.g.cs
 D:\vs workspace\WpfApp1\WpfApp1\obj\Debug\View\LoginView.baml
 D:\vs workspace\WpfApp1\WpfApp1\obj\Debug\View\MainView.baml
 D:\vs workspace\WpfApp1\WpfApp1\obj\Debug\View\SigninView.baml
-D:\vs workspace\WpfApp1\WpfApp1\obj\Debug\WpfApp1.csprojAssemblyReference.cache
 D:\vs workspace\WpfApp1\WpfApp1\obj\Debug\App.baml
 D:\vs workspace\WpfApp1\WpfApp1\obj\Debug\Style\MyCustomControl.baml
+D:\vs workspace\WpfApp1\WpfApp1\obj\Debug\WpfApp1.csprojAssemblyReference.cache
+D:\vs workspace\WpfApp1\WpfApp1\obj\Debug\GeneratedInternalTypeHelper.g.cs

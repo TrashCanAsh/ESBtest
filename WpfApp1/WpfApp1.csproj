@@ -98,6 +98,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Common\DBControl.cs" />
+    <Compile Include="Common\PasswordBoxHelper.cs" />
+    <Compile Include="Model\UserModel.cs" />
+    <Compile Include="ViewModel\Base\CommandBase.cs" />
+    <Compile Include="ViewModel\Base\NotifyBase.cs" />
+    <Compile Include="ViewModel\LoginViewModel.cs" />
+    <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\SigninViewModel.cs" />
     <Compile Include="View\SigninView.xaml.cs">
       <DependentUpon>SigninView.xaml</DependentUpon>
     </Compile>
@@ -157,10 +165,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Common\" />
-    <Folder Include="DataAccess\" />
-    <Folder Include="Model\" />
-    <Folder Include="ViewModel\" />
+    <Folder Include="Assets\Fonts\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\Images\logo-hjxy_700_74.png" />

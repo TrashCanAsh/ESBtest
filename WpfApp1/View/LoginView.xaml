@@ -4,75 +4,29 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1"
-        mc:Ignorable="d"
+        xmlns:common="clr-namespace:WpfApp1.Common"
+        mc:Ignorable="d" Name="LoginWindow"
         Title="登录界面" Height="400" Width="300" ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"  WindowStyle="None"
         AllowsTransparency="True" Background="{x:Null}" >
-    <Window.Resources>
-        <SolidColorBrush x:Key="TextBox.Static.Border" Color="#FFABAdB3"/>
-        <SolidColorBrush x:Key="TextBox.MouseOver.Border" Color="#FF7EB4EA"/>
-        <SolidColorBrush x:Key="TextBox.Focus.Border" Color="#FF569DE5"/>
-
-        <Style x:Key="PasswordBoxPasswordStyle" TargetType="{x:Type PasswordBox}">
-            <Setter Property="PasswordChar" Value="●"/>
-            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource TextBox.Static.Border}"/>
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
-            <Setter Property="HorizontalContentAlignment" Value="Left"/>
-            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-            <Setter Property="AllowDrop" Value="true"/>
-            <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
-            <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type PasswordBox}">
-                        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
-                                <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" VerticalAlignment="Center" MinHeight="20" />
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsEnabled" Value="false">
-                                <Setter Property="Opacity" TargetName="border" Value="0.56"/>
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="true">
-                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource TextBox.MouseOver.Border}"/>
-                            </Trigger>
-                            <Trigger Property="IsKeyboardFocused" Value="true">
-                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource TextBox.Focus.Border}"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <MultiTrigger>
-                    <MultiTrigger.Conditions>
-                        <Condition Property="IsInactiveSelectionHighlightEnabled" Value="true"/>
-                        <Condition Property="IsSelectionActive" Value="false"/>
-                    </MultiTrigger.Conditions>
-                    <Setter Property="SelectionBrush" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
-                </MultiTrigger>
-            </Style.Triggers>
-        </Style>
-    </Window.Resources>
+    
     <Border Margin="5" Background="#EFEFEF" >
         <Border.Effect>
             <DropShadowEffect Color="Gray" ShadowDepth="0" BlurRadius="5" Opacity="0.2" Direction="0"/>
         </Border.Effect>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
+                <RowDefinition Height="20"/>
                 <RowDefinition Height="2*"/>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="40"/>
             </Grid.RowDefinitions>
-            <Label VerticalAlignment="Top" Height="30" MouseDown="Label_MouseDown"/>
+            <Label VerticalAlignment="Top" Height="20" MouseDown="Label_MouseDown"/>
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Row="0">
-                <Button x:Name="ButtonMini" Style="{StaticResource MinimizeWindowButtonStyle}" Click="ButtonMini_Click"/>
-                <Button x:Name="ButtonClose" Style="{StaticResource CloseWindowButtonStyle}" Click="ButtonClose_Click"/>
+                <Button x:Name="ButtonMini" Style="{StaticResource MinimizeWindowButtonStyle}" Command="{Binding CloseWindowCommand}" CommandParameter="{Binding ElementName=LoginWindow}"/>
+                <Button x:Name="ButtonClose" Style="{StaticResource CloseWindowButtonStyle}" Command="{Binding CloseWindowCommand}" CommandParameter="{Binding ElementName=LoginWindow}"/>
             </StackPanel>
             <StackPanel Grid.Row="1" Orientation="Vertical">
                 <Label Content="环境样品库数据管理系统" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="20" Margin="0 40 0 0"/>
@@ -80,15 +34,16 @@
             </StackPanel>
             <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="170" Grid.Row="2">
                 <Label Content="用户名" VerticalContentAlignment="Center"  Width="50"/>
-                <TextBox x:Name="TextBoxUsername" TextWrapping="Wrap"  Width="120" Style="{StaticResource TextBoxUsernameStyle}" />
+                <TextBox x:Name="TextBoxUsername" TextWrapping="Wrap"  Width="120" Style="{DynamicResource TextBoxUsernameStyle}" Text="{Binding userModel.UserName}"/>
             </StackPanel>
             <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="170" Grid.Row="3">
                 <Label Content="密码" VerticalContentAlignment="Center"  Width="50"/>
-                <PasswordBox x:Name="PasswordBoxPassword" Width="120" Style="{DynamicResource PasswordBoxPasswordStyle}" KeyDown="PasswordBoxPassword_KeyDown" />
+                <PasswordBox x:Name="PasswordBoxPassword" Width="120"   
+                             common:PasswordBoxHelper.Attach="True" common:PasswordBoxHelper.Password="{Binding userModel.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
             <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="170" Grid.Row="4">
-                <Button x:Name="ButtonLogin" Content="登录" Width="75" Click="ButtonLogin_Click" Margin="0 0 20 0"/>
-                <Button x:Name="ButtonSignin" Content="注册" Width="75" Click="ButtonSignin_Click" />
+                <Button x:Name="ButtonLogin" Content="登录" Width="75" Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=LoginWindow}" Margin="0 0 20 0"/>
+                <Button x:Name="ButtonSignin" Content="注册" Width="75" Command="{Binding SigninCommand}" CommandParameter="{Binding ElementName=LoginWindow}"/>
             </StackPanel>
             <Image Source="../Assets/Images/logo-hjxy_700_74.png" Margin="0 10 0 0" Grid.Row="5"/>
         </Grid>
