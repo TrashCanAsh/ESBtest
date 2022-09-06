@@ -8,6 +8,10 @@ using System.Windows.Controls;
 
 namespace WpfApp1.Common
 {
+    /// <summary>
+    /// 密码框助手，辅助数据绑定
+    /// （微软不允许直接对密码框进行数据绑定）
+    /// </summary>
     public class PasswordBoxHelper
     {
         static bool isUpdating = false;

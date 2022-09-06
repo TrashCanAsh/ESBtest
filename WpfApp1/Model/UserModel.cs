@@ -7,9 +7,28 @@ using WpfApp1.ViewModel.Base;
 
 namespace WpfApp1.Model
 {
+    /// <summary>
+    /// 用户数据模型
+    /// </summary>
     public class UserModel:NotifyBase
     {
+        #region 私人变量
         private string userName;
+        private string password;
+        private string passwordCheck;
+        private string name;
+        #endregion
+
+        public string Name
+        {
+            get { return name; }
+            set
+            {
+                name = value;
+                RaisePropertyChanged();
+            }
+        }
+
 
         public string UserName
         {
@@ -21,8 +40,6 @@ namespace WpfApp1.Model
             }
         }
 
-        private string password;
-
         public string Password
         {
             get { return password; }
@@ -33,6 +50,15 @@ namespace WpfApp1.Model
             }
         }
 
+        public string PasswordCheck
+        {
+            get { return passwordCheck; }
+            set
+            {
+                passwordCheck = value;
+                RaisePropertyChanged();
+            }
+        }
 
 
 

@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1"
-        mc:Ignorable="d"
+        mc:Ignorable="d" Name="MainWindow"
         Title="MainWindow" Height="450" Width="800"
         WindowStartupLocation="CenterScreen"  WindowStyle="None"
         AllowsTransparency="True" Background="{x:Null}">
@@ -33,9 +33,9 @@
                     <MenuItem Header="编辑" Width="45">
                     </MenuItem>
                 </Menu>
-                <Button x:Name="ButtonMini" Style="{StaticResource MinimizeWindowButtonStyle}" Click="ButtonMini_Click" Grid.Column="1"/>
-                <Button x:Name="ButtonMax" Style="{StaticResource MaximizeWindowButtonStyle1}" Click="ButtonMax_Click" Grid.Column="2"/>
-                <Button x:Name="ButtonClose" Style="{StaticResource CloseWindowButtonStyle}" Click="ButtonClose_Click" Grid.Column="3"/>
+                <Button x:Name="ButtonMini" Style="{StaticResource MinimizeWindowButtonStyle}" Command="{Binding MinWindowCommand}" CommandParameter="{Binding ElementName=MainWindow}" Grid.Column="1"/>
+                <Button x:Name="ButtonMax" Style="{StaticResource MaximizeWindowButtonStyle1}" Command="{Binding MaxWindowCommand}" CommandParameter="{Binding ElementName=MainWindow}" Grid.Column="2"/>
+                <Button x:Name="ButtonClose" Style="{StaticResource CloseWindowButtonStyle}" Command="{Binding CloseWindowCommand}" CommandParameter="{Binding ElementName=MainWindow}" Grid.Column="3"/>
             </Grid>
 
             <TabControl Grid.Row="1" >

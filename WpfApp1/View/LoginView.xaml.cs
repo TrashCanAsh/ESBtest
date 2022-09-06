@@ -26,7 +26,7 @@ namespace WpfApp1.View
         {
             //初始化组件
             InitializeComponent();
-            //创建ViewModel
+            //关联ViewModel
             this.DataContext = new LoginViewModel();
         }
         //鼠标拖动窗口事件

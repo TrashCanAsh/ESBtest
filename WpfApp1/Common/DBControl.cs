@@ -9,23 +9,39 @@ using WpfApp1.Model;
 
 namespace WpfApp1.Common
 {
+    /// <summary>
+    /// 数据库操作类
+    /// 内置各种数据库操作（增删改查）
+    /// </summary>
     public class DBControl
     {
+        #region 私人变量
         //数据库连接实例
         private MySqlConnection giricon = null;
+        #endregion
 
+        #region 公共变量
+        /// <summary>
+        /// 数据库状态
+        /// 0 -> 未连接
+        /// 1 -> 连接成功
+        /// </summary>
+        public int sqlStatus = 0;
+        #endregion
         //
         public DBControl()
         {
             Initialization();
         }
 
-        //
+        /// <summary>
+        /// 数据库初始化函数
+        /// </summary>
         private void Initialization()
         {
             if(TryConnection())
             {
-
+                this.sqlStatus = 1;
             }
             
         }
@@ -55,7 +71,15 @@ namespace WpfApp1.Common
 
 
         #region 增
-
+        public int InsertIntoUserTable(string name, string username, string password)
+        {
+            string sqlcmd = "insert into user (iduser, name, username, password, LOA) values (" + (NumOfTableRow("user") + 1).ToString() + ", '" + name + "', '"
+                    + username + "', '" + password + "', 'normal_user')";
+            MySqlCommand mycmd = new MySqlCommand(sqlcmd, giricon);
+            //For UPDATE, INSERT, and DELETE statements
+            //返回值为受影响的列数，如果为-1则为操作失败
+            return mycmd.ExecuteNonQuery();
+        }
         #endregion
 
         #region 删
@@ -67,23 +91,63 @@ namespace WpfApp1.Common
         #endregion
 
         #region 查
-
-        public bool isLoginSuccess(string username, string password)
+        /// <summary>
+        /// 查询用户名是否已存在
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        public bool IsUserNameExist(string username)
+        {
+            string sqlcmd = "select * from user where username = '" + username + "'";
+            MySqlCommand mycmd = new MySqlCommand(sqlcmd, giricon);
+            MySqlDataReader reader = mycmd.ExecuteReader();
+            bool flag = reader.HasRows;
+            reader.Close();
+            if (flag)
+            {
+                return true;
+            }
+            return false;
+        }
+        /// <summary>
+        /// 根据用户名和密码查找是否匹配
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public bool IsUserNameAndPasswordMatch(string username, string password)
         {
             string sqlcmd = "select * from user where username = '" + username + "' and password = '" + password + "'";
             MySqlCommand mycmd = new MySqlCommand(sqlcmd, giricon);
             MySqlDataReader reader = mycmd.ExecuteReader();
-            if (reader.HasRows)
+            bool flag = reader.HasRows;
+            reader.Close();
+            if (flag)
             {
                 return true;
             }
             else
             {
-                Console.WriteLine("No rows found.");
+                Console.WriteLine("No rows found: username & password not match");
             }
-            reader.Close();
 
             return false;
+        }
+        /// <summary>
+        /// 查找某表的列数
+        /// </summary>
+        /// <param name="tablename"></param>
+        /// <returns></returns>
+        public int NumOfTableRow(string tablename)
+        {
+            string sqlcmd = "select count(*) from " + tablename;
+            MySqlCommand mycmd = new MySqlCommand(sqlcmd, giricon);
+            MySqlDataReader reader = mycmd.ExecuteReader();
+            //默认位置 SqlDataReader 位于第一条记录之前。 因此，必须调用 Read 才能开始访问任何数据。
+            reader.Read();
+            int n = reader.GetInt32(0);
+            reader.Close();
+            return n;
         }
 
         #endregion

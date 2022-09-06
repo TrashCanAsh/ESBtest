@@ -4,7 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1"
-        mc:Ignorable="d"
+        xmlns:common="clr-namespace:WpfApp1.Common"
+        mc:Ignorable="d" Name="SigninWindow"
         Title="注册界面" Height="400" Width="300" ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"  WindowStyle="None"
         AllowsTransparency="True" Background="{x:Null}" >
@@ -24,27 +25,29 @@
             </Grid.RowDefinitions>
             <Label VerticalAlignment="Top" Height="20" MouseDown="Label_MouseDown"/>
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Row="0">
-                <Button x:Name="ButtonMini" Style="{StaticResource MinimizeWindowButtonStyle}" Click="ButtonMini_Click"/>
-                <Button x:Name="ButtonClose" Style="{StaticResource CloseWindowButtonStyle}" Click="ButtonClose_Click"/>
+                <Button x:Name="ButtonMini" Style="{StaticResource MinimizeWindowButtonStyle}" Command="{Binding MinWindowCommand}" CommandParameter="{Binding ElementName=SigninWindow}"/>
+                <Button x:Name="ButtonClose" Style="{StaticResource CloseWindowButtonStyle}" Command="{Binding CloseWindowCommand}" CommandParameter="{Binding ElementName=SigninWindow}"/>
             </StackPanel>
             <Label Content="欢迎注册" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="30" Grid.Row="1"/>
             <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="240" Grid.Row="2">
-                <Label Content="新用户名" VerticalContentAlignment="Center"  Width="60"/>
-                <TextBox x:Name="TextBoxUsername" TextWrapping="Wrap"  Width="100" LostFocus="TextBoxUsername_LostFocus" />
+                <Label Content="新用户名" VerticalContentAlignment="Center"  Width="60"  />
+                <TextBox x:Name="TextBoxUsername" TextWrapping="Wrap"  Width="100" Style="{StaticResource TextBoxUsernameStyle}" Text="{Binding userModel.UserName}" />
                 <Label x:Name="LabelInfoUsername" VerticalContentAlignment="Center" Width="100" TextElement.Foreground="Red"/>
             </StackPanel>
             <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="240" Grid.Row="3">
                 <Label Content="新密码" VerticalContentAlignment="Center"  Width="60"/>
-                <PasswordBox x:Name="PasswordBoxPassword" Width="100" />
+                <PasswordBox x:Name="PasswordBoxPassword" Width="100" 
+                             common:PasswordBoxHelper.Attach="True" common:PasswordBoxHelper.Password="{Binding userModel.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
             <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="240" Grid.Row="4">
                 <Label Content="确认密码" VerticalContentAlignment="Center"  Width="60"/>
-                <PasswordBox x:Name="PasswordBoxPasswordCheck"   Width="100" LostFocus="PasswordBoxPasswordCheck_LostFocus" />
+                <PasswordBox x:Name="PasswordBoxPasswordCheck"   Width="100" 
+                             common:PasswordBoxHelper.Attach="True" common:PasswordBoxHelper.Password="{Binding userModel.PasswordCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <Label x:Name="LabelInfoPasswordCheck" VerticalContentAlignment="Center" Width="100" TextElement.Foreground="Red"/>
             </StackPanel>
             <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="200" Grid.Row="5">
-                <Button x:Name="ButtonSignin" Content="确认注册" Width="75" Margin="0 0 20 0" Click="ButtonSignin_Click"/>
-                <Button x:Name="ButtonBack" Content="返回" Width="75" Click="ButtonBack_Click"  />
+                <Button x:Name="ButtonSignin" Content="确认注册" Width="75" Command="{Binding SigninCommand}" CommandParameter="{Binding ElementName=SigninWindow}" Margin="0 0 20 0" />
+                <Button x:Name="ButtonBack" Content="返回" Width="75" Command="{Binding CancelCommand}" CommandParameter="{Binding ElementName=SigninWindow}"/>
             </StackPanel>
         </Grid>
 
