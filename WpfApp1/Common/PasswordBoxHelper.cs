@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace WpfApp1.Common
+namespace ESBtest.Common
 {
     /// <summary>
     /// 密码框助手，辅助数据绑定

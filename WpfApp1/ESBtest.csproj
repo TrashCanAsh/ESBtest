@@ -99,6 +99,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Common\DBControl.cs" />
+    <Compile Include="Common\Global.cs" />
     <Compile Include="Common\PasswordBoxHelper.cs" />
     <Compile Include="Model\UserModel.cs" />
     <Compile Include="ViewModel\Base\CommandBase.cs" />

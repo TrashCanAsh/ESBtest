@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using WpfApp1.Common;
-using WpfApp1.Model;
-using WpfApp1.ViewModel.Base;
+using ESBtest.Common;
+using ESBtest.Model;
+using ESBtest.ViewModel.Base;
 
-namespace WpfApp1.ViewModel
+namespace ESBtest.ViewModel
 {
     public class MainViewModel : NotifyBase
     {

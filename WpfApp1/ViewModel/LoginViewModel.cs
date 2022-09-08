@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using WpfApp1.Common;
-using WpfApp1.Model;
-using WpfApp1.View;
-using WpfApp1.ViewModel.Base;
+using ESBtest.Common;
+using ESBtest.Model;
+using ESBtest.View;
+using ESBtest.ViewModel.Base;
 
-namespace WpfApp1.ViewModel
+namespace ESBtest.ViewModel
 {
     public class LoginViewModel : NotifyBase
     {
@@ -45,29 +45,7 @@ namespace WpfApp1.ViewModel
                 (w as Window).WindowState = WindowState.Minimized;
             });
             //登录命令
-            this.LoginCommand.ExecuteAction = new Action<object>((w) =>
-            {
-                //Console.WriteLine(userModel.UserName + userModel.Password);
-                if (dBControl.IsUserNameExist(userModel.UserName))
-                {
-                    if (dBControl.IsUserNameAndPasswordMatch(userModel.UserName, userModel.Password))
-                    {
-                        MessageBox.Show((w as Window), "登录成功", "登录提示");
-                        MainView mainWindow = new MainView();
-                        mainWindow.Show();
-                        (w as Window).Close();
-                    }
-                    else
-                    {
-                        MessageBox.Show((w as Window), "密码错误", "登录提示");
-                    }
-                }
-                else
-                {
-                    MessageBox.Show((w as Window), "用户名不存在", "登录提示");
-                }
-
-            });
+            this.LoginCommand.ExecuteAction = new Action<object>(LoginFunc);
             //注册命令
             this.SigninCommand.ExecuteAction = new Action<object>((w) =>
             {
@@ -77,6 +55,29 @@ namespace WpfApp1.ViewModel
             });
 
 
+        }
+
+        private void LoginFunc(object w)
+        {
+            //Console.WriteLine(userModel.UserName + userModel.Password);
+            if (dBControl.IsUserNameExist(userModel.UserName))
+            {
+                if (dBControl.IsUserNameAndPasswordMatch(userModel.UserName, userModel.Password))
+                {
+                    MessageBox.Show((w as Window), "登录成功", "登录提示");
+                    MainView mainWindow = new MainView();
+                    mainWindow.Show();
+                    (w as Window).Close();
+                }
+                else
+                {
+                    MessageBox.Show((w as Window), "密码错误", "登录提示");
+                }
+            }
+            else
+            {
+                MessageBox.Show((w as Window), "用户名不存在", "登录提示");
+            }
         }
     }
 }

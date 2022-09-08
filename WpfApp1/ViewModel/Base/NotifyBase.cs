@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WpfApp1.ViewModel.Base
+namespace ESBtest.ViewModel.Base
 {
     public class NotifyBase : INotifyPropertyChanged
     {

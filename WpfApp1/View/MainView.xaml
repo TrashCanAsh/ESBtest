@@ -1,9 +1,9 @@
-﻿<Window x:Class="WpfApp1.View.MainView"
+﻿<Window x:Class="ESBtest.View.MainView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WpfApp1"
+        xmlns:local="clr-namespace:ESBtest"
         mc:Ignorable="d" Name="MainWindow"
         Title="MainWindow" Height="450" Width="800"
         WindowStartupLocation="CenterScreen"  WindowStyle="None"
@@ -37,12 +37,12 @@
                 <Button x:Name="ButtonMax" Style="{StaticResource MaximizeWindowButtonStyle1}" Command="{Binding MaxWindowCommand}" CommandParameter="{Binding ElementName=MainWindow}" Grid.Column="2"/>
                 <Button x:Name="ButtonClose" Style="{StaticResource CloseWindowButtonStyle}" Command="{Binding CloseWindowCommand}" CommandParameter="{Binding ElementName=MainWindow}" Grid.Column="3"/>
             </Grid>
-
+            <!--  标签页  -->
             <TabControl Grid.Row="1" >
-                <TabItem Header="添加" IsSelected="True">
+                <TabItem Header="查询" IsSelected="True">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="300" MinWidth="300"/>
+                            <ColumnDefinition Width="200" MinWidth="200"/>
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
@@ -51,11 +51,12 @@
                             </Grid.RowDefinitions>
                         </Grid>
                         <GridSplitter Grid.Column="1" Width="3" Background="Gray"/>
+                        <!--  数据展示  -->
                         <DataGrid Grid.Column="2">
                         </DataGrid>
                     </Grid>
                 </TabItem>
-                <TabItem>
+                <TabItem Header="">
 
                 </TabItem>
             </TabControl>

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WpfApp1.ViewModel.Base;
+using ESBtest.ViewModel.Base;
 
-namespace WpfApp1.Model
+namespace ESBtest.Model
 {
     /// <summary>
     /// 用户数据模型
@@ -17,6 +17,8 @@ namespace WpfApp1.Model
         private string password;
         private string passwordCheck;
         private string name;
+        private int userRight;
+
         #endregion
 
         public string Name
@@ -60,6 +62,16 @@ namespace WpfApp1.Model
             }
         }
 
+
+        public int UserRight
+        {
+            get { return userRight; }
+            set
+            {
+                userRight = value;
+                RaisePropertyChanged();
+            }
+        }
 
 
     }

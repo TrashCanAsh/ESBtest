@@ -1,10 +1,10 @@
-﻿<Window x:Class="WpfApp1.View.SigninView"
+﻿<Window x:Class="ESBtest.View.SigninView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WpfApp1"
-        xmlns:common="clr-namespace:WpfApp1.Common"
+        xmlns:local="clr-namespace:ESBtest"
+        xmlns:common="clr-namespace:ESBtest.Common"
         mc:Ignorable="d" Name="SigninWindow"
         Title="注册界面" Height="400" Width="300" ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"  WindowStyle="None"
@@ -29,10 +29,9 @@
                 <Button x:Name="ButtonClose" Style="{StaticResource CloseWindowButtonStyle}" Command="{Binding CloseWindowCommand}" CommandParameter="{Binding ElementName=SigninWindow}"/>
             </StackPanel>
             <Label Content="欢迎注册" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="30" Grid.Row="1"/>
-            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="240" Grid.Row="2">
-                <Label Content="新用户名" VerticalContentAlignment="Center"  Width="60"  />
-                <TextBox x:Name="TextBoxUsername" TextWrapping="Wrap"  Width="100" Style="{StaticResource TextBoxUsernameStyle}" Text="{Binding userModel.UserName}" />
-                <Label x:Name="LabelInfoUsername" VerticalContentAlignment="Center" Width="100" TextElement.Foreground="Red"/>
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Grid.Row="2">
+                <Label Content="新用户名" VerticalContentAlignment="Center" HorizontalAlignment="Center" Width="60" />
+                <TextBox x:Name="TextBoxUsername" TextWrapping="Wrap"  Width="100" Style="{StaticResource TextBoxUsernameStyle}" Text="{Binding userModel.UserName}" HorizontalAlignment="Center"/>
             </StackPanel>
             <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="240" Grid.Row="3">
                 <Label Content="新密码" VerticalContentAlignment="Center"  Width="60"/>
@@ -43,7 +42,6 @@
                 <Label Content="确认密码" VerticalContentAlignment="Center"  Width="60"/>
                 <PasswordBox x:Name="PasswordBoxPasswordCheck"   Width="100" 
                              common:PasswordBoxHelper.Attach="True" common:PasswordBoxHelper.Password="{Binding userModel.PasswordCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                <Label x:Name="LabelInfoPasswordCheck" VerticalContentAlignment="Center" Width="100" TextElement.Foreground="Red"/>
             </StackPanel>
             <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="200" Grid.Row="5">
                 <Button x:Name="ButtonSignin" Content="确认注册" Width="75" Command="{Binding SigninCommand}" CommandParameter="{Binding ElementName=SigninWindow}" Margin="0 0 20 0" />

@@ -12,9 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 //
-using WpfApp1.ViewModel;
+using ESBtest.ViewModel;
 
-namespace WpfApp1.View
+namespace ESBtest.View
 {
     /// <summary>
     /// SigninWindow.xaml 的交互逻辑

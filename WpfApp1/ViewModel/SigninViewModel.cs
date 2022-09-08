@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using WpfApp1.Common;
-using WpfApp1.Model;
-using WpfApp1.View;
-using WpfApp1.ViewModel.Base;
+using ESBtest.Common;
+using ESBtest.Model;
+using ESBtest.View;
+using ESBtest.ViewModel.Base;
 
-namespace WpfApp1.ViewModel
+namespace ESBtest.ViewModel
 {
     public class SigninViewModel : NotifyBase
     {
@@ -45,40 +45,7 @@ namespace WpfApp1.ViewModel
                 (w as Window).WindowState = WindowState.Minimized;
             });
             //注册命令
-            this.SigninCommand.ExecuteAction = new Action<object>((w) =>
-            {
-                if (userModel.UserName == "")
-                {
-                    MessageBox.Show((w as Window), "用户名不能为空", "注册提示");
-                }
-                else if (userModel.Password == "")
-                {
-                    MessageBox.Show((w as Window), "密码不能为空", "注册提示");
-                }
-                else if (dBControl.IsUserNameExist(userModel.UserName))
-                {
-                    MessageBox.Show((w as Window), "用户名已存在", "注册提示");
-                }
-                else if (userModel.Password != userModel.PasswordCheck)
-                {
-                    MessageBox.Show((w as Window), "密码不一致", "注册提示");
-                }
-                else
-                {
-                    if(dBControl.InsertIntoUserTable(userModel.UserName, userModel.UserName, userModel.Password) > 0)
-                    {
-                        MessageBox.Show((w as Window), "注册成功\n正在返回登录界面...", "注册提示");
-                        //注册成功后返回登录界面
-                        LoginView loginWindow = new LoginView();
-                        loginWindow.Show();
-                        (w as Window).Close();
-                    }
-                    else
-                    {
-                        MessageBox.Show((w as Window), "注册失败：未知错误", "注册提示");
-                    }
-                }
-            });
+            this.SigninCommand.ExecuteAction = new Action<object>(SigninFunc);
             //取消返回命令->返回登录界面
             this.CancelCommand.ExecuteAction = new Action<object>((w) =>
             {
@@ -87,6 +54,41 @@ namespace WpfApp1.ViewModel
                 (w as Window).Close();
             });
 
+        }
+
+        private void SigninFunc(object w)
+        {
+            if (userModel.UserName == "")
+            {
+                MessageBox.Show((w as Window), "用户名不能为空", "注册提示");
+            }
+            else if (userModel.Password == "")
+            {
+                MessageBox.Show((w as Window), "密码不能为空", "注册提示");
+            }
+            else if (dBControl.IsUserNameExist(userModel.UserName))
+            {
+                MessageBox.Show((w as Window), "用户名已存在", "注册提示");
+            }
+            else if (userModel.Password != userModel.PasswordCheck)
+            {
+                MessageBox.Show((w as Window), "密码不一致", "注册提示");
+            }
+            else
+            {
+                if (dBControl.InsertIntoUserTable(userModel.UserName, userModel.UserName, userModel.Password) > 0)
+                {
+                    MessageBox.Show((w as Window), "注册成功\n正在返回登录界面...", "注册提示");
+                    //注册成功后返回登录界面
+                    LoginView loginWindow = new LoginView();
+                    loginWindow.Show();
+                    (w as Window).Close();
+                }
+                else
+                {
+                    MessageBox.Show((w as Window), "注册失败：未知错误", "注册提示");
+                }
+            }
         }
     }
 }
