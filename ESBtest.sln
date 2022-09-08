@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.28307.2017
+VisualStudioVersion = 15.0.28307.2092
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESBtest", "WpfApp1\ESBtest.csproj", "{206759C0-EDAD-4ACC-906B-B05E11A216D7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESBtest", "ESBtest\ESBtest.csproj", "{206759C0-EDAD-4ACC-906B-B05E11A216D7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,6 +20,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {B3D7C1FD-A288-405B-9572-A1C4C22EFF4B}
+		SolutionGuid = {E0DBC947-A365-4F06-ADE4-47090BE79468}
 	EndGlobalSection
 EndGlobal
