@@ -11,7 +11,7 @@
     
     <Border Margin="5" Background="#EFEFEF">
         <Border.Effect>
-            <DropShadowEffect Color="Blue" ShadowDepth="0" BlurRadius="5" Opacity="0.2" Direction="0"/>
+            <DropShadowEffect Color="Blue" ShadowDepth="0" BlurRadius="5" Opacity="0.3" Direction="0"/>
         </Border.Effect>
         <Grid>
             <Grid.RowDefinitions>
@@ -27,10 +27,14 @@
                     <ColumnDefinition Width="30"/>
                 </Grid.ColumnDefinitions>
                 <Label VerticalAlignment="Top" Height="20" MouseDown="Label_MouseDown" Grid.Column="0"/>
-                <Menu VerticalAlignment="Top" Background="#EEEEEE"  Height="20" FontSize="16" Width="90" HorizontalAlignment="Left">
-                    <MenuItem Header="文件" Width="45">
+                <Menu VerticalAlignment="Top" Background="#EEEEEE"  Height="20" FontSize="16" HorizontalAlignment="Left">
+                    <MenuItem Header="界面" >
                     </MenuItem>
-                    <MenuItem Header="编辑" Width="45">
+                    <MenuItem Header="设置" >
+                    </MenuItem>
+                    <MenuItem Header="帮助" >
+                        <MenuItem Header="查看帮助"/>
+                        <MenuItem Header="关于"/>
                     </MenuItem>
                 </Menu>
                 <Button x:Name="ButtonMini" Style="{StaticResource MinimizeWindowButtonStyle}" Command="{Binding MinWindowCommand}" CommandParameter="{Binding ElementName=MainWindow}" Grid.Column="1"/>
@@ -46,13 +50,31 @@
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
+                        <!--  左侧操作面板  -->
                         <Grid Grid.Column="0">
                             <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/><!--  文本框输入  -->
+                                <RowDefinition/><!--  种类下拉框  -->
+                                <RowDefinition/><!--  地点 两个坐标左上-右下  -->
+                                <RowDefinition/><!--  采样方式  -->
                             </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                                <Label Content="关键字"/>
+                                <TextBox Width="120"/>
+                                <Button Content="搜索"/>
+                            </StackPanel>
                         </Grid>
                         <GridSplitter Grid.Column="1" Width="3" Background="Gray"/>
                         <!--  数据展示  -->
-                        <DataGrid Grid.Column="2">
+                        <DataGrid Grid.Column="2" ItemsSource="{Binding}">
+                            <DataGrid.Columns>
+                                <DataGridCheckBoxColumn />
+                                <DataGridTextColumn Header="编号" Binding="{Binding sampleid}"/>
+                                <DataGridTextColumn Header="名称"/>
+                                <DataGridTextColumn Header="采样时间"/>
+                                <DataGridTextColumn Header="采样地点"/>
+                                <DataGridTextColumn/>
+                            </DataGrid.Columns>
                         </DataGrid>
                     </Grid>
                 </TabItem>

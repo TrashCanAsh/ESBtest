@@ -30,6 +30,7 @@ namespace ESBtest.Common
         /// 1 -> 连接成功
         /// </summary>
         public int sqlStatus = 0;
+
         #endregion
 
 
@@ -38,6 +39,7 @@ namespace ESBtest.Common
         /// </summary>
         public DBControl() { }
 
+        #region 基础操作
         /// <summary>
         /// 尝试连接数据库
         /// </summary>
@@ -52,33 +54,35 @@ namespace ESBtest.Common
                 string str = "server=localhost;User Id=root;password=scr170410;Database=test01";//连接MySQL的字符串
                 this.mysqlConn = new MySqlConnection(str);//实例化链接
                 this.mysqlConn.Open();//开启连接
+                this.sqlStatus = 1;
                 return true;
             }
             catch (Exception ex)
             {
                 Console.WriteLine("数据库连接异常！" + ex);
+                this.sqlStatus = 0;
                 return false;
             }
         }
 
         /// <summary>
-        /// 
+        /// 结束命令和连接
         /// </summary>
         private void sqlDispose()
         {
+            if(mysqlCmd!=null)
+            {
+                mysqlCmd.Dispose();
+                mysqlCmd = null;
+            }
             if (mysqlConn != null)
             {
                 mysqlConn.Close();
                 mysqlConn.Dispose();
                 mysqlConn = null;
             }
-            if(mysqlCmd!=null)
-            {
-                mysqlCmd.Dispose();
-                mysqlCmd = null;
-            }
         }
-
+        #endregion
 
 
 
@@ -211,6 +215,7 @@ namespace ESBtest.Common
             }
             return -1;
         }
+
 
         #endregion
     }

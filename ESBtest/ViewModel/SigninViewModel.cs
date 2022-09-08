@@ -58,11 +58,11 @@ namespace ESBtest.ViewModel
 
         private void SigninFunc(object w)
         {
-            if (userModel.UserName == "")
+            if (string.IsNullOrEmpty(userModel.UserName))
             {
                 MessageBox.Show((w as Window), "用户名不能为空", "注册提示");
             }
-            else if (userModel.Password == "")
+            else if (string.IsNullOrEmpty(userModel.Password))
             {
                 MessageBox.Show((w as Window), "密码不能为空", "注册提示");
             }

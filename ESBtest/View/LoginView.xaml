@@ -17,7 +17,8 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="20"/>
-                <RowDefinition Height="2*"/>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
@@ -50,6 +51,11 @@
                 </PasswordBox>
             </StackPanel>
             <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="170" Grid.Row="4">
+                <RadioButton GroupName="UserRight" Content="普通用户" IsChecked="True"/>
+                <RadioButton GroupName="UserRight" Content="游客"/>
+                <RadioButton GroupName="UserRight" Content="管理员"/>
+            </StackPanel>
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="170" Grid.Row="5">
                 <Button x:Name="ButtonLogin" Content="登录" Width="75" Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=LoginWindow}" Margin="0 0 20 0"/>
                 <Button x:Name="ButtonSignin" Content="注册" Width="75" Command="{Binding SigninCommand}" CommandParameter="{Binding ElementName=LoginWindow}"/>
             </StackPanel>

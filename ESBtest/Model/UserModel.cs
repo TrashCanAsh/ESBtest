@@ -21,6 +21,7 @@ namespace ESBtest.Model
 
         #endregion
 
+        #region property
         public string Name
         {
             get { return name; }
@@ -62,7 +63,12 @@ namespace ESBtest.Model
             }
         }
 
-
+        /// <summary>
+        /// 用户权限
+        /// 0 - 游客
+        /// 1 - 普通用户
+        /// 2 - 管理员
+        /// </summary>
         public int UserRight
         {
             get { return userRight; }
@@ -72,7 +78,7 @@ namespace ESBtest.Model
                 RaisePropertyChanged();
             }
         }
-
+        #endregion
 
     }
 }
