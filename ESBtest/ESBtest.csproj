@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{206759C0-EDAD-4ACC-906B-B05E11A216D7}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>WpfApp1</RootNamespace>
-    <AssemblyName>WpfApp1</AssemblyName>
+    <RootNamespace>ESBtest</RootNamespace>
+    <AssemblyName>ESBtest</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -102,6 +102,7 @@
     <Compile Include="Common\Global.cs" />
     <Compile Include="Common\PasswordBoxHelper.cs" />
     <Compile Include="Model\SampleModel.cs" />
+    <Compile Include="Model\SearchModel.cs" />
     <Compile Include="Model\UserModel.cs" />
     <Compile Include="ViewModel\Base\CommandBase.cs" />
     <Compile Include="ViewModel\Base\NotifyBase.cs" />

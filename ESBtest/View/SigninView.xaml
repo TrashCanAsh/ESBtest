@@ -29,18 +29,18 @@
                 <Button x:Name="ButtonClose" Style="{StaticResource CloseWindowButtonStyle}" Command="{Binding CloseWindowCommand}" CommandParameter="{Binding ElementName=SigninWindow}"/>
             </StackPanel>
             <Label Content="欢迎注册" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="30" Grid.Row="1"/>
-            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Grid.Row="2">
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="200" Grid.Row="2">
                 <Label Content="新用户名" VerticalContentAlignment="Center" HorizontalAlignment="Center" Width="60" />
                 <TextBox x:Name="TextBoxUsername" TextWrapping="Wrap"  Width="100" Style="{StaticResource TextBoxUsernameStyle}" Text="{Binding userModel.UserName}" HorizontalAlignment="Center"/>
             </StackPanel>
-            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="240" Grid.Row="3">
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="200" Grid.Row="3">
                 <Label Content="新密码" VerticalContentAlignment="Center"  Width="60"/>
-                <PasswordBox x:Name="PasswordBoxPassword" Width="100" 
+                <PasswordBox x:Name="PasswordBoxPassword" Width="100" Style="{DynamicResource PasswordBoxStyle}"
                              common:PasswordBoxHelper.Attach="True" common:PasswordBoxHelper.Password="{Binding userModel.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
-            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="240" Grid.Row="4">
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="200" Grid.Row="4">
                 <Label Content="确认密码" VerticalContentAlignment="Center"  Width="60"/>
-                <PasswordBox x:Name="PasswordBoxPasswordCheck"   Width="100" 
+                <PasswordBox x:Name="PasswordBoxPasswordCheck"   Width="100" Style="{DynamicResource PasswordBoxStyle}"
                              common:PasswordBoxHelper.Attach="True" common:PasswordBoxHelper.Password="{Binding userModel.PasswordCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
             <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="200" Grid.Row="5">

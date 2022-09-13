@@ -28,12 +28,21 @@
                 </Grid.ColumnDefinitions>
                 <Label VerticalAlignment="Top" Height="20" MouseDown="Label_MouseDown" Grid.Column="0"/>
                 <Menu VerticalAlignment="Top" Background="#EEEEEE"  Height="20" FontSize="16" HorizontalAlignment="Left">
-                    <MenuItem Header="界面" >
+                    <MenuItem Header="功能" >
+                        <MenuItem Header="查找样品"/>
+                        <MenuItem Header="样品借出申请">
+                            <MenuItem Header="填写申请"/>
+                            <MenuItem Header="进度查询"/>
+                            <MenuItem Header="借出/还入"/>
+                        </MenuItem>
                     </MenuItem>
                     <MenuItem Header="设置" >
+                        <MenuItem Header="个人信息设置"/>
+                        <MenuItem Header="系统设置"/>
                     </MenuItem>
                     <MenuItem Header="帮助" >
                         <MenuItem Header="查看帮助"/>
+                        <Separator/>
                         <MenuItem Header="关于"/>
                     </MenuItem>
                 </Menu>
@@ -53,27 +62,42 @@
                         <!--  左侧操作面板  -->
                         <Grid Grid.Column="0">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="auto"/><!--  文本框输入  -->
-                                <RowDefinition/><!--  种类下拉框  -->
-                                <RowDefinition/><!--  地点 两个坐标左上-右下  -->
-                                <RowDefinition/><!--  采样方式  -->
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/><!--  种类 下拉框  -->
+                                <RowDefinition Height="auto"/><!--  地点 两个坐标左上-右下  -->
+                                <RowDefinition Height="auto"/><!--  采样方式 下拉框  -->
+                                <RowDefinition/>
                             </Grid.RowDefinitions>
+                            <!--  文本框输入  -->
                             <StackPanel Grid.Row="0" Orientation="Horizontal">
                                 <Label Content="关键字"/>
-                                <TextBox Width="120"/>
-                                <Button Content="搜索"/>
+                                <TextBox Width="120" Text="{Binding searchModel.KeyWord, UpdateSourceTrigger=PropertyChanged}"/>
+                                <Button Content="搜索" Command="{Binding SearchCommand}" CommandParameter="{Binding ElementName=SampleDataGrid}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                                <Label Content="种类"/>
+                                <ComboBox Width="auto"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="2" Orientation="Horizontal">
+                                <Label Content="采样时间"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="3" Orientation="Horizontal">
+                                <Label Content="采样地点"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="4">
                             </StackPanel>
                         </Grid>
                         <GridSplitter Grid.Column="1" Width="3" Background="Gray"/>
                         <!--  数据展示  -->
-                        <DataGrid Grid.Column="2" ItemsSource="{Binding}">
+                        <DataGrid Name="SampleDataGrid" Grid.Column="2" ItemsSource="{Binding}" AutoGenerateColumns="False" 
+                                  CanUserAddRows="False" CanUserReorderColumns = "True" CanUserSortColumns = "True">
                             <DataGrid.Columns>
                                 <DataGridCheckBoxColumn />
-                                <DataGridTextColumn Header="编号" Binding="{Binding sampleid}"/>
-                                <DataGridTextColumn Header="名称"/>
-                                <DataGridTextColumn Header="采样时间"/>
-                                <DataGridTextColumn Header="采样地点"/>
-                                <DataGridTextColumn/>
+                                <DataGridTextColumn Header="编号" Binding="{Binding SampleID}"/>
+                                <DataGridTextColumn Header="名称" Binding="{Binding SampleName}"/>
+                                <DataGridTextColumn Header="种类" Binding="{Binding Category}"/>
+                                <DataGridTextColumn Header="采样时间" Binding="{Binding SamplingTime}"/>
+                                <DataGridTextColumn Header="采样地点" Binding="{Binding SamplingLocation}"/>
                             </DataGrid.Columns>
                         </DataGrid>
                     </Grid>

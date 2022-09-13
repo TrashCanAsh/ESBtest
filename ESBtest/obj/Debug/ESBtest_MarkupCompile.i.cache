@@ -1,11 +1,11 @@
-﻿WpfApp1
+﻿ESBtest
 
 
 winexe
 C#
 .cs
 D:\vs workspace\ESBtest\ESBtest\obj\Debug\
-WpfApp1
+ESBtest
 none
 false
 DEBUG;TRACE
@@ -16,5 +16,5 @@ D:\vs workspace\ESBtest\ESBtest\App.xaml
 32-503687946
 Style\MyCustomControl.xaml;View\LoginView.xaml;View\MainView.xaml;View\SigninView.xaml;
 
-True
+False
 

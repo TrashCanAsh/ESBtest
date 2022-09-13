@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using ESBtest.Common;
 using ESBtest.Model;
 using ESBtest.ViewModel.Base;
@@ -15,10 +16,12 @@ namespace ESBtest.ViewModel
         private DBControl dBControl;
 
         public UserModel userModel { get; set; }
+        public SearchModel searchModel { get; set; }
 
         public CommandBase CloseWindowCommand { get; set; }
         public CommandBase MinWindowCommand { get; set; }
         public CommandBase MaxWindowCommand { get; set; }
+        public CommandBase SearchCommand { get; set; }
 
         public MainViewModel()
         {
@@ -26,10 +29,15 @@ namespace ESBtest.ViewModel
             this.dBControl = new DBControl();
             //创建用户数据实例
             this.userModel = new UserModel();
+            //
+            this.searchModel = new SearchModel();
+            
+
             //创建命令实例
             this.CloseWindowCommand = new CommandBase();
             this.MinWindowCommand = new CommandBase();
             this.MaxWindowCommand = new CommandBase();
+            this.SearchCommand = new CommandBase();
 
             //关闭窗口命令
             this.CloseWindowCommand.ExecuteAction = new Action<object>((w) =>
@@ -52,6 +60,13 @@ namespace ESBtest.ViewModel
                 {
                     (w as Window).WindowState = WindowState.Maximized;
                 }
+            });
+            //
+            this.SearchCommand.ExecuteAction = new Action<object>((w) =>
+            {
+                string searchName = searchModel.KeyWord;
+                List<SampleModel> sList = dBControl.SearchSample(searchName);
+                (w as DataGrid).ItemsSource = sList;
             });
         }
     }

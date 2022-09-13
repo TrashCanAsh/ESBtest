@@ -19,7 +19,7 @@ namespace ESBtest.Common
         #region 私人变量
         //数据库连接实例
         private MySqlConnection mysqlConn = null;
-        //
+        //数据库命令实例
         private MySqlCommand mysqlCmd = null;
         #endregion
 
@@ -87,6 +87,13 @@ namespace ESBtest.Common
 
 
         #region 增
+        /// <summary>
+        /// 向用户表中添加数据
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         public int InsertIntoUserTable(string name, string username, string password)
         {
             try
@@ -138,6 +145,10 @@ namespace ESBtest.Common
                 if (flag)
                 {
                     return true;
+                }
+                else
+                {
+                    Console.WriteLine("No rows found: username not exist");
                 }
             }
             catch (Exception ex)
@@ -214,6 +225,47 @@ namespace ESBtest.Common
                 sqlDispose();
             }
             return -1;
+        }
+
+        public List<SampleModel> SearchSample(string sampleName)
+        {
+            List<SampleModel> sList = new List<SampleModel>();
+            try
+            {
+                TryConnection();
+                string sqlcmd;
+                if (string.IsNullOrEmpty(sampleName))
+                {
+                    sqlcmd = "select * from samples ";
+                }
+                else
+                {
+                    sqlcmd = "select * from samples where name = '" + sampleName + "'";
+                }
+                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
+                MySqlDataReader reader = mysqlCmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    SampleModel s = new SampleModel();
+                    s.SampleID = reader.GetValue(0).ToString();
+                    s.SampleName = reader.GetValue(1).ToString();
+                    s.Category = reader.GetValue(2).ToString();
+                    s.SamplingTime = ((DateTime)reader.GetValue(3)).ToShortDateString().ToString();
+                    s.SamplingLocation = reader.GetValue(4).ToString();
+                    sList.Add(s);
+                }
+                
+                return sList;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                sqlDispose();
+            }
+            return null;
         }
 
 

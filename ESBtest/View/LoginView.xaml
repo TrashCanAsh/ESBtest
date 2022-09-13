@@ -43,8 +43,8 @@
             </StackPanel>
             <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="170" Grid.Row="3">
                 <Label Content="密码" VerticalContentAlignment="Center"  Width="50"/>
-                <PasswordBox x:Name="PasswordBoxPassword" Width="120"
-                             common:PasswordBoxHelper.Attach="True" common:PasswordBoxHelper.Password="{Binding userModel.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <PasswordBox x:Name="PasswordBoxPassword" Width="120" Style="{DynamicResource PasswordBoxStyle}"
+                             common:PasswordBoxHelper.Attach="True" common:PasswordBoxHelper.Password="{Binding userModel.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
                     <PasswordBox.InputBindings>
                         <KeyBinding Key="Enter" Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=LoginWindow}"/>
                     </PasswordBox.InputBindings>
