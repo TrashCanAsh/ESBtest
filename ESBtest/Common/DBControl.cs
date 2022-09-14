@@ -244,17 +244,20 @@ namespace ESBtest.Common
                 }
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 MySqlDataReader reader = mysqlCmd.ExecuteReader();
-                while (reader.Read())
+                if(reader.HasRows)
                 {
-                    SampleModel s = new SampleModel();
-                    s.SampleID = reader.GetValue(0).ToString();
-                    s.SampleName = reader.GetValue(1).ToString();
-                    s.Category = reader.GetValue(2).ToString();
-                    s.SamplingTime = ((DateTime)reader.GetValue(3)).ToShortDateString().ToString();
-                    s.SamplingLocation = reader.GetValue(4).ToString() + ", " + reader.GetValue(5).ToString();
-                    sList.Add(s);
+                    while (reader.Read())
+                    {
+                        SampleModel s = new SampleModel();
+                        s.SampleID = reader.GetValue(0).ToString();
+                        s.SampleName = reader.GetValue(1).ToString();
+                        s.Category = reader.GetValue(2).ToString();
+                        s.SamplingTime = ((DateTime)reader.GetValue(3)).ToShortDateString().ToString();
+                        s.SamplingLocation = reader.GetValue(4).ToString() + ", " + reader.GetValue(5).ToString();
+                        sList.Add(s);
+                    }
                 }
-
+                reader.Close();
                 return sList;
             }
             catch (Exception ex)
@@ -269,7 +272,7 @@ namespace ESBtest.Common
         }
 
 
-        public List<SampleModel> SearchSample(string sampleName, string category, DateTime start, DateTime end, Location NW, Location SE)
+        public List<SampleModel> SearchSample(string sampleName, string category, string start, string end, Location NW, Location SE)
         {
             List<SampleModel> sList = new List<SampleModel>();
             try
@@ -294,28 +297,28 @@ namespace ESBtest.Common
                         sqlcmd += "and category = '" + category + "' ";
                     }
                 }
-                if (start != null)
+                if (!string.IsNullOrEmpty(start))
                 {
                     if (isFirst)
                     {
                         isFirst = false;
-                        sqlcmd += "samplingtime >= '" + start.ToShortDateString().ToString() + "' ";
+                        sqlcmd += "samplingtime >= '" + start + "' ";
                     }
                     else
                     {
-                        sqlcmd += "and samplingtime >= '" + start.ToShortDateString().ToString() + "' ";
+                        sqlcmd += "and samplingtime >= '" + start + "' ";
                     }
                 }
-                if (end != null)
+                if (!string.IsNullOrEmpty(end))
                 {
                     if (isFirst)
                     {
                         isFirst = false;
-                        sqlcmd += "samplingtime <= '" + end.ToShortDateString().ToString() + "' ";
+                        sqlcmd += "samplingtime <= '" + end + "' ";
                     }
                     else
                     {
-                        sqlcmd += "and samplingtime <= '" + end.ToShortDateString().ToString() + "' ";
+                        sqlcmd += "and samplingtime <= '" + end + "' ";
                     }
                 }
                 if (NW != null)
@@ -323,11 +326,11 @@ namespace ESBtest.Common
                     if (isFirst)
                     {
                         isFirst = false;
-                        sqlcmd += "longitude >= '" + NW.longitude.ToString() + "' and latitude >= '" + NW.latitude.ToString() + ", ";
+                        sqlcmd += "longitude >= '" + NW.longitude.ToString() + "' and latitude >= '" + NW.latitude.ToString() + "' ";
                     }
                     else
                     {
-                        sqlcmd += "and longitude >= '" + NW.longitude.ToString() + "' and latitude >= '" + NW.latitude.ToString() + ", ";
+                        sqlcmd += "and longitude >= '" + NW.longitude.ToString() + "' and latitude >= '" + NW.latitude.ToString() + "' ";
                     }
                 }
                 if (SE != null)
@@ -335,11 +338,11 @@ namespace ESBtest.Common
                     if (isFirst)
                     {
                         isFirst = false;
-                        sqlcmd += "longitude <= '" + SE.longitude.ToString() + "' and latitude <= '" + SE.latitude.ToString() + ", ";
+                        sqlcmd += "longitude <= '" + SE.longitude.ToString() + "' and latitude <= '" + SE.latitude.ToString() + "' ";
                     }
                     else
                     {
-                        sqlcmd += "and longitude <= '" + SE.longitude.ToString() + "' and latitude <= '" + SE.latitude.ToString() + ", ";
+                        sqlcmd += "and longitude <= '" + SE.longitude.ToString() + "' and latitude <= '" + SE.latitude.ToString() + "' ";
                     }
                 }
 
@@ -347,22 +350,26 @@ namespace ESBtest.Common
                 {
                     sqlcmd = "select * from samples";
                 }
+                
 
                 Console.WriteLine(sqlcmd);
 
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 MySqlDataReader reader = mysqlCmd.ExecuteReader();
-                while (reader.Read())
+                if (reader.HasRows)
                 {
-                    SampleModel s = new SampleModel();
-                    s.SampleID = reader.GetValue(0).ToString();
-                    s.SampleName = reader.GetValue(1).ToString();
-                    s.Category = reader.GetValue(2).ToString();
-                    s.SamplingTime = ((DateTime)reader.GetValue(3)).ToShortDateString().ToString();
-                    s.SamplingLocation = reader.GetValue(4).ToString() + ", " + reader.GetValue(5).ToString();
-                    sList.Add(s);
+                    while (reader.Read())
+                    {
+                        SampleModel s = new SampleModel();
+                        s.SampleID = reader.GetValue(0).ToString();
+                        s.SampleName = reader.GetValue(1).ToString();
+                        s.Category = reader.GetValue(2).ToString();
+                        s.SamplingTime = ((DateTime)reader.GetValue(3)).ToShortDateString().ToString();
+                        s.SamplingLocation = reader.GetValue(4).ToString() + ", " + reader.GetValue(5).ToString();
+                        sList.Add(s);
+                    }
                 }
-
+                reader.Close();
                 return sList;
             }
             catch (Exception ex)

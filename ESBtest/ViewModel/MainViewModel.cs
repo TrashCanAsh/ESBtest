@@ -109,10 +109,14 @@ namespace ESBtest.ViewModel
             string start = searchModel.StartDate > new DateTime(2022, 1, 1) ? searchModel.StartDate.ToShortDateString().ToString() : null;
             string end = searchModel.EndDate > new DateTime(2022, 1, 1) ? searchModel.EndDate.ToShortDateString().ToString() : null;
 
+            Location nw = (searchModel.NW.longitude <= 100 || searchModel.NW.latitude <= 25) ? null : searchModel.NW;
+            Location se = (searchModel.SE.longitude <= 100 || searchModel.SE.latitude <= 25) ? null : searchModel.SE;
+
             Console.WriteLine("keyword:" + keyword + "//category:" + category + "//startDate:" + start + "//endDate:" + end +
                 "//NW:" + searchModel.NW.longitude + ", " + searchModel.NW.latitude + "//SE:" + searchModel.SE.longitude + ", " + searchModel.SE.latitude);
-            //List<SampleModel> sList = dBControl.SearchSample(searchModel.KeyWord);
-            //(w as DataGrid).ItemsSource = sList;
+
+            List<SampleModel> sList = dBControl.SearchSample(keyword, category, start, end, nw, se);
+            (w as DataGrid).ItemsSource = sList;
         }
     }
 }

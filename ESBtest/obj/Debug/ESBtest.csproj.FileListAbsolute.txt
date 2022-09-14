@@ -89,3 +89,4 @@ D:\vs workspace\ESBtest\ESBtest\obj\Debug\ESBtest.g.resources
 D:\vs workspace\ESBtest\ESBtest\obj\Debug\ESBtest.Properties.Resources.resources
 D:\vs workspace\ESBtest\ESBtest\obj\Debug\ESBtest.exe
 D:\vs workspace\ESBtest\ESBtest\obj\Debug\ESBtest.pdb
+D:\vs workspace\ESBtest\ESBtest\obj\Debug\ESBtest.csprojAssemblyReference.cache
