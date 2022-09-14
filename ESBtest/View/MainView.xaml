@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ESBtest"
+        xmlns:common="clr-namespace:ESBtest.Common"
         mc:Ignorable="d" Name="MainWindow"
         Title="MainWindow" Height="450" Width="800"
         WindowStartupLocation="CenterScreen"  WindowStyle="None"
@@ -46,68 +47,111 @@
                         <MenuItem Header="关于"/>
                     </MenuItem>
                 </Menu>
-                <Button x:Name="ButtonMini" Style="{StaticResource MinimizeWindowButtonStyle}" Command="{Binding MinWindowCommand}" CommandParameter="{Binding ElementName=MainWindow}" Grid.Column="1"/>
-                <Button x:Name="ButtonMax" Style="{StaticResource MaximizeWindowButtonStyle1}" Command="{Binding MaxWindowCommand}" CommandParameter="{Binding ElementName=MainWindow}" Grid.Column="2"/>
-                <Button x:Name="ButtonClose" Style="{StaticResource CloseWindowButtonStyle}" Command="{Binding CloseWindowCommand}" CommandParameter="{Binding ElementName=MainWindow}" Grid.Column="3"/>
+                <Button x:Name="ButtonMini" Style="{StaticResource MinimizeWindowButtonStyle}" 
+                        Command="{Binding MinWindowCommand}" CommandParameter="{Binding ElementName=MainWindow}" Grid.Column="1"/>
+                <Button x:Name="ButtonMax" Style="{StaticResource MaximizeWindowButtonStyle1}" 
+                        Command="{Binding MaxWindowCommand}" CommandParameter="{Binding ElementName=MainWindow}" Grid.Column="2"/>
+                <Button x:Name="ButtonClose" Style="{StaticResource CloseWindowButtonStyle}" 
+                        Command="{Binding CloseWindowCommand}" CommandParameter="{Binding ElementName=MainWindow}" Grid.Column="3"/>
             </Grid>
-            <!--  标签页  -->
-            <TabControl Grid.Row="1" >
-                <TabItem Header="查询" IsSelected="True">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="200" MinWidth="200"/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <!--  左侧操作面板  -->
-                        <Grid Grid.Column="0">
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="300" MinWidth="300"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <!--  左侧操作面板  -->
+                <!--  标签页  -->
+                <TabControl Grid.Column="0" >
+                    <TabItem Header="查询" IsSelected="True">
+                        <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="auto"/>
-                                <RowDefinition Height="auto"/><!--  种类 下拉框  -->
-                                <RowDefinition Height="auto"/><!--  地点 两个坐标左上-右下  -->
-                                <RowDefinition Height="auto"/><!--  采样方式 下拉框  -->
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <!--  文本框输入  -->
-                            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10 0 10 0">
                                 <Label Content="关键字"/>
                                 <TextBox Width="120" Text="{Binding searchModel.KeyWord, UpdateSourceTrigger=PropertyChanged}"/>
                                 <Button Content="搜索" Command="{Binding SearchCommand}" CommandParameter="{Binding ElementName=SampleDataGrid}"/>
                             </StackPanel>
-                            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                            <!--  种类 下拉框  -->
+                            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10 10 10 0">
+                                <CheckBox VerticalAlignment="Center"/>
                                 <Label Content="种类"/>
-                                <ComboBox Width="auto"/>
+                                <ComboBox Width="120" SelectedIndex="{Binding searchModel.Category, Mode=TwoWay}" 
+                                          ItemsSource="{Binding comboBoxCategory, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                             </StackPanel>
-                            <StackPanel Grid.Row="2" Orientation="Horizontal">
-                                <Label Content="采样时间"/>
+                            <!--  采样时间  -->
+                            <StackPanel Grid.Row="2" Margin="10 10 10 0">
+                                <StackPanel Orientation="Horizontal">
+                                    <CheckBox VerticalAlignment="Center"/>
+                                    <Label Content="采样时间"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <DatePicker SelectedDate="{Binding searchModel.StartDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="100"
+                                                DisplayDateStart="{Binding FirstSamplingDate}" DisplayDateEnd="{Binding LastSamplingDate}"/>
+                                    <Label Content="->"/>
+                                    <DatePicker SelectedDate="{Binding searchModel.EndDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="100"
+                                                DisplayDateStart="{Binding searchModel.StartDate, UpdateSourceTrigger=PropertyChanged}" DisplayDateEnd="{Binding LastSamplingDate}"/>
+                                </StackPanel>
                             </StackPanel>
-                            <StackPanel Grid.Row="3" Orientation="Horizontal">
-                                <Label Content="采样地点"/>
+                            <!--  采样地点  *待实现/可以用gis组件来框选区域or选择点*  -->
+                            <StackPanel Grid.Row="3" Margin="10 10 10 0">
+                                <StackPanel Orientation="Horizontal">
+                                    <CheckBox VerticalAlignment="Center"/>
+                                    <Label Content="采样地点"/>
+                                    <Button Content="手动选择"/>
+                                </StackPanel>
+                                <!--  坐标选择还需要实现只允许输入数字  -->
+                                <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
+                                    <Label Content="x:"/>
+                                    <TextBox x:Name="text01" Width="40" Text="{Binding searchModel.NW.longitude, StringFormat='f2', Mode=TwoWay}" common:TextBoxAttachedProperties.MyIsOnlyNumber="True"/>
+                                    <Label Content="y:" />
+                                    <TextBox x:Name="text02" Width="40" Text="{Binding searchModel.NW.latitude, StringFormat='f2', Mode=TwoWay}" common:TextBoxAttachedProperties.MyIsOnlyNumber="True"/>
+                                    <Label Content="—"/>
+                                    <Label Content="x:"/>
+                                    <TextBox x:Name="text03" Width="40" Text="{Binding searchModel.SE.longitude, StringFormat='f2', Mode=TwoWay}" common:TextBoxAttachedProperties.MyIsOnlyNumber="True"/>
+                                    <Label Content="y:"/>
+                                    <TextBox x:Name="text04" Width="40" Text="{Binding searchModel.SE.latitude, StringFormat='f2', Mode=TwoWay}" common:TextBoxAttachedProperties.MyIsOnlyNumber="True"/>
+                                </StackPanel>
                             </StackPanel>
-                            <StackPanel Grid.Row="4">
+                            <StackPanel Grid.Row="4" Margin="0 10 0 0">
+                                <Button Content="清空搜索条件"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="5">
                             </StackPanel>
                         </Grid>
-                        <GridSplitter Grid.Column="1" Width="3" Background="Gray"/>
-                        <!--  数据展示  -->
-                        <DataGrid Name="SampleDataGrid" Grid.Column="2" ItemsSource="{Binding}" AutoGenerateColumns="False" 
-                                  CanUserAddRows="False" CanUserReorderColumns = "True" CanUserSortColumns = "True">
-                            <DataGrid.Columns>
-                                <DataGridCheckBoxColumn />
-                                <DataGridTextColumn Header="编号" Binding="{Binding SampleID}"/>
-                                <DataGridTextColumn Header="名称" Binding="{Binding SampleName}"/>
-                                <DataGridTextColumn Header="种类" Binding="{Binding Category}"/>
-                                <DataGridTextColumn Header="采样时间" Binding="{Binding SamplingTime}"/>
-                                <DataGridTextColumn Header="采样地点" Binding="{Binding SamplingLocation}"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </Grid>
-                </TabItem>
-                <TabItem Header="">
+                    </TabItem>
+                    <TabItem Header="导入">
 
-                </TabItem>
-            </TabControl>
+                    </TabItem>
+                </TabControl>
+                
+                <!--  分割线  -->
+                <GridSplitter Grid.Column="1" Width="3" Background="Gray"/>
+                <!--  数据展示  -->
+                <DataGrid Name="SampleDataGrid" Grid.Column="2" ItemsSource="{Binding}" AutoGenerateColumns="False" 
+                                  CanUserAddRows="False" CanUserReorderColumns = "True" CanUserSortColumns = "True">
+                    <DataGrid.Columns>
+                        <DataGridCheckBoxColumn />
+                        <DataGridTextColumn Header="编号" Binding="{Binding SampleID}"/>
+                        <DataGridTextColumn Header="名称" Binding="{Binding SampleName}"/>
+                        <DataGridTextColumn Header="种类" Binding="{Binding Category}"/>
+                        <DataGridTextColumn Header="采样时间" Binding="{Binding SamplingTime}"/>
+                        <DataGridTextColumn Header="采样地点" Binding="{Binding SamplingLocation}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
 
             <StatusBar Background="#E0E0E0" Grid.Row="2">
+                <Grid>
+                </Grid>
             </StatusBar>
         </Grid>
     </Border>

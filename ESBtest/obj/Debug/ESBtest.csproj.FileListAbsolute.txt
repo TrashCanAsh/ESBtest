@@ -67,7 +67,6 @@ D:\vs workspace\ESBtest\ESBtest\bin\Debug\System.Buffers.xml
 D:\vs workspace\ESBtest\ESBtest\bin\Debug\System.Memory.xml
 D:\vs workspace\ESBtest\ESBtest\bin\Debug\System.Numerics.Vectors.xml
 D:\vs workspace\ESBtest\ESBtest\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
-D:\vs workspace\ESBtest\ESBtest\obj\Debug\ESBtest.csprojAssemblyReference.cache
 D:\vs workspace\ESBtest\ESBtest\obj\Debug\View\LoginView.g.cs
 D:\vs workspace\ESBtest\ESBtest\obj\Debug\View\MainView.g.cs
 D:\vs workspace\ESBtest\ESBtest\obj\Debug\View\SigninView.g.cs

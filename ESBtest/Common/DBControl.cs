@@ -70,7 +70,7 @@ namespace ESBtest.Common
         /// </summary>
         private void sqlDispose()
         {
-            if(mysqlCmd!=null)
+            if (mysqlCmd != null)
             {
                 mysqlCmd.Dispose();
                 mysqlCmd = null;
@@ -107,7 +107,7 @@ namespace ESBtest.Common
                 return mysqlCmd.ExecuteNonQuery();
             }
             catch (Exception ex)
-            { 
+            {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally
@@ -251,10 +251,10 @@ namespace ESBtest.Common
                     s.SampleName = reader.GetValue(1).ToString();
                     s.Category = reader.GetValue(2).ToString();
                     s.SamplingTime = ((DateTime)reader.GetValue(3)).ToShortDateString().ToString();
-                    s.SamplingLocation = reader.GetValue(4).ToString();
+                    s.SamplingLocation = reader.GetValue(4).ToString() + ", " + reader.GetValue(5).ToString();
                     sList.Add(s);
                 }
-                
+
                 return sList;
             }
             catch (Exception ex)
@@ -268,6 +268,113 @@ namespace ESBtest.Common
             return null;
         }
 
+
+        public List<SampleModel> SearchSample(string sampleName, string category, DateTime start, DateTime end, Location NW, Location SE)
+        {
+            List<SampleModel> sList = new List<SampleModel>();
+            try
+            {
+                TryConnection();
+                bool isFirst = true;
+                string sqlcmd = "select * from samples where ";
+                if (!string.IsNullOrEmpty(sampleName))
+                {
+                    isFirst = false;
+                    sqlcmd += "name = '" + sampleName + "' ";
+                }
+                if (!string.IsNullOrEmpty(category))
+                {
+                    if (isFirst)
+                    {
+                        isFirst = false;
+                        sqlcmd += "category = '" + category + "' ";
+                    }
+                    else
+                    {
+                        sqlcmd += "and category = '" + category + "' ";
+                    }
+                }
+                if (start != null)
+                {
+                    if (isFirst)
+                    {
+                        isFirst = false;
+                        sqlcmd += "samplingtime >= '" + start.ToShortDateString().ToString() + "' ";
+                    }
+                    else
+                    {
+                        sqlcmd += "and samplingtime >= '" + start.ToShortDateString().ToString() + "' ";
+                    }
+                }
+                if (end != null)
+                {
+                    if (isFirst)
+                    {
+                        isFirst = false;
+                        sqlcmd += "samplingtime <= '" + end.ToShortDateString().ToString() + "' ";
+                    }
+                    else
+                    {
+                        sqlcmd += "and samplingtime <= '" + end.ToShortDateString().ToString() + "' ";
+                    }
+                }
+                if (NW != null)
+                {
+                    if (isFirst)
+                    {
+                        isFirst = false;
+                        sqlcmd += "longitude >= '" + NW.longitude.ToString() + "' and latitude >= '" + NW.latitude.ToString() + ", ";
+                    }
+                    else
+                    {
+                        sqlcmd += "and longitude >= '" + NW.longitude.ToString() + "' and latitude >= '" + NW.latitude.ToString() + ", ";
+                    }
+                }
+                if (SE != null)
+                {
+                    if (isFirst)
+                    {
+                        isFirst = false;
+                        sqlcmd += "longitude <= '" + SE.longitude.ToString() + "' and latitude <= '" + SE.latitude.ToString() + ", ";
+                    }
+                    else
+                    {
+                        sqlcmd += "and longitude <= '" + SE.longitude.ToString() + "' and latitude <= '" + SE.latitude.ToString() + ", ";
+                    }
+                }
+
+                if(isFirst)
+                {
+                    sqlcmd = "select * from samples";
+                }
+
+                Console.WriteLine(sqlcmd);
+
+                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
+                MySqlDataReader reader = mysqlCmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    SampleModel s = new SampleModel();
+                    s.SampleID = reader.GetValue(0).ToString();
+                    s.SampleName = reader.GetValue(1).ToString();
+                    s.Category = reader.GetValue(2).ToString();
+                    s.SamplingTime = ((DateTime)reader.GetValue(3)).ToShortDateString().ToString();
+                    s.SamplingLocation = reader.GetValue(4).ToString() + ", " + reader.GetValue(5).ToString();
+                    sList.Add(s);
+                }
+
+                return sList;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                sqlDispose();
+            }
+            return null;
+        }
 
         #endregion
     }
