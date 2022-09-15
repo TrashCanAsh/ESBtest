@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using ESBtest.ViewModel;
 
 namespace ESBtest.View
@@ -23,6 +24,7 @@ namespace ESBtest.View
     /// </summary>
     public partial class MainView : Window
     {
+        private DispatcherTimer ShowTimer;
         //构造函数
         public MainView()
         {
@@ -30,11 +32,25 @@ namespace ESBtest.View
             InitializeComponent();
             //关联ViewModel
             this.DataContext = new MainViewModel();
+            //Timer
+            ShowCurrentTime();
         }
         //鼠标拖动窗口事件
         private void Label_MouseDown(object sender, MouseButtonEventArgs e)
         {
             this.DragMove();
+        }
+        //状态栏显示当前时间
+        private void ShowCurrentTime()
+        {
+            this.CurrentTime.Text = DateTime.Now.ToString();
+            ShowTimer = new System.Windows.Threading.DispatcherTimer();
+            ShowTimer.Tick += new EventHandler((s,e)=> 
+            {
+                this.CurrentTime.Text = DateTime.Now.ToString();
+            });
+            ShowTimer.Interval = new TimeSpan(0, 0, 0, 1, 0);
+            ShowTimer.Start();
         }
     }
 }

@@ -49,6 +49,19 @@ namespace ESBtest.Model
             }
         }
 
+        private int categoryIndex;
+
+        public int CategoryIndex
+        {
+            get { return categoryIndex; }
+            set
+            {
+                categoryIndex = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
 
         private string samplingTime;
 

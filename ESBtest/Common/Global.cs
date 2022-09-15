@@ -32,6 +32,29 @@ namespace ESBtest.Common
             this.latitude = 0.0;
         }
     }
+    public class GlobalFunc
+    {
+        public static void CloseWindow(object w)
+        {
+            (w as Window).Close();
+        }
 
+        public static void MinWindow(object w)
+        {
+            (w as Window).WindowState = WindowState.Minimized;
+        }
+
+        public static void MaxWindow(object w)
+        {
+            if ((w as Window).WindowState == WindowState.Maximized)
+            {
+                (w as Window).WindowState = WindowState.Normal;
+            }
+            else
+            {
+                (w as Window).WindowState = WindowState.Maximized;
+            }
+        }
+    }
     
 }

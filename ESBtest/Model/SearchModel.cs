@@ -82,6 +82,44 @@ namespace ESBtest.Model
                 RaisePropertyChanged();
             }
         }
+
+        private bool isCategoryChecked;
+
+        public bool IsCategoryChecked
+        {
+            get { return isCategoryChecked; }
+            set
+            {
+                isCategoryChecked = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool isSamplingTimeChecked;
+
+        public bool IsSamplingTimeChecked
+        {
+            get { return isSamplingTimeChecked; }
+            set
+            {
+                isSamplingTimeChecked = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool isSamplingLocationChecked;
+
+        public bool IsSamplingLocationChecked
+        {
+            get { return isSamplingLocationChecked; }
+            set
+            {
+                isSamplingLocationChecked = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
         #endregion
 
         public SearchModel()
@@ -92,6 +130,9 @@ namespace ESBtest.Model
             this.EndDate = DateTime.Now.Date;
             this.NW = new Location();
             this.SE = new Location();
+            this.IsCategoryChecked = false;
+            this.IsSamplingLocationChecked = false;
+            this.IsSamplingTimeChecked = false;
         }
     }
 }
