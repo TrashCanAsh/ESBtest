@@ -75,17 +75,44 @@ namespace ESBtest.Model
             }
         }
 
-        private string samplingLocation;
+        private DateTime samplingDateTime;
 
-        public string SamplingLocation
+        public DateTime SamplingDateTime
         {
-            get { return samplingLocation; }
+            get { return samplingDateTime; }
             set
             {
-                samplingLocation = value;
+                samplingDateTime = value;
                 RaisePropertyChanged();
             }
         }
+
+
+        private string longtitude;
+
+        public string Longtitude
+        {
+            get { return longtitude; }
+            set
+            {
+                longtitude = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private string latitude;
+
+        public string Latitude
+        {
+            get { return latitude; }
+            set
+            {
+                latitude = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
         #endregion
     }
 }

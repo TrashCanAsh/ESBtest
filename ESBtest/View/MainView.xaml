@@ -8,7 +8,7 @@
         mc:Ignorable="d" Name="MainWindow"
         Title="MainWindow" Height="450" Width="800"
         WindowStartupLocation="CenterScreen"  WindowStyle="None"
-        AllowsTransparency="True" Background="{x:Null}">
+        AllowsTransparency="True" Background="{x:Null}" ResizeMode="CanResizeWithGrip">
 
     <Window.Resources>
         <!--  DatePicker禁止手动输入数据  -->
@@ -138,8 +138,9 @@
                                     </StackPanel>
                                 </StackPanel>
                                 <!--  清空搜索条件  -->
-                                <StackPanel Grid.Row="4" Margin="0 10 0 0">
+                                <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="50 10 0 0">
                                     <Button Content="清空搜索条件" Command="{Binding SearchResetCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
+                                    <Button Content="清空搜索内容" Command="{Binding SearchClearCommand}" CommandParameter="{Binding ElementName=SampleDataGrid}" Margin="20 0 0 0"/>
                                 </StackPanel>
                                 <!--  留白  -->
                                 <StackPanel Grid.Row="5">
@@ -163,47 +164,65 @@
                                             <RowDefinition Height="auto"/>
                                             <RowDefinition Height="auto"/>
                                             <RowDefinition Height="auto"/>
-                                            <RowDefinition Height="auto"/>
                                         </Grid.RowDefinitions>
-                                        <StackPanel Grid.Row="0" Orientation="Horizontal">
-                                            <Label Content="样品编号" />
-                                            <TextBox Width="125"/>
+                                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0 10 0 0">
+                                            <Label Content="样品名称"/>
+                                            <TextBox Text="{Binding sampleModel.SampleName}" Width="125"/>
                                         </StackPanel>
                                         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0 10 0 0">
-                                            <Label Content="样品名称"/>
-                                            <TextBox Width="125"/>
-                                        </StackPanel>
-                                        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0 10 0 0">
                                             <Label Content="样品种类"/>
-                                            <ComboBox x:Name="ComboBoxCategoryInsert" Width="125" SelectedIndex="{Binding Category, Mode=TwoWay}" 
+                                            <ComboBox x:Name="ComboBoxCategoryInsert" Width="125" SelectedIndex="{Binding sampleModel.CategoryIndex, Mode=TwoWay}" 
                                                 ItemsSource="{Binding comboBoxCategory, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                                         </StackPanel>
-                                        <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0 10 0 0">
+                                        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0 10 0 0">
                                             <Label Content="采样时间"/>
-                                            <DatePicker x:Name="DatePikerStartDateInsert" SelectedDate="{Binding Date, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="125"/>
+                                            <DatePicker x:Name="DatePikerStartDateInsert" SelectedDate="{Binding sampleModel.SamplingDateTime, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="125"/>
                                         </StackPanel>
-                                        <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="0 10 0 0">
+                                        <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0 10 0 0">
                                             <Label Content="采样地点"/>
                                             <Label Content="x: "/>
-                                            <TextBox Width="40" Text="{Binding xx, StringFormat='f2', Mode=TwoWay}" common:TextBoxAttachedProperties.MyIsOnlyNumber="True"/>
+                                            <TextBox Width="40" Text="{Binding sampleModel.Longtitude, StringFormat='f2', Mode=TwoWay}" common:TextBoxAttachedProperties.MyIsOnlyNumber="True"/>
                                             <Label Content="y: "/>
-                                            <TextBox Width="40" Text="{Binding yy, StringFormat='f2', Mode=TwoWay}" common:TextBoxAttachedProperties.MyIsOnlyNumber="True"/>
+                                            <TextBox Width="40" Text="{Binding sampleModel.Latitude, StringFormat='f2', Mode=TwoWay}" common:TextBoxAttachedProperties.MyIsOnlyNumber="True"/>
                                         </StackPanel>
-                                        <StackPanel Grid.Row="5" Margin="0 10 0 0">
-                                            <Button Content="导入"/>
+                                        <StackPanel Grid.Row="4" Margin="0 10 0 0">
+                                            <Button Content="导入" Command="{Binding InsertSampleInfoCommand}"/>
                                         </StackPanel>
                                     </Grid>
                                 </GroupBox>
                                 <!--  批量导入  -->
                                 <GroupBox Header="批量导入" Grid.Row="1">
+                                    <StackPanel>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBox x:Name="TextBoxFilePath" Grid.Column="0" IsReadOnly="True" />
+                                            <Button Grid.Column="1" Content="选择文件" Command="{Binding OpenInsertFileDialogCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
+                                        </Grid>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Content="导入"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </GroupBox>
+                            </Grid>
+                        </TabItem>
+
+                        <TabItem Header="修改/删除">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <GroupBox Grid.Row="0" Header="修改">
                                     <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBox x:Name="TextBoxFilePath" Grid.Column="0" IsReadOnly="True" />
-                                        <Button Grid.Column="1" Content="选择文件" Command="{Binding OpenInsertFileDialogCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
+                                        
                                     </Grid>
+                                </GroupBox>
+                                <GroupBox Grid.Row="1" Header="删除">
+                                    <Button Content="删除选中行"/>
                                 </GroupBox>
                             </Grid>
                         </TabItem>
@@ -234,7 +253,7 @@
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="120" />
                             </Grid.ColumnDefinitions>
                         </Grid>
                     </ItemsPanelTemplate>
@@ -251,9 +270,10 @@
                 <!--  分割线  -->
                 <Separator Grid.Column="3" />
                 <!--  实时时间  -->
-                <StatusBarItem Grid.Column="4" Background="#FFFFFF">
+                <StatusBarItem Grid.Column="4" Background="#FFFFFF" >
                     <TextBlock x:Name="CurrentTime"/>
                 </StatusBarItem>
+                
             </StatusBar>
         </Grid>
     </Border>

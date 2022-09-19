@@ -98,12 +98,44 @@ namespace ESBtest.Common
         {
             try
             {
+                string num = (NumOfTableRow("user") + 1).ToString();
                 TryConnection();
-                string sqlcmd = "insert into user (iduser, name, username, password, LOA) values (" + (NumOfTableRow("user") + 1).ToString() + ", '" + name + "', '"
+                string sqlcmd = "insert into user (iduser, name, username, password, LOA) values (" + num + ", '" + name + "', '"
                     + username + "', '" + password + "', 'normal_user')";
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 //For UPDATE, INSERT, and DELETE statements
                 //返回值为受影响的列数，如果为-1则为操作失败
+                return mysqlCmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                sqlDispose();
+            }
+            return -1;
+        }
+        /// <summary>
+        /// 向样品表中添加数据
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="category"></param>
+        /// <param name="samplingTime"></param>
+        /// <param name="lo"></param>
+        /// <param name="la"></param>
+        /// <returns></returns>
+        public int InsertIntoSampleTable(string name, string category, string samplingTime, string lo, string la)
+        {
+            try
+            {
+                string num = (NumOfLastID("samples") + 1).ToString();
+                TryConnection();
+                string sqlcmd = "insert into samples (idsamples, name, category, samplingtime, longtitude, latitude) values (" + num + ",'" + name + "','"
+                    + category + "','" + samplingTime + "'," + lo + "," + la + ")";
+                Console.WriteLine(sqlcmd);
+                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 return mysqlCmd.ExecuteNonQuery();
             }
             catch (Exception ex)
@@ -226,7 +258,41 @@ namespace ESBtest.Common
             }
             return -1;
         }
-
+        /// <summary>
+        /// 查找表中最后一个数据的ID值
+        /// </summary>
+        /// <param name="tablename"></param>
+        /// <returns></returns>
+        public int NumOfLastID(string tablename)
+        {
+            try
+            {
+                TryConnection();
+                //SELECT TOP 1 * FROM table_name ORDER BY col_name DESC
+                string sqlcmd = "select top 1 * from " + tablename + "order by id" + tablename + "desc";
+                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
+                MySqlDataReader reader = mysqlCmd.ExecuteReader();
+                //默认位置 SqlDataReader 位于第一条记录之前。 因此，必须调用 Read 才能开始访问任何数据。
+                reader.Read();
+                int n = reader.GetInt32(0);
+                reader.Close();
+                return n;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                sqlDispose();
+            }
+            return -1;
+        }
+        /// <summary>
+        /// 根据样品名称搜索
+        /// </summary>
+        /// <param name="sampleName"></param>
+        /// <returns></returns>
         public List<SampleModel> SearchSample(string sampleName)
         {
             List<SampleModel> sList = new List<SampleModel>();
@@ -253,7 +319,8 @@ namespace ESBtest.Common
                         s.SampleName = reader.GetValue(1).ToString();
                         s.Category = reader.GetValue(2).ToString();
                         s.SamplingTime = ((DateTime)reader.GetValue(3)).ToShortDateString().ToString();
-                        s.SamplingLocation = reader.GetValue(4).ToString() + ", " + reader.GetValue(5).ToString();
+                        s.Longtitude = reader.GetValue(4).ToString();
+                        s.Latitude = reader.GetValue(5).ToString();
                         sList.Add(s);
                     }
                 }
@@ -271,7 +338,16 @@ namespace ESBtest.Common
             return null;
         }
 
-
+        /// <summary>
+        /// 根据各种参数进行搜索
+        /// </summary>
+        /// <param name="sampleName"></param>
+        /// <param name="category"></param>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <param name="NW"></param>
+        /// <param name="SE"></param>
+        /// <returns></returns>
         public List<SampleModel> SearchSample(string sampleName, string category, string start, string end, Location NW, Location SE)
         {
             List<SampleModel> sList = new List<SampleModel>();
@@ -365,7 +441,8 @@ namespace ESBtest.Common
                         s.SampleName = reader.GetValue(1).ToString();
                         s.Category = reader.GetValue(2).ToString();
                         s.SamplingTime = ((DateTime)reader.GetValue(3)).ToShortDateString().ToString();
-                        s.SamplingLocation = reader.GetValue(4).ToString() + ", " + reader.GetValue(5).ToString();
+                        s.Longtitude = reader.GetValue(4).ToString();
+                        s.Latitude = reader.GetValue(5).ToString();
                         sList.Add(s);
                     }
                 }

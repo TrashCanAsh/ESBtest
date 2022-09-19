@@ -24,6 +24,7 @@ namespace ESBtest.ViewModel
         public ObservableCollection<string> comboBoxCategory { get; set; }
 
         public UserModel userModel { get; set; }
+        public SampleModel sampleModel { get; set; }
         public SearchModel searchModel { get; set; }
 
         public CommandBase CloseWindowCommand { get; set; }
@@ -31,6 +32,8 @@ namespace ESBtest.ViewModel
         public CommandBase MaxWindowCommand { get; set; }
         public CommandBase SearchCommand { get; set; }
         public CommandBase SearchResetCommand { get; set; }
+        public CommandBase SearchClearCommand { get; set; }
+        public CommandBase InsertSampleInfoCommand { get; set; }
         public CommandBase OpenInsertFileDialogCommand { get; set; }
 
         /// <summary>
@@ -52,12 +55,16 @@ namespace ESBtest.ViewModel
             this.dBControl = new DBControl();
             //创建用户数据实例
             this.userModel = new UserModel();
+            //创建样品信息实例
+            this.sampleModel = new SampleModel();
             //创建搜索条件实例
             this.searchModel = new SearchModel();
             //下拉框内容
             comboBoxCategory = new ObservableCollection<string>() { "null", "solid", "liquid", "gas", "bio" };
         }
-
+        /// <summary>
+        /// 命令合集
+        /// </summary>
         private void SetCommand()
         {
             //创建命令实例
@@ -66,6 +73,8 @@ namespace ESBtest.ViewModel
             this.MaxWindowCommand = new CommandBase();
             this.SearchCommand = new CommandBase();
             this.SearchResetCommand = new CommandBase();
+            this.SearchClearCommand = new CommandBase();
+            this.InsertSampleInfoCommand = new CommandBase();
             this.OpenInsertFileDialogCommand = new CommandBase();
 
             //关闭窗口命令
@@ -78,7 +87,11 @@ namespace ESBtest.ViewModel
             this.SearchCommand.ExecuteAction = new Action<object>(SearchSample);
             //重置搜索条件命令
             this.SearchResetCommand.ExecuteAction = new Action<object>(SearchReset);
+            //重置搜索结果命令
+            this.SearchClearCommand.ExecuteAction = new Action<object>(SearchClear);
             //
+            this.InsertSampleInfoCommand.ExecuteAction = new Action<object>(InsertSampleInfo);
+            //打开信息导入文件窗口命令
             this.OpenInsertFileDialogCommand.ExecuteAction = new Action<object>(InsertFileDialog);
         }
         /// <summary>
@@ -87,7 +100,7 @@ namespace ESBtest.ViewModel
         /// <param name="w"></param>
         private void SearchSample(object w)
         {
-            //*可能要做分割*
+            //*字符串分割/模糊搜索*
             string keyword = searchModel.KeyWord;
             //
             string category = "";
@@ -118,7 +131,7 @@ namespace ESBtest.ViewModel
             
             string start = searchModel.StartDate > new DateTime(2022, 1, 1) && searchModel.IsSamplingTimeChecked ? searchModel.StartDate.ToShortDateString().ToString() : null;
             string end = searchModel.EndDate > new DateTime(2022, 1, 1) && searchModel.IsSamplingTimeChecked ? searchModel.EndDate.ToShortDateString().ToString() : null;
-
+            //待实现：范围选取设定
             Location nw = (searchModel.NW.longitude >= 100 && searchModel.NW.latitude >= 25) && searchModel.IsSamplingLocationChecked ? searchModel.NW : null;
             Location se = (searchModel.SE.longitude >= 100 && searchModel.SE.latitude >= 25) && searchModel.IsSamplingLocationChecked ? searchModel.SE : null;
 
@@ -128,7 +141,10 @@ namespace ESBtest.ViewModel
             List<SampleModel> sList = dBControl.SearchSample(keyword, category, start, end, nw, se);
             (w as DataGrid).ItemsSource = sList;
         }
-
+        /// <summary>
+        /// 重新设置搜索条件
+        /// </summary>
+        /// <param name="w"></param>
         private void SearchReset(object w)
         {
             (w as MainView).TextBoxKeyWord.Text = "";
@@ -143,11 +159,75 @@ namespace ESBtest.ViewModel
             (w as MainView).CheckBoxSamplingTime.IsChecked = false;
             (w as MainView).CheckBoxSamplingLocation.IsChecked = false;
         }
-
+        /// <summary>
+        /// 清除搜索结果
+        /// </summary>
+        /// <param name="w"></param>
+        private void SearchClear(object w)
+        {
+            (w as DataGrid).ItemsSource = null;
+        }
+        
+        private void InsertSampleInfo(object w)
+        {
+            if(string.IsNullOrEmpty(sampleModel.SampleName))
+            {
+                MessageBox.Show((w as Window), "样品名称不能为空", "提示");
+            }
+            else if (sampleModel.CategoryIndex <= 0)
+            {
+                MessageBox.Show((w as Window), "样品种类不能为空", "提示");
+            }
+            else if(sampleModel.SamplingDateTime == null)
+            {
+                MessageBox.Show((w as Window), "样品采样时间不能为空", "提示");
+            }
+            else if(string.IsNullOrEmpty(sampleModel.Longtitude)|| string.IsNullOrEmpty(sampleModel.Latitude))
+            {
+                MessageBox.Show((w as Window), "样品采样地点不能为空", "提示");
+            }
+            else
+            {
+                string name = sampleModel.SampleName;
+                string category = "";
+                switch (sampleModel.CategoryIndex)
+                {
+                    case 1:
+                        category = "solid";
+                        break;
+                    case 2:
+                        category = "liquid";
+                        break;
+                    case 3:
+                        category = "gas";
+                        break;
+                    case 4:
+                        category = "bio";
+                        break;
+                    default:
+                        break;
+                }
+                string time = sampleModel.SamplingDateTime.ToShortDateString().ToString();
+                string longtitude = sampleModel.Longtitude;
+                string latitude = sampleModel.Latitude;
+                if (dBControl.InsertIntoSampleTable(name, category, time, longtitude, latitude) > 0)
+                {
+                    MessageBox.Show((w as Window), "导入成功", "提示");
+                }
+                else
+                {
+                    MessageBox.Show((w as Window), "导入失败：未知错误", "提示");
+                }
+            }
+        }
+        /// <summary>
+        /// 批量导入样品数据
+        /// </summary>
+        /// <param name="w"></param>
         private void InsertFileDialog(object w)
         {
-            OpenFileDialog ofp = new OpenFileDialog() { Filter = "Txt files(*.txt)|*.txt|Csv files(*.csv)|*.csv|Excel files(*.xlsx, *.xls)|*.xlsx;*.xls|All files(*.*)|*.*" };
-            if(ofp.ShowDialog() == true)
+            OpenFileDialog ofp = new OpenFileDialog() { Title = "打开样品数据导入文件", Filter = "Txt files(*.txt)|*.txt|Csv files(*.csv)|*.csv|Excel files(*.xlsx, *.xls)|*.xlsx;*.xls|All files(*.*)|*.*" };
+            if (ofp.ShowDialog() == true)
             {
                 (w as MainView).TextBoxFilePath.Text = ofp.FileName;
             }
