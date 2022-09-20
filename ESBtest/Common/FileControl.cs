@@ -10,12 +10,21 @@ namespace ESBtest.Common
 {
     public class FileControl
     {
+        /// <summary>
+        /// 识别文件类型
+        /// </summary>
+        /// <param name="filepath"></param>
+        /// <returns></returns>
         private static string GetFileType(string filepath)
         {
             string[] s = filepath.Split('.');
             return string.IsNullOrEmpty(s[1]) ? null : s[1];
         }
-
+        /// <summary>
+        /// 读取文件内容并存到样品信息列表中
+        /// </summary>
+        /// <param name="filepath"></param>
+        /// <returns></returns>
         public static List<SampleModel> ReadFile(string filepath)
         {
             List<SampleModel> sList = new List<SampleModel>();

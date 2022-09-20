@@ -36,6 +36,7 @@ namespace ESBtest.ViewModel
         public CommandBase InsertSampleInfoCommand { get; set; }
         public CommandBase OpenInsertFileDialogCommand { get; set; }
         public CommandBase InsertFileDataCommand { get; set; }
+        public CommandBase DataGridDoubleClickCommand { get; set; }
 
         /// <summary>
         /// 构造函数
@@ -78,6 +79,7 @@ namespace ESBtest.ViewModel
             this.InsertSampleInfoCommand = new CommandBase();
             this.OpenInsertFileDialogCommand = new CommandBase();
             this.InsertFileDataCommand = new CommandBase();
+            this.DataGridDoubleClickCommand = new CommandBase();
 
             //关闭窗口命令
             this.CloseWindowCommand.ExecuteAction = new Action<object>(GlobalFunc.CloseWindow);
@@ -91,12 +93,14 @@ namespace ESBtest.ViewModel
             this.SearchResetCommand.ExecuteAction = new Action<object>(SearchReset);
             //重置搜索结果命令
             this.SearchClearCommand.ExecuteAction = new Action<object>(SearchClear);
-            //
+            //手动逐条添加样品命令
             this.InsertSampleInfoCommand.ExecuteAction = new Action<object>(InsertSampleInfo);
             //打开信息导入文件窗口命令
             this.OpenInsertFileDialogCommand.ExecuteAction = new Action<object>(InsertFileDialog);
-            //
+            //批量导入样品命令
             this.InsertFileDataCommand.ExecuteAction = new Action<object>(InsertFileData);
+            //DataGrid双击事件
+            this.DataGridDoubleClickCommand.ExecuteAction = new Action<object>(DataGridDoubleClick);
         }
         /// <summary>
         /// 根据搜索条件对样品数据进行搜索
@@ -228,7 +232,7 @@ namespace ESBtest.ViewModel
             }
         }
         /// <summary>
-        /// 批量导入样品数据
+        /// 选择样品数据文件
         /// </summary>
         /// <param name="w"></param>
         private void InsertFileDialog(object w)
@@ -239,7 +243,10 @@ namespace ESBtest.ViewModel
                 (w as MainView).TextBoxFilePath.Text = ofp.FileName;
             }
         }
-
+        /// <summary>
+        /// 批量导入样品数据
+        /// </summary>
+        /// <param name="w"></param>
         private void InsertFileData(object w)
         {
             string filepath = (w as MainView).TextBoxFilePath.Text;
@@ -251,6 +258,15 @@ namespace ESBtest.ViewModel
             {
                 MessageBox.Show((w as Window), "批量导入失败", "提示");
             }
+        }
+        /// <summary>
+        /// DataGrid双击事件
+        /// </summary>
+        /// <param name="w"></param>
+        private void DataGridDoubleClick(object w)
+        {
+            string str = (w as DataGrid).SelectedItem.ToString();
+            Console.WriteLine(str);
         }
     }
 }
