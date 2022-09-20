@@ -10,7 +10,7 @@ namespace ESBtest.Common
 {
     public class FileControl
     {
-        private string GetFileType(string filepath)
+        private static string GetFileType(string filepath)
         {
             string[] s = filepath.Split('.');
             return string.IsNullOrEmpty(s[1]) ? null : s[1];
@@ -25,7 +25,19 @@ namespace ESBtest.Common
                 while (!strFile.EndOfStream)
                 {
                     string str = strFile.ReadLine();
-                    string[] strsplit = str.Split(' ');
+                    string type = GetFileType(filepath);
+                    string[] strsplit = null;
+                    switch (type)
+                    {
+                        case "txt":
+                            strsplit = str.Split(' ');
+                            break;
+                        case "csv":
+                            strsplit = str.Split(',');
+                            break;
+                        default:
+                            break;
+                    }
                     SampleModel sample = new SampleModel
                     {
                         SampleName = strsplit[0],
