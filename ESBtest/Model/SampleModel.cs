@@ -88,14 +88,14 @@ namespace ESBtest.Model
         }
 
 
-        private string longtitude;
+        private string longitude;
 
-        public string Longtitude
+        public string Longitude
         {
-            get { return longtitude; }
+            get { return longitude; }
             set
             {
-                longtitude = value;
+                longitude = value;
                 RaisePropertyChanged();
             }
         }
@@ -110,6 +110,11 @@ namespace ESBtest.Model
                 latitude = value;
                 RaisePropertyChanged();
             }
+        }
+
+        public SampleModel()
+        {
+            this.SamplingDateTime = DateTime.Now;
         }
 
 

@@ -132,8 +132,35 @@ namespace ESBtest.Common
             {
                 string num = (NumOfLastID("samples") + 1).ToString();
                 TryConnection();
-                string sqlcmd = "insert into samples (idsamples, name, category, samplingtime, longtitude, latitude) values (" + num + ",'" + name + "','"
+                string sqlcmd = "insert into samples (idsamples, name, category, samplingtime, longitude, latitude) values (" + num + ",'" + name + "','"
                     + category + "','" + samplingTime + "'," + lo + "," + la + ")";
+                Console.WriteLine(sqlcmd);
+                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
+                return mysqlCmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                sqlDispose();
+            }
+            return -1;
+        }
+
+        public int InsertIntoSampleTable(List<SampleModel> sList)
+        {
+            try
+            {
+                int num = (NumOfLastID("samples") + 1);
+                TryConnection();
+                string sqlcmd = "";
+                foreach (SampleModel sample in sList)
+                {
+                    sqlcmd += "insert into samples (idsamples, name, category, samplingtime, longitude, latitude) values (" + num++ + ",'" + sample.SampleName + "','"
+                    + sample.Category + "','" + sample.SamplingTime + "'," + sample.Longitude + "," + sample.Latitude + ");\n";
+                }
                 Console.WriteLine(sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 return mysqlCmd.ExecuteNonQuery();
@@ -268,8 +295,9 @@ namespace ESBtest.Common
             try
             {
                 TryConnection();
-                //SELECT TOP 1 * FROM table_name ORDER BY col_name DESC
-                string sqlcmd = "select top 1 * from " + tablename + "order by id" + tablename + "desc";
+                //SELECT * FROM table_name ORDER BY column_name DESC LIMIT 1;
+                string sqlcmd = "select * from " + tablename + " order by id" + tablename + " desc limit 1";
+                Console.WriteLine(sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 MySqlDataReader reader = mysqlCmd.ExecuteReader();
                 //默认位置 SqlDataReader 位于第一条记录之前。 因此，必须调用 Read 才能开始访问任何数据。
@@ -314,13 +342,15 @@ namespace ESBtest.Common
                 {
                     while (reader.Read())
                     {
-                        SampleModel s = new SampleModel();
-                        s.SampleID = reader.GetValue(0).ToString();
-                        s.SampleName = reader.GetValue(1).ToString();
-                        s.Category = reader.GetValue(2).ToString();
-                        s.SamplingTime = ((DateTime)reader.GetValue(3)).ToShortDateString().ToString();
-                        s.Longtitude = reader.GetValue(4).ToString();
-                        s.Latitude = reader.GetValue(5).ToString();
+                        SampleModel s = new SampleModel
+                        {
+                            SampleID = reader.GetValue(0).ToString(),
+                            SampleName = reader.GetValue(1).ToString(),
+                            Category = reader.GetValue(2).ToString(),
+                            SamplingTime = ((DateTime)reader.GetValue(3)).ToShortDateString().ToString(),
+                            Longitude = reader.GetValue(4).ToString(),
+                            Latitude = reader.GetValue(5).ToString()
+                        };
                         sList.Add(s);
                     }
                 }
@@ -441,7 +471,7 @@ namespace ESBtest.Common
                         s.SampleName = reader.GetValue(1).ToString();
                         s.Category = reader.GetValue(2).ToString();
                         s.SamplingTime = ((DateTime)reader.GetValue(3)).ToShortDateString().ToString();
-                        s.Longtitude = reader.GetValue(4).ToString();
+                        s.Longitude = reader.GetValue(4).ToString();
                         s.Latitude = reader.GetValue(5).ToString();
                         sList.Add(s);
                     }

@@ -35,6 +35,7 @@ namespace ESBtest.ViewModel
         public CommandBase SearchClearCommand { get; set; }
         public CommandBase InsertSampleInfoCommand { get; set; }
         public CommandBase OpenInsertFileDialogCommand { get; set; }
+        public CommandBase InsertFileDataCommand { get; set; }
 
         /// <summary>
         /// 构造函数
@@ -76,6 +77,7 @@ namespace ESBtest.ViewModel
             this.SearchClearCommand = new CommandBase();
             this.InsertSampleInfoCommand = new CommandBase();
             this.OpenInsertFileDialogCommand = new CommandBase();
+            this.InsertFileDataCommand = new CommandBase();
 
             //关闭窗口命令
             this.CloseWindowCommand.ExecuteAction = new Action<object>(GlobalFunc.CloseWindow);
@@ -93,6 +95,8 @@ namespace ESBtest.ViewModel
             this.InsertSampleInfoCommand.ExecuteAction = new Action<object>(InsertSampleInfo);
             //打开信息导入文件窗口命令
             this.OpenInsertFileDialogCommand.ExecuteAction = new Action<object>(InsertFileDialog);
+            //
+            this.InsertFileDataCommand.ExecuteAction = new Action<object>(InsertFileData);
         }
         /// <summary>
         /// 根据搜索条件对样品数据进行搜索
@@ -167,7 +171,10 @@ namespace ESBtest.ViewModel
         {
             (w as DataGrid).ItemsSource = null;
         }
-        
+        /// <summary>
+        /// 逐条插入样品数据
+        /// </summary>
+        /// <param name="w"></param>
         private void InsertSampleInfo(object w)
         {
             if(string.IsNullOrEmpty(sampleModel.SampleName))
@@ -182,7 +189,7 @@ namespace ESBtest.ViewModel
             {
                 MessageBox.Show((w as Window), "样品采样时间不能为空", "提示");
             }
-            else if(string.IsNullOrEmpty(sampleModel.Longtitude)|| string.IsNullOrEmpty(sampleModel.Latitude))
+            else if(string.IsNullOrEmpty(sampleModel.Longitude)|| string.IsNullOrEmpty(sampleModel.Latitude))
             {
                 MessageBox.Show((w as Window), "样品采样地点不能为空", "提示");
             }
@@ -208,9 +215,9 @@ namespace ESBtest.ViewModel
                         break;
                 }
                 string time = sampleModel.SamplingDateTime.ToShortDateString().ToString();
-                string longtitude = sampleModel.Longtitude;
+                string longitude = sampleModel.Longitude;
                 string latitude = sampleModel.Latitude;
-                if (dBControl.InsertIntoSampleTable(name, category, time, longtitude, latitude) > 0)
+                if (dBControl.InsertIntoSampleTable(name, category, time, longitude, latitude) > 0)
                 {
                     MessageBox.Show((w as Window), "导入成功", "提示");
                 }
@@ -230,6 +237,19 @@ namespace ESBtest.ViewModel
             if (ofp.ShowDialog() == true)
             {
                 (w as MainView).TextBoxFilePath.Text = ofp.FileName;
+            }
+        }
+
+        private void InsertFileData(object w)
+        {
+            string filepath = (w as MainView).TextBoxFilePath.Text;
+            if (dBControl.InsertIntoSampleTable(FileControl.ReadFile(filepath)) > 0)
+            {
+                MessageBox.Show((w as Window), "批量导入成功", "提示");
+            }
+            else
+            {
+                MessageBox.Show((w as Window), "批量导入失败", "提示");
             }
         }
     }

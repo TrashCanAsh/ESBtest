@@ -181,12 +181,12 @@
                                         <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0 10 0 0">
                                             <Label Content="采样地点"/>
                                             <Label Content="x: "/>
-                                            <TextBox Width="40" Text="{Binding sampleModel.Longtitude, StringFormat='f2', Mode=TwoWay}" common:TextBoxAttachedProperties.MyIsOnlyNumber="True"/>
+                                            <TextBox Width="40" Text="{Binding sampleModel.Longitude, StringFormat='f2', Mode=TwoWay}" common:TextBoxAttachedProperties.MyIsOnlyNumber="True"/>
                                             <Label Content="y: "/>
                                             <TextBox Width="40" Text="{Binding sampleModel.Latitude, StringFormat='f2', Mode=TwoWay}" common:TextBoxAttachedProperties.MyIsOnlyNumber="True"/>
                                         </StackPanel>
                                         <StackPanel Grid.Row="4" Margin="0 10 0 0">
-                                            <Button Content="导入" Command="{Binding InsertSampleInfoCommand}"/>
+                                            <Button Content="导入" Command="{Binding InsertSampleInfoCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
                                         </StackPanel>
                                     </Grid>
                                 </GroupBox>
@@ -202,7 +202,7 @@
                                             <Button Grid.Column="1" Content="选择文件" Command="{Binding OpenInsertFileDialogCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
                                         </Grid>
                                         <StackPanel Orientation="Horizontal">
-                                            <Button Content="导入"/>
+                                            <Button Content="导入" Command="{Binding InsertFileDataCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
                                         </StackPanel>
                                     </StackPanel>
                                 </GroupBox>
