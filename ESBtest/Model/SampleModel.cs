@@ -13,6 +13,19 @@ namespace ESBtest.Model
     public class SampleModel:NotifyBase
     {
         #region property
+        private bool isSelected;
+
+        public bool IsSelected
+        {
+            get { return isSelected; }
+            set
+            {
+                isSelected = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
         private string sampleID;
 
         public string SampleID
@@ -128,6 +141,7 @@ namespace ESBtest.Model
         public SampleModel()
         {
             this.SamplingDateTime = DateTime.Now;
+            this.IsSelected = false;
         }
 
 

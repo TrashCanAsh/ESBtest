@@ -37,6 +37,7 @@ namespace ESBtest.ViewModel
         public CommandBase OpenInsertFileDialogCommand { get; set; }
         public CommandBase InsertFileDataCommand { get; set; }
         public CommandBase DataGridDoubleClickCommand { get; set; }
+        public CommandBase DeleteSelectedSampleCommand { get; set; }
 
         /// <summary>
         /// 构造函数
@@ -62,7 +63,7 @@ namespace ESBtest.ViewModel
             //创建搜索条件实例
             this.SearchModel = new SearchModel();
             //下拉框内容
-            ComboBoxCategory = new ObservableCollection<string>() { "null", "solid", "liquid", "gas", "bio" };
+            this.ComboBoxCategory = new ObservableCollection<string>() { "null", "solid", "liquid", "gas", "bio" };
         }
         /// <summary>
         /// 命令合集
@@ -80,6 +81,7 @@ namespace ESBtest.ViewModel
             this.OpenInsertFileDialogCommand = new CommandBase();
             this.InsertFileDataCommand = new CommandBase();
             this.DataGridDoubleClickCommand = new CommandBase();
+            this.DeleteSelectedSampleCommand = new CommandBase();
 
             //关闭窗口命令
             this.CloseWindowCommand.ExecuteAction = new Action<object>(GlobalFunc.CloseWindow);
@@ -101,18 +103,22 @@ namespace ESBtest.ViewModel
             this.InsertFileDataCommand.ExecuteAction = new Action<object>(InsertFileData);
             //DataGrid双击事件
             this.DataGridDoubleClickCommand.ExecuteAction = new Action<object>(DataGridDoubleClick);
+            //删除选中样品命令
+            this.DeleteSelectedSampleCommand.ExecuteAction = new Action<object>(DeleteSample);
         }
-
+        /// <summary>
+        /// 刷新DataGrid
+        /// </summary>
+        /// <param name="dg"></param>
         private void RefreshDataGrid(DataGrid dg)
         {
             dg.ItemsSource = null;
-            List<SampleModel> sList = dBControl.SearchSample();
-            dg.ItemsSource = sList;
+            dg.ItemsSource = dBControl.SearchSample();
         }
         /// <summary>
         /// 根据搜索条件对样品数据进行搜索
         /// </summary>
-        /// <param name="w"></param>
+        /// <param name="w">DataGrid</param>
         private void SearchSample(object w)
         {
             //*字符串分割/模糊搜索*
@@ -136,14 +142,12 @@ namespace ESBtest.ViewModel
 
             //Console.WriteLine("keyword:" + keyword + "//categoryIndex:" + categoryIndex + "//startDate:" + start + "//endDate:" + end +
             //    "//NW:" + searchModel.NW.longitude + ", " + searchModel.NW.latitude + "//SE:" + searchModel.SE.longitude + ", " + searchModel.SE.latitude);
-
-            List<SampleModel> sList = dBControl.SearchSample(keyword, category, start, end, nw, se);
-            (w as DataGrid).ItemsSource = sList;
+            (w as DataGrid).ItemsSource = dBControl.SearchSample(keyword, category, start, end, nw, se);
         }
         /// <summary>
         /// 重新设置搜索条件
         /// </summary>
-        /// <param name="w"></param>
+        /// <param name="w">MainView</param>
         private void SearchReset(object w)
         {
             (w as MainView).TextBoxKeyWord.Text = "";
@@ -161,7 +165,7 @@ namespace ESBtest.ViewModel
         /// <summary>
         /// 清除搜索结果
         /// </summary>
-        /// <param name="w"></param>
+        /// <param name="w">DataGrid</param>
         private void SearchClear(object w)
         {
             (w as DataGrid).ItemsSource = null;
@@ -169,7 +173,7 @@ namespace ESBtest.ViewModel
         /// <summary>
         /// 逐条插入样品数据
         /// </summary>
-        /// <param name="w"></param>
+        /// <param name="w">MainView</param>
         private void InsertSampleInfo(object w)
         {
             if(string.IsNullOrEmpty(SampleModel.SampleName))
@@ -210,7 +214,7 @@ namespace ESBtest.ViewModel
         /// <summary>
         /// 选择样品数据文件
         /// </summary>
-        /// <param name="w"></param>
+        /// <param name="w">MainView</param>
         private void InsertFileDialog(object w)
         {
             OpenFileDialog ofp = new OpenFileDialog() { Title = "打开样品数据导入文件", Filter = "Txt files(*.txt)|*.txt|Csv files(*.csv)|*.csv|Excel files(*.xlsx, *.xls)|*.xlsx;*.xls|All files(*.*)|*.*" };
@@ -222,7 +226,7 @@ namespace ESBtest.ViewModel
         /// <summary>
         /// 批量导入样品数据
         /// </summary>
-        /// <param name="w"></param>
+        /// <param name="w">MainView</param>
         private void InsertFileData(object w)
         {
             string filepath = (w as MainView).TextBoxFilePath.Text;
@@ -240,18 +244,48 @@ namespace ESBtest.ViewModel
         /// <summary>
         /// DataGrid双击事件->打开样品数据修改界面
         /// </summary>
-        /// <param name="w"></param>
+        /// <param name="w">DataGrid</param>
         private void DataGridDoubleClick(object w)
         {
             SampleModel sample = (SampleModel)(w as DataGrid).SelectedItem;
-            UpdateView updateView = new UpdateView();
-            (updateView.DataContext as UpdateViewModel).sampleUpdated = sample;
-            if (updateView.ShowDialog().Value)
+            if (sample != null)
             {
-                //刷新表中内容
-                RefreshDataGrid(w as DataGrid);
+                UpdateView updateView = new UpdateView();
+                (updateView.DataContext as UpdateViewModel).sampleUpdated = sample;
+                if (updateView.ShowDialog().Value)
+                {
+                    //刷新表中内容
+                    RefreshDataGrid((w as DataGrid));
+                }
             }
+        }
+        /// <summary>
+        /// 删除选中的样品信息
+        /// </summary>
+        /// <param name="w">MainWindow</param>
+        private void DeleteSample(object w)
+        {
+            List<int> iList = new List<int>();
+            List<SampleModel> sList = (List<SampleModel>)(w as MainView).SampleDataGrid.ItemsSource;
+            foreach (SampleModel s in sList)
+            {
+                if(s.IsSelected)
+                {
+                    iList.Add(int.Parse(s.SampleID));
+                }
+            }
+            if(iList.Count > 0)
+            {
+                string str = "正在删除：";
+                foreach (int i in iList)
+                {
+                    str += i + ";";
+                }
+                if(MessageBox.Show((w as Window), str, "提示")==MessageBoxResult.Yes)
+                {
 
+                }
+            }
         }
     }
 }

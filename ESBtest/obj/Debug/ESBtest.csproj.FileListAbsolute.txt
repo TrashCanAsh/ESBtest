@@ -91,3 +91,4 @@ D:\vs workspace\ESBtest\ESBtest\obj\Debug\ESBtest.exe
 D:\vs workspace\ESBtest\ESBtest\obj\Debug\ESBtest.pdb
 D:\vs workspace\ESBtest\ESBtest\obj\Debug\View\UpdateView.g.cs
 D:\vs workspace\ESBtest\ESBtest\obj\Debug\View\UpdateView.baml
+D:\vs workspace\ESBtest\ESBtest\obj\Debug\ESBtest.csprojAssemblyReference.cache

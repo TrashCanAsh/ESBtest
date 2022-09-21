@@ -183,9 +183,40 @@ namespace ESBtest.Common
 
         #region 删
 
+        public int DeleteSampleTable(List<int> idList)
+        {
+            try
+            {
+                TryConnection();
+                //DELETE FROM table_name WHERE (situation)
+                string sqlcmd = "DELETE FROM samples WHERE idsamples = ";
+                Console.WriteLine(sqlcmd);
+                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
+                return mysqlCmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                sqlDispose();
+            }
+            return -1;
+        }
         #endregion
 
         #region 改
+        /// <summary>
+        /// 修改某一样品信息
+        /// </summary>
+        /// <param name="sampleID"></param>
+        /// <param name="sampleName"></param>
+        /// <param name="category"></param>
+        /// <param name="samplingTime"></param>
+        /// <param name="longitude"></param>
+        /// <param name="latitude"></param>
+        /// <returns></returns>
         public int UpdateSampleTable(string sampleID, string sampleName, string category, string samplingTime, string longitude, string latitude)
         {
             try

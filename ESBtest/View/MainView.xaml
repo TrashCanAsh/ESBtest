@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ESBtest"
         xmlns:common="clr-namespace:ESBtest.Common"
         mc:Ignorable="d" Name="MainWindow"
-        Title="MainWindow" Height="450" Width="800"
+        Title="MainWindow" Height="450" Width="800" MinHeight="300" MinWidth="300"
         WindowStartupLocation="CenterScreen"  WindowStyle="None"
         AllowsTransparency="True" Background="{x:Null}" ResizeMode="CanResizeWithGrip">
 
@@ -64,6 +64,12 @@
             </Grid>
             <!--  工具栏  -->
             <ToolBar Grid.Row="1">
+                <Button Content="导入"/>
+                <Separator/>
+                <Button Content="删除" Command="{Binding DeleteSelectedSampleCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
+                <Separator/>
+                <Button Content="导出"/>
+                
             </ToolBar>
             <!--  主体部分  -->
             <Grid Grid.Row="2">
@@ -230,15 +236,19 @@
                 
                 
                 <!--  数据展示  -->
-                <DataGrid Name="SampleDataGrid" Grid.Column="2" ItemsSource="{Binding}" IsReadOnly="True"
-                          AutoGenerateColumns="False" CanUserAddRows="False" CanUserReorderColumns = "True" CanUserSortColumns = "True">
+                <DataGrid Name="SampleDataGrid" Grid.Column="2" ItemsSource="{Binding}" 
+                          AutoGenerateColumns="False" CanUserAddRows="False" CanUserReorderColumns="True" CanUserSortColumns="True">
                     <DataGrid.Columns>
-                        <DataGridCheckBoxColumn/>
-                        <DataGridTextColumn Header="编号" Binding="{Binding SampleID}"/>
-                        <DataGridTextColumn Header="名称" Binding="{Binding SampleName}"/>
-                        <DataGridTextColumn Header="种类" Binding="{Binding Category}"/>
-                        <DataGridTextColumn Header="采样时间" Binding="{Binding SamplingTime}"/>
-                        <DataGridTextColumn Header="采样地点" Binding="{Binding SamplingLocation}"/>
+                        <DataGridCheckBoxColumn Binding="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <DataGridCheckBoxColumn.ElementStyle>
+                                <Style TargetType="CheckBox"/>
+                            </DataGridCheckBoxColumn.ElementStyle>
+                        </DataGridCheckBoxColumn>
+                        <DataGridTextColumn Header="编号" Binding="{Binding SampleID}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="名称" Binding="{Binding SampleName}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="种类" Binding="{Binding Category}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="采样时间" Binding="{Binding SamplingTime}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="采样地点" Binding="{Binding SamplingLocation}" IsReadOnly="True"/>
                     </DataGrid.Columns>
                     <DataGrid.InputBindings>
                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DataGridDoubleClickCommand}" CommandParameter="{Binding ElementName=SampleDataGrid}"/>
