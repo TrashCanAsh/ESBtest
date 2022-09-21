@@ -132,7 +132,7 @@ namespace ESBtest.Common
             {
                 string num = (NumOfLastID("samples") + 1).ToString();
                 TryConnection();
-                string sqlcmd = "insert into samples (idsamples, name, category, samplingtime, longitude, latitude) values (" + num + ",'" + name + "','"
+                string sqlcmd = "INSERT INTO samples (idsamples, name, category, samplingtime, longitude, latitude) VALUES (" + num + ",'" + name + "','"
                     + category + "','" + samplingTime + "'," + lo + "," + la + ")";
                 Console.WriteLine(sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
@@ -148,7 +148,11 @@ namespace ESBtest.Common
             }
             return -1;
         }
-
+        /// <summary>
+        /// 批量添加数据
+        /// </summary>
+        /// <param name="sList"></param>
+        /// <returns></returns>
         public int InsertIntoSampleTable(List<SampleModel> sList)
         {
             try
@@ -182,6 +186,28 @@ namespace ESBtest.Common
         #endregion
 
         #region 改
+        public int UpdateSampleTable(string sampleID, string sampleName, string category, string samplingTime, string longitude, string latitude)
+        {
+            try
+            {
+                TryConnection();
+                //UPDATE table_name SET column_name1 = new_value, column_name2 = new_value WHERE ( situation);
+                string sqlcmd = "UPDATE samples SET name = '" + sampleName + "', category = '" + category + "', samplingtime = '" + samplingTime + 
+                    "', longitude = " + longitude + ", latitude = " + latitude + " WHERE idsamples = " + sampleID;
+                Console.WriteLine(sqlcmd);
+                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
+                return mysqlCmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                sqlDispose();
+            }
+            return -1;
+        }
 
         #endregion
 
@@ -316,7 +342,70 @@ namespace ESBtest.Common
             }
             return -1;
         }
-        
+        /// <summary>
+        /// 搜索全部内容
+        /// </summary>
+        /// <returns></returns>
+        public List<SampleModel> SearchSample()
+        {
+            List<SampleModel> sList = new List<SampleModel>();
+            try
+            {
+                TryConnection();
+                string sqlcmd = "select * from samples";
+                
+                Console.WriteLine(sqlcmd);
+
+                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
+                MySqlDataReader reader = mysqlCmd.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        SampleModel s = new SampleModel
+                        {
+                            SampleID = reader.GetValue(0).ToString(),
+                            SampleName = reader.GetValue(1).ToString(),
+                            Category = reader.GetValue(2).ToString(),
+                            SamplingTime = ((DateTime)reader.GetValue(3)).ToShortDateString(),
+                            SamplingDateTime = (DateTime)reader.GetValue(3),
+                            SamplingLocation = reader.GetValue(4).ToString() + ", " + reader.GetValue(5).ToString(),
+                            Longitude = reader.GetValue(4).ToString(),
+                            Latitude = reader.GetValue(5).ToString()
+                        };
+                        switch (reader.GetValue(2).ToString())
+                        {
+                            case "solid":
+                                s.CategoryIndex = 1;
+                                break;
+                            case "liquid":
+                                s.CategoryIndex = 2;
+                                break;
+                            case "gas":
+                                s.CategoryIndex = 3;
+                                break;
+                            case "bio":
+                                s.CategoryIndex = 4;
+                                break;
+                            default:
+                                break;
+                        }
+                        sList.Add(s);
+                    }
+                }
+                reader.Close();
+                return sList;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                sqlDispose();
+            }
+            return null;
+        }
         /// <summary>
         /// 根据各种参数进行搜索
         /// </summary>
@@ -420,7 +509,7 @@ namespace ESBtest.Common
                             SampleID = reader.GetValue(0).ToString(),
                             SampleName = reader.GetValue(1).ToString(),
                             Category = reader.GetValue(2).ToString(),
-                            SamplingTime = ((DateTime)reader.GetValue(3)).ToShortDateString().ToString(),
+                            SamplingTime = ((DateTime)reader.GetValue(3)).ToShortDateString(),
                             SamplingDateTime = (DateTime)reader.GetValue(3),
                             SamplingLocation = reader.GetValue(4).ToString() + ", " + reader.GetValue(5).ToString(),
                             Longitude = reader.GetValue(4).ToString(),

@@ -16,16 +16,16 @@ using System.Windows.Shapes;
 namespace ESBtest.View
 {
     /// <summary>
-    /// ModifyView.xaml 的交互逻辑
+    /// UpdateView.xaml 的交互逻辑
     /// </summary>
-    public partial class ModifyView : Window
+    public partial class UpdateView : Window
     {
-        public ModifyView()
+        public UpdateView()
         {
             //初始化组件
             InitializeComponent();
             //关联ViewModel
-            this.DataContext = new ModifyViewModel();
+            this.DataContext = new UpdateViewModel();
         }
         //鼠标拖动窗口事件
         private void Label_MouseDown(object sender, MouseButtonEventArgs e)

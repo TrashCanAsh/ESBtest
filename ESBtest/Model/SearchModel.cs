@@ -23,14 +23,14 @@ namespace ESBtest.Model
             }
         }
 
-        private int category;
+        private int categoryIndex;
 
-        public int Category
+        public int CategoryIndex
         {
-            get { return category; }
+            get { return categoryIndex; }
             set
             {
-                category = value;
+                categoryIndex = value;
                 RaisePropertyChanged();
             }
         }
@@ -125,7 +125,7 @@ namespace ESBtest.Model
         public SearchModel()
         {
             this.KeyWord = "";
-            this.Category = 0;
+            this.CategoryIndex = 0;
             this.StartDate = DateTime.Now.Date;
             this.EndDate = DateTime.Now.Date;
             this.NW = new Location();

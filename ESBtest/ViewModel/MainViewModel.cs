@@ -21,11 +21,11 @@ namespace ESBtest.ViewModel
     {
         private DBControl dBControl;
 
-        public ObservableCollection<string> comboBoxCategory { get; set; }
+        public ObservableCollection<string> ComboBoxCategory { get; set; }
 
-        public UserModel userModel { get; set; }
-        public SampleModel sampleModel { get; set; }
-        public SearchModel searchModel { get; set; }
+        public UserModel UserModel { get; set; }
+        public SampleModel SampleModel { get; set; }
+        public SearchModel SearchModel { get; set; }
 
         public CommandBase CloseWindowCommand { get; set; }
         public CommandBase MinWindowCommand { get; set; }
@@ -56,13 +56,13 @@ namespace ESBtest.ViewModel
             //创建数据库操作实例
             this.dBControl = new DBControl();
             //创建用户数据实例
-            this.userModel = new UserModel();
+            this.UserModel = new UserModel();
             //创建样品信息实例
-            this.sampleModel = new SampleModel();
+            this.SampleModel = new SampleModel();
             //创建搜索条件实例
-            this.searchModel = new SearchModel();
+            this.SearchModel = new SearchModel();
             //下拉框内容
-            comboBoxCategory = new ObservableCollection<string>() { "null", "solid", "liquid", "gas", "bio" };
+            ComboBoxCategory = new ObservableCollection<string>() { "null", "solid", "liquid", "gas", "bio" };
         }
         /// <summary>
         /// 命令合集
@@ -102,6 +102,13 @@ namespace ESBtest.ViewModel
             //DataGrid双击事件
             this.DataGridDoubleClickCommand.ExecuteAction = new Action<object>(DataGridDoubleClick);
         }
+
+        private void RefreshDataGrid(DataGrid dg)
+        {
+            dg.ItemsSource = null;
+            List<SampleModel> sList = dBControl.SearchSample();
+            dg.ItemsSource = sList;
+        }
         /// <summary>
         /// 根据搜索条件对样品数据进行搜索
         /// </summary>
@@ -109,41 +116,25 @@ namespace ESBtest.ViewModel
         private void SearchSample(object w)
         {
             //*字符串分割/模糊搜索*
-            string keyword = searchModel.KeyWord;
+            string keyword = SearchModel.KeyWord;
             //
-            string category = "";
-            if(searchModel.IsCategoryChecked)
+            string category = null;
+            if(SearchModel.IsCategoryChecked)
             {
-                switch (searchModel.Category)
-                {
-                    case 1:
-                        category = "solid";
-                        break;
-                    case 2:
-                        category = "liquid";
-                        break;
-                    case 3:
-                        category = "gas";
-                        break;
-                    case 4:
-                        category = "bio";
-                        break;
-                    default:
-                        break;
-                }
+                category = ComboBoxCategory[SearchModel.CategoryIndex];
             }
             else
             {
                 category = null;
             }
             
-            string start = searchModel.StartDate > new DateTime(2022, 1, 1) && searchModel.IsSamplingTimeChecked ? searchModel.StartDate.ToShortDateString().ToString() : null;
-            string end = searchModel.EndDate > new DateTime(2022, 1, 1) && searchModel.IsSamplingTimeChecked ? searchModel.EndDate.ToShortDateString().ToString() : null;
+            string start = SearchModel.StartDate > new DateTime(2022, 1, 1) && SearchModel.IsSamplingTimeChecked ? SearchModel.StartDate.ToShortDateString() : null;
+            string end = SearchModel.EndDate > new DateTime(2022, 1, 1) && SearchModel.IsSamplingTimeChecked ? SearchModel.EndDate.ToShortDateString() : null;
             //待实现：范围选取设定
-            Location nw = (searchModel.NW.longitude >= 100 && searchModel.NW.latitude >= 25) && searchModel.IsSamplingLocationChecked ? searchModel.NW : null;
-            Location se = (searchModel.SE.longitude >= 100 && searchModel.SE.latitude >= 25) && searchModel.IsSamplingLocationChecked ? searchModel.SE : null;
+            Location nw = (SearchModel.NW.longitude >= 100 && SearchModel.NW.latitude >= 25) && SearchModel.IsSamplingLocationChecked ? SearchModel.NW : null;
+            Location se = (SearchModel.SE.longitude >= 100 && SearchModel.SE.latitude >= 25) && SearchModel.IsSamplingLocationChecked ? SearchModel.SE : null;
 
-            //Console.WriteLine("keyword:" + keyword + "//category:" + category + "//startDate:" + start + "//endDate:" + end +
+            //Console.WriteLine("keyword:" + keyword + "//categoryIndex:" + categoryIndex + "//startDate:" + start + "//endDate:" + end +
             //    "//NW:" + searchModel.NW.longitude + ", " + searchModel.NW.latitude + "//SE:" + searchModel.SE.longitude + ", " + searchModel.SE.latitude);
 
             List<SampleModel> sList = dBControl.SearchSample(keyword, category, start, end, nw, se);
@@ -181,49 +172,34 @@ namespace ESBtest.ViewModel
         /// <param name="w"></param>
         private void InsertSampleInfo(object w)
         {
-            if(string.IsNullOrEmpty(sampleModel.SampleName))
+            if(string.IsNullOrEmpty(SampleModel.SampleName))
             {
                 MessageBox.Show((w as Window), "样品名称不能为空", "提示");
             }
-            else if (sampleModel.CategoryIndex <= 0)
+            else if (SampleModel.CategoryIndex <= 0)
             {
                 MessageBox.Show((w as Window), "样品种类不能为空", "提示");
             }
-            else if(sampleModel.SamplingDateTime == null)
+            else if(SampleModel.SamplingDateTime == null)
             {
                 MessageBox.Show((w as Window), "样品采样时间不能为空", "提示");
             }
-            else if(string.IsNullOrEmpty(sampleModel.Longitude)|| string.IsNullOrEmpty(sampleModel.Latitude))
+            else if(string.IsNullOrEmpty(SampleModel.Longitude)|| string.IsNullOrEmpty(SampleModel.Latitude))
             {
                 MessageBox.Show((w as Window), "样品采样地点不能为空", "提示");
             }
             else
             {
-                string name = sampleModel.SampleName;
-                string category = "";
-                switch (sampleModel.CategoryIndex)
-                {
-                    case 1:
-                        category = "solid";
-                        break;
-                    case 2:
-                        category = "liquid";
-                        break;
-                    case 3:
-                        category = "gas";
-                        break;
-                    case 4:
-                        category = "bio";
-                        break;
-                    default:
-                        break;
-                }
-                string time = sampleModel.SamplingDateTime.ToShortDateString().ToString();
-                string longitude = sampleModel.Longitude;
-                string latitude = sampleModel.Latitude;
+                string name = SampleModel.SampleName;
+                string category = ComboBoxCategory[SampleModel.CategoryIndex];
+                string time = SampleModel.SamplingDateTime.ToShortDateString();
+                string longitude = SampleModel.Longitude;
+                string latitude = SampleModel.Latitude;
                 if (dBControl.InsertIntoSampleTable(name, category, time, longitude, latitude) > 0)
                 {
                     MessageBox.Show((w as Window), "导入成功", "提示");
+                    //刷新表中内容
+                    RefreshDataGrid((w as MainView).SampleDataGrid);
                 }
                 else
                 {
@@ -253,6 +229,8 @@ namespace ESBtest.ViewModel
             if (dBControl.InsertIntoSampleTable(FileControl.ReadFile(filepath)) > 0)
             {
                 MessageBox.Show((w as Window), "批量导入成功", "提示");
+                //刷新表中内容
+                RefreshDataGrid((w as MainView).SampleDataGrid);
             }
             else
             {
@@ -266,9 +244,14 @@ namespace ESBtest.ViewModel
         private void DataGridDoubleClick(object w)
         {
             SampleModel sample = (SampleModel)(w as DataGrid).SelectedItem;
-            ModifyView modifyView = new ModifyView();
-            (modifyView.DataContext as ModifyViewModel).samplemodify = sample;
-            modifyView.ShowDialog();
+            UpdateView updateView = new UpdateView();
+            (updateView.DataContext as UpdateViewModel).sampleUpdated = sample;
+            if (updateView.ShowDialog().Value)
+            {
+                //刷新表中内容
+                RefreshDataGrid(w as DataGrid);
+            }
+
         }
     }
 }
