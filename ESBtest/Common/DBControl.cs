@@ -316,67 +316,16 @@ namespace ESBtest.Common
             }
             return -1;
         }
-        /// <summary>
-        /// 根据样品名称搜索
-        /// </summary>
-        /// <param name="sampleName"></param>
-        /// <returns></returns>
-        public List<SampleModel> SearchSample(string sampleName)
-        {
-            List<SampleModel> sList = new List<SampleModel>();
-            try
-            {
-                TryConnection();
-                string sqlcmd;
-                if (string.IsNullOrEmpty(sampleName))
-                {
-                    sqlcmd = "select * from samples ";
-                }
-                else
-                {
-                    sqlcmd = "select * from samples where name = '" + sampleName + "'";
-                }
-                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
-                MySqlDataReader reader = mysqlCmd.ExecuteReader();
-                if(reader.HasRows)
-                {
-                    while (reader.Read())
-                    {
-                        SampleModel s = new SampleModel
-                        {
-                            SampleID = reader.GetValue(0).ToString(),
-                            SampleName = reader.GetValue(1).ToString(),
-                            Category = reader.GetValue(2).ToString(),
-                            SamplingTime = ((DateTime)reader.GetValue(3)).ToShortDateString().ToString(),
-                            Longitude = reader.GetValue(4).ToString(),
-                            Latitude = reader.GetValue(5).ToString()
-                        };
-                        sList.Add(s);
-                    }
-                }
-                reader.Close();
-                return sList;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            finally
-            {
-                sqlDispose();
-            }
-            return null;
-        }
-
+        
         /// <summary>
         /// 根据各种参数进行搜索
         /// </summary>
-        /// <param name="sampleName"></param>
-        /// <param name="category"></param>
-        /// <param name="start"></param>
-        /// <param name="end"></param>
-        /// <param name="NW"></param>
-        /// <param name="SE"></param>
+        /// <param name="sampleName">样品名称</param>
+        /// <param name="category">样品种类</param>
+        /// <param name="start">采样起始时间</param>
+        /// <param name="end">采样结束时间</param>
+        /// <param name="NW">左上角坐标</param>
+        /// <param name="SE">右下角坐标</param>
         /// <returns></returns>
         public List<SampleModel> SearchSample(string sampleName, string category, string start, string end, Location NW, Location SE)
         {
@@ -466,13 +415,34 @@ namespace ESBtest.Common
                 {
                     while (reader.Read())
                     {
-                        SampleModel s = new SampleModel();
-                        s.SampleID = reader.GetValue(0).ToString();
-                        s.SampleName = reader.GetValue(1).ToString();
-                        s.Category = reader.GetValue(2).ToString();
-                        s.SamplingTime = ((DateTime)reader.GetValue(3)).ToShortDateString().ToString();
-                        s.Longitude = reader.GetValue(4).ToString();
-                        s.Latitude = reader.GetValue(5).ToString();
+                        SampleModel s = new SampleModel
+                        {
+                            SampleID = reader.GetValue(0).ToString(),
+                            SampleName = reader.GetValue(1).ToString(),
+                            Category = reader.GetValue(2).ToString(),
+                            SamplingTime = ((DateTime)reader.GetValue(3)).ToShortDateString().ToString(),
+                            SamplingDateTime = (DateTime)reader.GetValue(3),
+                            SamplingLocation = reader.GetValue(4).ToString() + ", " + reader.GetValue(5).ToString(),
+                            Longitude = reader.GetValue(4).ToString(),
+                            Latitude = reader.GetValue(5).ToString()
+                        };
+                        switch (reader.GetValue(2).ToString())
+                        {
+                            case "solid":
+                                s.CategoryIndex = 1;
+                                break;
+                            case "liquid":
+                                s.CategoryIndex = 2;
+                                break;
+                            case "gas":
+                                s.CategoryIndex = 3;
+                                break;
+                            case "bio":
+                                s.CategoryIndex = 4;
+                                break;
+                            default:
+                                break;
+                        }
                         sList.Add(s);
                     }
                 }

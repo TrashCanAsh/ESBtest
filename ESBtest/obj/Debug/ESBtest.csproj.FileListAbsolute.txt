@@ -90,3 +90,5 @@ D:\vs workspace\ESBtest\ESBtest\obj\Debug\ESBtest.Properties.Resources.resources
 D:\vs workspace\ESBtest\ESBtest\obj\Debug\ESBtest.exe
 D:\vs workspace\ESBtest\ESBtest\obj\Debug\ESBtest.pdb
 D:\vs workspace\ESBtest\ESBtest\obj\Debug\ESBtest.csprojAssemblyReference.cache
+D:\vs workspace\ESBtest\ESBtest\obj\Debug\View\ModifyView.g.cs
+D:\vs workspace\ESBtest\ESBtest\obj\Debug\View\ModifyView.baml

@@ -260,13 +260,15 @@ namespace ESBtest.ViewModel
             }
         }
         /// <summary>
-        /// DataGrid双击事件
+        /// DataGrid双击事件->打开样品数据修改界面
         /// </summary>
         /// <param name="w"></param>
         private void DataGridDoubleClick(object w)
         {
-            string str = (w as DataGrid).SelectedItem.ToString();
-            Console.WriteLine(str);
+            SampleModel sample = (SampleModel)(w as DataGrid).SelectedItem;
+            ModifyView modifyView = new ModifyView();
+            (modifyView.DataContext as ModifyViewModel).samplemodify = sample;
+            modifyView.ShowDialog();
         }
     }
 }

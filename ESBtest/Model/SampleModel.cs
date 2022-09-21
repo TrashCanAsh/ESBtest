@@ -87,6 +87,19 @@ namespace ESBtest.Model
             }
         }
 
+        private string samplingLocation;
+
+        public string SamplingLocation
+        {
+            get { return samplingLocation; }
+            set
+            {
+                samplingLocation = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
 
         private string longitude;
 

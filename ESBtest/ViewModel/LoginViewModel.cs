@@ -24,10 +24,25 @@ namespace ESBtest.ViewModel
 
         public LoginViewModel()
         {
+            Initialization();
+
+            SetCommand();
+        }
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        private void Initialization()
+        {
             //创建数据库操作实例
             this.dBControl = new DBControl();
             //创建用户数据实例
             this.userModel = new UserModel();
+        }
+        /// <summary>
+        /// 命令合集
+        /// </summary>
+        private void SetCommand()
+        {
             //创建命令实例
             this.CloseWindowCommand = new CommandBase();
             this.MinWindowCommand = new CommandBase();
@@ -35,28 +50,18 @@ namespace ESBtest.ViewModel
             this.SigninCommand = new CommandBase();
 
             //关闭窗口命令
-            this.CloseWindowCommand.ExecuteAction = new Action<object>((w) =>
-            {
-                (w as Window).Close();
-            });
+            this.CloseWindowCommand.ExecuteAction = new Action<object>(GlobalFunc.CloseWindow);
             //最小化窗口命令
-            this.MinWindowCommand.ExecuteAction = new Action<object>((w) =>
-            {
-                (w as Window).WindowState = WindowState.Minimized;
-            });
+            this.MinWindowCommand.ExecuteAction = new Action<object>(GlobalFunc.MinWindow);
             //登录命令
             this.LoginCommand.ExecuteAction = new Action<object>(LoginFunc);
             //注册命令
-            this.SigninCommand.ExecuteAction = new Action<object>((w) =>
-            {
-                SigninView signinWindow = new SigninView();
-                signinWindow.Show();
-                (w as Window).Close();
-            });
-
-
+            this.SigninCommand.ExecuteAction = new Action<object>(SigninFunc);
         }
-
+        /// <summary>
+        /// 登录命令
+        /// </summary>
+        /// <param name="w"></param>
         private void LoginFunc(object w)
         {
             //Console.WriteLine(userModel.UserName + userModel.Password);
@@ -78,6 +83,16 @@ namespace ESBtest.ViewModel
             {
                 MessageBox.Show((w as Window), "用户名不存在", "登录提示");
             }
+        }
+        /// <summary>
+        /// 注册命令->打开注册界面
+        /// </summary>
+        /// <param name="w"></param>
+        private void SigninFunc(object w)
+        {
+            SigninView signinWindow = new SigninView();
+            signinWindow.Show();
+            (w as Window).Close();
         }
     }
 }

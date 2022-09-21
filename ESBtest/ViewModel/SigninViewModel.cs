@@ -24,10 +24,25 @@ namespace ESBtest.ViewModel
 
         public SigninViewModel()
         {
+            Initialization();
+
+            SetCommand();
+        }
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        private void Initialization()
+        {
             //创建数据库操作实例
             this.dBControl = new DBControl();
             //创建用户数据实例
             this.userModel = new UserModel();
+        }
+        /// <summary>
+        /// 命令合集
+        /// </summary>
+        private void SetCommand()
+        {
             //创建命令实例
             this.CloseWindowCommand = new CommandBase();
             this.MinWindowCommand = new CommandBase();
@@ -35,27 +50,18 @@ namespace ESBtest.ViewModel
             this.CancelCommand = new CommandBase();
 
             //关闭窗口命令
-            this.CloseWindowCommand.ExecuteAction = new Action<object>((w) =>
-            {
-                (w as Window).Close();
-            });
+            this.CloseWindowCommand.ExecuteAction = new Action<object>(GlobalFunc.CloseWindow);
             //最小化窗口命令
-            this.MinWindowCommand.ExecuteAction = new Action<object>((w) =>
-            {
-                (w as Window).WindowState = WindowState.Minimized;
-            });
+            this.MinWindowCommand.ExecuteAction = new Action<object>(GlobalFunc.MinWindow);
             //注册命令
             this.SigninCommand.ExecuteAction = new Action<object>(SigninFunc);
             //取消返回命令->返回登录界面
-            this.CancelCommand.ExecuteAction = new Action<object>((w) =>
-            {
-                LoginView loginWindow = new LoginView();
-                loginWindow.Show();
-                (w as Window).Close();
-            });
-
+            this.CancelCommand.ExecuteAction = new Action<object>(CancelFunc);
         }
-
+        /// <summary>
+        /// 注册命令
+        /// </summary>
+        /// <param name="w"></param>
         private void SigninFunc(object w)
         {
             if (string.IsNullOrEmpty(userModel.UserName))
@@ -89,6 +95,16 @@ namespace ESBtest.ViewModel
                     MessageBox.Show((w as Window), "注册失败：未知错误", "注册提示");
                 }
             }
+        }
+        /// <summary>
+        /// 取消注册->返回登录界面
+        /// </summary>
+        /// <param name="w"></param>
+        private void CancelFunc(object w)
+        {
+            LoginView loginWindow = new LoginView();
+            loginWindow.Show();
+            (w as Window).Close();
         }
     }
 }

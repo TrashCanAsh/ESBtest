@@ -110,7 +110,11 @@
     <Compile Include="ViewModel\Base\NotifyBase.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\ModifyViewModel.cs" />
     <Compile Include="ViewModel\SigninViewModel.cs" />
+    <Compile Include="View\ModifyView.xaml.cs">
+      <DependentUpon>ModifyView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\SigninView.xaml.cs">
       <DependentUpon>SigninView.xaml</DependentUpon>
     </Compile>
@@ -137,6 +141,10 @@
       <DependentUpon>MainView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\ModifyView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\SigninView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
