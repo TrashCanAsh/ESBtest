@@ -14,8 +14,8 @@ namespace ESBtest.Common
     public static class GlobalValue
     {
         public static DateTime FirstSamplingTime = new DateTime(2022, 08, 10);
+        public static UserModel CurrentUser;
     }
-
     /// <summary>
     /// 地点类
     /// longitude代表经度
@@ -32,18 +32,31 @@ namespace ESBtest.Common
             this.latitude = 0.0;
         }
     }
+    /// <summary>
+    /// 全局函数
+    /// </summary>
     public class GlobalFunc
     {
+        /// <summary>
+        /// 关闭当前窗口
+        /// </summary>
+        /// <param name="w">View</param>
         public static void CloseWindow(object w)
         {
             (w as Window).Close();
         }
-
+        /// <summary>
+        /// 最小化当前窗口
+        /// </summary>
+        /// <param name="w">View</param>
         public static void MinWindow(object w)
         {
             (w as Window).WindowState = WindowState.Minimized;
         }
-
+        /// <summary>
+        /// 最大化当前窗口，如果已经最大化，则还原窗口
+        /// </summary>
+        /// <param name="w">View</param>
         public static void MaxWindow(object w)
         {
             if ((w as Window).WindowState == WindowState.Maximized)

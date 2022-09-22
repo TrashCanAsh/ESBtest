@@ -36,12 +36,15 @@
                     <ColumnDefinition Width="30"/>
                 </Grid.ColumnDefinitions>
                 <Label VerticalAlignment="Top" Height="20" MouseDown="Label_MouseDown" Grid.Column="0"/>
-                <Menu VerticalAlignment="Top" Background="#EEEEEE"  Height="20" FontSize="16" HorizontalAlignment="Left">
+                <Menu VerticalAlignment="Top" Background="#EEEEEE"  Height="20" FontSize="14" HorizontalAlignment="Left">
                     <MenuItem Header="功能" >
-                        <MenuItem Header="查找样品"/>
+                        <MenuItem Header="查找样品" Command="{Binding MenuSearchSampleCommand}" CommandParameter="{Binding ElementName=TabControlFunction}"/>
                         <MenuItem Header="样品借出申请">
+                            <!-- *待实现：新窗口 -->
                             <MenuItem Header="填写申请"/>
+                            <!-- *待实现：新窗口 -->
                             <MenuItem Header="进度查询"/>
+                            <!-- *待实现：新窗口 -->
                             <MenuItem Header="借出/还入"/>
                         </MenuItem>
                     </MenuItem>
@@ -54,6 +57,10 @@
                         <Separator/>
                         <MenuItem Header="关于"/>
                     </MenuItem>
+                    <!-- *待实现：新窗口 -->
+                    <MenuItem Header="收藏夹" Command="{Binding}"/>
+                    <!-- *待实现：新窗口 -->
+                    <MenuItem Header="购物车" Command="{Binding}"/>
                 </Menu>
                 <Button x:Name="ButtonMini" Style="{StaticResource MinimizeWindowButtonStyle}" 
                         Command="{Binding MinWindowCommand}" CommandParameter="{Binding ElementName=MainWindow}" Grid.Column="1"/>
@@ -64,10 +71,11 @@
             </Grid>
             <!--  工具栏  -->
             <ToolBar Grid.Row="1">
-                
                 <Button Content="删除" Command="{Binding DeleteSelectedSampleCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
-                
-                
+                <Separator/>
+                <Button Content="添加至收藏夹"/>
+                <Button Content="添加至购物车"/>
+                <Separator/>
             </ToolBar>
             <!--  主体部分  -->
             <Grid Grid.Row="2">
@@ -81,7 +89,7 @@
                         <DropShadowEffect Color="LightGray" ShadowDepth="0" BlurRadius="5" Opacity="0.3" Direction="0"/>
                     </Border.Effect>
                     <!--  标签页  -->
-                    <TabControl Grid.Column="0" >
+                    <TabControl Grid.Column="0" x:Name="TabControlFunction">
                         <!--  查询标签页  -->
                         <TabItem Header="查询" IsSelected="True">
                             <Grid>
@@ -224,8 +232,8 @@
                                     <TextBox x:Name="TextBoxOutputFilePath" Grid.Column="1" IsReadOnly="True" />
                                 </Grid>
                                 <StackPanel Orientation="Horizontal" Margin="60 10 0 0">
-                                    <Button Content="选择路径" Width="80" Margin="0 0 20 0" Command="{Binding }" CommandParameter="{Binding ElementName=MainWindow}"/>
-                                    <Button Content="导出" Width="80"  Command="{Binding }" CommandParameter="{Binding ElementName=MainWindow}"/>
+                                    <Button Content="选择路径" Width="80" Margin="0 0 20 0" Command="{Binding OpenOutputFileDialogCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
+                                    <Button Content="导出" Width="80"  Command="{Binding OutputFileDataCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
                                 </StackPanel>
                             </StackPanel>
                         </TabItem>
@@ -248,6 +256,7 @@
                         <DataGridTextColumn Header="采样时间" Binding="{Binding SamplingTime}" IsReadOnly="True"/>
                         <DataGridTextColumn Header="采样地点" Binding="{Binding SamplingLocation}" IsReadOnly="True"/>
                     </DataGrid.Columns>
+                    <!--  绑定双击事件  -->
                     <DataGrid.InputBindings>
                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DataGridDoubleClickCommand}" CommandParameter="{Binding ElementName=SampleDataGrid}"/>
                     </DataGrid.InputBindings>
@@ -275,7 +284,7 @@
                 <Separator Grid.Column="1" />
                 <!--  版本信息  -->
                 <StatusBarItem Grid.Column="2" Background="#EEEEEE">
-                    <TextBlock Text="Version: alpha v0.0.2"/>
+                    <TextBlock Text="Version: alpha v0.0.3"/>
                 </StatusBarItem>
                 <!--  分割线  -->
                 <Separator Grid.Column="3" />

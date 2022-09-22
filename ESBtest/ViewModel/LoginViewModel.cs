@@ -73,6 +73,7 @@ namespace ESBtest.ViewModel
                     MainView mainWindow = new MainView();
                     mainWindow.Show();
                     (w as Window).Close();
+                    GlobalValue.CurrentUser = dBControl.GetUserInformation(userModel.UserName);
                 }
                 else
                 {

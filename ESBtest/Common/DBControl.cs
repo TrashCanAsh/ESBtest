@@ -21,7 +21,7 @@ namespace ESBtest.Common
         private MySqlConnection mysqlConn = null;
         //数据库命令实例
         private MySqlCommand mysqlCmd = null;
-        #endregion
+        #endregion 私人变量
 
         #region 公共变量
         /// <summary>
@@ -30,8 +30,7 @@ namespace ESBtest.Common
         /// 1 -> 连接成功
         /// </summary>
         public int sqlStatus = 0;
-
-        #endregion
+        #endregion 公共变量
 
 
         /// <summary>
@@ -64,7 +63,6 @@ namespace ESBtest.Common
                 return false;
             }
         }
-
         /// <summary>
         /// 结束命令和连接
         /// </summary>
@@ -82,7 +80,7 @@ namespace ESBtest.Common
                 mysqlConn = null;
             }
         }
-        #endregion
+        #endregion 基础操作
 
 
 
@@ -179,10 +177,14 @@ namespace ESBtest.Common
             }
             return -1;
         }
-        #endregion
+        #endregion 增
 
         #region 删
-
+        /// <summary>
+        /// 根据选中的样品ID来删除对应样品数据
+        /// </summary>
+        /// <param name="idList"></param>
+        /// <returns></returns>
         public int DeleteSampleTable(List<int> idList)
         {
             try
@@ -218,7 +220,7 @@ namespace ESBtest.Common
             }
             return -1;
         }
-        #endregion
+        #endregion 删
 
         #region 改
         /// <summary>
@@ -254,7 +256,7 @@ namespace ESBtest.Common
             return -1;
         }
 
-        #endregion
+        #endregion 改
 
         #region 查
         /// <summary>
@@ -326,6 +328,60 @@ namespace ESBtest.Common
             }
 
             return false;
+        }
+        /// <summary>
+        /// 根据用户名查询用户信息
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        public UserModel GetUserInformation(string username)
+        {
+            try
+            {
+                TryConnection();
+                string sqlcmd = "select * from user where username = '" + username + "'";
+                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
+                MySqlDataReader reader = mysqlCmd.ExecuteReader();
+                
+                if (reader.HasRows)
+                {
+                    reader.Read();
+                    UserModel user = new UserModel()
+                    {
+                        UserID = reader.GetInt32(0),
+                        Name = reader.GetValue(1).ToString(),
+                        UserName = reader.GetValue(2).ToString()
+                    };
+                    switch (reader.GetValue(4).ToString())
+                    {
+                        case "guest":
+                            user.UserRight = 0;
+                            break;
+                        case "normal_user":
+                            user.UserRight = 1;
+                            break;
+                        case "admin":
+                            user.UserRight = 2;
+                            break;
+                        default:
+                            break;
+                    }
+                    return user;
+                }
+                else
+                {
+                    Console.WriteLine("No rows found: username not exist");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                sqlDispose();
+            }
+            return null;
         }
         /// <summary>
         /// 查找某表的列数
@@ -412,38 +468,7 @@ namespace ESBtest.Common
                 MySqlDataReader reader = mysqlCmd.ExecuteReader();
                 if (reader.HasRows)
                 {
-                    while (reader.Read())
-                    {
-                        SampleModel s = new SampleModel
-                        {
-                            SampleID = reader.GetValue(0).ToString(),
-                            SampleName = reader.GetValue(1).ToString(),
-                            Category = reader.GetValue(2).ToString(),
-                            SamplingTime = ((DateTime)reader.GetValue(3)).ToShortDateString(),
-                            SamplingDateTime = (DateTime)reader.GetValue(3),
-                            SamplingLocation = reader.GetValue(4).ToString() + ", " + reader.GetValue(5).ToString(),
-                            Longitude = reader.GetValue(4).ToString(),
-                            Latitude = reader.GetValue(5).ToString()
-                        };
-                        switch (reader.GetValue(2).ToString())
-                        {
-                            case "solid":
-                                s.CategoryIndex = 1;
-                                break;
-                            case "liquid":
-                                s.CategoryIndex = 2;
-                                break;
-                            case "gas":
-                                s.CategoryIndex = 3;
-                                break;
-                            case "bio":
-                                s.CategoryIndex = 4;
-                                break;
-                            default:
-                                break;
-                        }
-                        sList.Add(s);
-                    }
+                    sList = GetSampleList(reader);
                 }
                 reader.Close();
                 return sList;
@@ -554,38 +579,7 @@ namespace ESBtest.Common
                 MySqlDataReader reader = mysqlCmd.ExecuteReader();
                 if (reader.HasRows)
                 {
-                    while (reader.Read())
-                    {
-                        SampleModel s = new SampleModel
-                        {
-                            SampleID = reader.GetValue(0).ToString(),
-                            SampleName = reader.GetValue(1).ToString(),
-                            Category = reader.GetValue(2).ToString(),
-                            SamplingTime = ((DateTime)reader.GetValue(3)).ToShortDateString(),
-                            SamplingDateTime = (DateTime)reader.GetValue(3),
-                            SamplingLocation = reader.GetValue(4).ToString() + ", " + reader.GetValue(5).ToString(),
-                            Longitude = reader.GetValue(4).ToString(),
-                            Latitude = reader.GetValue(5).ToString()
-                        };
-                        switch (reader.GetValue(2).ToString())
-                        {
-                            case "solid":
-                                s.CategoryIndex = 1;
-                                break;
-                            case "liquid":
-                                s.CategoryIndex = 2;
-                                break;
-                            case "gas":
-                                s.CategoryIndex = 3;
-                                break;
-                            case "bio":
-                                s.CategoryIndex = 4;
-                                break;
-                            default:
-                                break;
-                        }
-                        sList.Add(s);
-                    }
+                    sList = GetSampleList(reader);
                 }
                 reader.Close();
                 return sList;
@@ -600,7 +594,99 @@ namespace ESBtest.Common
             }
             return null;
         }
+        /// <summary>
+        /// 根据选中的样品ID进行搜索
+        /// </summary>
+        /// <param name="idList">样品ID列表</param>
+        /// <returns></returns>
+        public List<SampleModel> SearchSample(List<int> idList)
+        {
+            List<SampleModel> sList = new List<SampleModel>();
+            try
+            {
+                TryConnection();
+                string sqlcmd = "SELECT * FROM samples WHERE (";
+                bool isFirst = true;
+                foreach (int i in idList)
+                {
+                    if (isFirst)
+                    {
+                        sqlcmd += "idsamples = " + i;
+                        isFirst = false;
+                    }
+                    else
+                    {
+                        sqlcmd += " or idsamples = " + i;
+                    }
+                }
+                sqlcmd += ")";
+                Console.WriteLine(sqlcmd);
 
-        #endregion
+                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
+                MySqlDataReader reader = mysqlCmd.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    sList = GetSampleList(reader);
+                }
+                reader.Close();
+                return sList;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                sqlDispose();
+            }
+            return null;
+        }
+        #endregion 查
+
+        #region 辅助函数
+        /// <summary>
+        /// 通过已有的MySqlDataReader来将数据存储到SampleModel的List中并返回
+        /// </summary>
+        /// <param name="reader">MySqlDataReader</param>
+        /// <returns></returns>
+        private List<SampleModel> GetSampleList(MySqlDataReader reader)
+        {
+            List<SampleModel> sList = new List<SampleModel>();
+            while (reader.Read())
+            {
+                SampleModel s = new SampleModel
+                {
+                    SampleID = reader.GetValue(0).ToString(),
+                    SampleName = reader.GetValue(1).ToString(),
+                    Category = reader.GetValue(2).ToString(),
+                    SamplingTime = ((DateTime)reader.GetValue(3)).ToShortDateString(),
+                    SamplingDateTime = (DateTime)reader.GetValue(3),
+                    SamplingLocation = reader.GetValue(4).ToString() + ", " + reader.GetValue(5).ToString(),
+                    Longitude = reader.GetValue(4).ToString(),
+                    Latitude = reader.GetValue(5).ToString()
+                };
+                switch (reader.GetValue(2).ToString())
+                {
+                    case "solid":
+                        s.CategoryIndex = 1;
+                        break;
+                    case "liquid":
+                        s.CategoryIndex = 2;
+                        break;
+                    case "gas":
+                        s.CategoryIndex = 3;
+                        break;
+                    case "bio":
+                        s.CategoryIndex = 4;
+                        break;
+                    default:
+                        break;
+                }
+                sList.Add(s);
+            }
+            return sList;
+        }
+        #endregion 辅助函数
+
     }
 }

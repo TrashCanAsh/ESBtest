@@ -61,5 +61,49 @@ namespace ESBtest.Common
             }
             return sList;
         }
+        /// <summary>
+        /// 将选中的样品信息写入到目标文件路径中
+        /// </summary>
+        /// <param name="filepath">目标文件路径</param>
+        /// <param name="sList">选中的样品信息</param>
+        /// <returns></returns>
+        public static bool WriteFile(string filepath, List<SampleModel> sList)
+        {
+            if(sList != null && !string.IsNullOrEmpty(filepath))
+            {
+                try
+                {
+                    string spliter = "";
+                    switch (GetFileType(filepath))
+                    {
+                        case "txt":
+                            spliter = " ";
+                            break;
+                        case "csv":
+                            spliter = ",";
+                            break;
+                        default:
+                            break;
+                    }
+                    StreamWriter sw = new StreamWriter(filepath);
+                    string write = "";
+                    foreach (SampleModel sample in sList)
+                    {
+                        write += sample.SampleName + spliter + sample.Category + spliter + sample.SamplingTime + spliter + sample.Longitude
+                            + spliter + sample.Latitude + spliter + "\n";
+                    }
+                    Console.WriteLine(write);
+                    sw.Write(write);
+                    sw.Flush();
+                    sw.Close();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
+            }
+            return false;
+        }
     }
 }

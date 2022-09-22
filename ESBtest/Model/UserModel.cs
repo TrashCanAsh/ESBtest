@@ -78,6 +78,20 @@ namespace ESBtest.Model
                 RaisePropertyChanged();
             }
         }
+
+        private int userID;
+
+        public int UserID
+        {
+            get { return userID; }
+            set
+            {
+                userID = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
         #endregion
 
     }

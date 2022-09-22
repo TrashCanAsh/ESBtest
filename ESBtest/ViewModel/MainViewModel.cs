@@ -30,6 +30,9 @@ namespace ESBtest.ViewModel
         public CommandBase CloseWindowCommand { get; set; }
         public CommandBase MinWindowCommand { get; set; }
         public CommandBase MaxWindowCommand { get; set; }
+
+        public CommandBase MenuSearchSampleCommand { get; set; }
+
         public CommandBase SearchCommand { get; set; }
         public CommandBase SearchResetCommand { get; set; }
         public CommandBase SearchClearCommand { get; set; }
@@ -38,6 +41,8 @@ namespace ESBtest.ViewModel
         public CommandBase InsertFileDataCommand { get; set; }
         public CommandBase DataGridDoubleClickCommand { get; set; }
         public CommandBase DeleteSelectedSampleCommand { get; set; }
+        public CommandBase OpenOutputFileDialogCommand { get; set; }
+        public CommandBase OutputFileDataCommand { get; set; }
 
         /// <summary>
         /// 构造函数
@@ -70,10 +75,30 @@ namespace ESBtest.ViewModel
         /// </summary>
         private void SetCommand()
         {
+            #region 窗口命令
             //创建命令实例
             this.CloseWindowCommand = new CommandBase();
             this.MinWindowCommand = new CommandBase();
             this.MaxWindowCommand = new CommandBase();
+
+            //关闭窗口命令
+            this.CloseWindowCommand.ExecuteAction = new Action<object>(GlobalFunc.CloseWindow);
+            //最小化窗口命令
+            this.MinWindowCommand.ExecuteAction = new Action<object>(GlobalFunc.MinWindow);
+            //最大化窗口命令
+            this.MaxWindowCommand.ExecuteAction = new Action<object>(GlobalFunc.MaxWindow);
+            #endregion 窗口命令
+
+            #region 菜单栏命令
+            //创建命令实例
+            this.MenuSearchSampleCommand = new CommandBase();
+
+            //菜单栏选择搜索样品信息命令
+            this.MenuSearchSampleCommand.ExecuteAction = new Action<object>(MenuSearchSample);
+            #endregion 菜单栏命令
+
+            #region 功能命令
+            //创建命令实例
             this.SearchCommand = new CommandBase();
             this.SearchResetCommand = new CommandBase();
             this.SearchClearCommand = new CommandBase();
@@ -82,13 +107,9 @@ namespace ESBtest.ViewModel
             this.InsertFileDataCommand = new CommandBase();
             this.DataGridDoubleClickCommand = new CommandBase();
             this.DeleteSelectedSampleCommand = new CommandBase();
+            this.OpenOutputFileDialogCommand = new CommandBase();
+            this.OutputFileDataCommand = new CommandBase();
 
-            //关闭窗口命令
-            this.CloseWindowCommand.ExecuteAction = new Action<object>(GlobalFunc.CloseWindow);
-            //最小化窗口命令
-            this.MinWindowCommand.ExecuteAction = new Action<object>(GlobalFunc.MinWindow);
-            //最大化窗口命令
-            this.MaxWindowCommand.ExecuteAction = new Action<object>(GlobalFunc.MaxWindow);
             //搜索样品信息命令
             this.SearchCommand.ExecuteAction = new Action<object>(SearchSample);
             //重置搜索条件命令
@@ -97,7 +118,7 @@ namespace ESBtest.ViewModel
             this.SearchClearCommand.ExecuteAction = new Action<object>(SearchClear);
             //手动逐条添加样品命令
             this.InsertSampleInfoCommand.ExecuteAction = new Action<object>(InsertSampleInfo);
-            //打开信息导入文件窗口命令
+            //打开选择导入数据文件路径窗口命令
             this.OpenInsertFileDialogCommand.ExecuteAction = new Action<object>(InsertFileDialog);
             //批量导入样品命令
             this.InsertFileDataCommand.ExecuteAction = new Action<object>(InsertFileData);
@@ -105,7 +126,25 @@ namespace ESBtest.ViewModel
             this.DataGridDoubleClickCommand.ExecuteAction = new Action<object>(DataGridDoubleClick);
             //删除选中样品命令
             this.DeleteSelectedSampleCommand.ExecuteAction = new Action<object>(DeleteSample);
+            //打开选择导出数据文件路径窗口命令
+            this.OpenOutputFileDialogCommand.ExecuteAction = new Action<object>(OutputFileDialog);
+            //
+            this.OutputFileDataCommand.ExecuteAction = new Action<object>(OutputSample);
+            #endregion 功能命令
         }
+
+        #region 菜单栏命令实现
+        /// <summary>
+        /// 将标签页设置到第一页（搜索样品数据）
+        /// </summary>
+        /// <param name="w">TabControl</param>
+        private void MenuSearchSample(object w)
+        {
+            (w as TabControl).SelectedIndex = 0;
+        }
+        #endregion 菜单栏命令实现
+
+        #region 功能命令实现
         /// <summary>
         /// 刷新DataGrid
         /// </summary>
@@ -125,7 +164,7 @@ namespace ESBtest.ViewModel
             string keyword = SearchModel.KeyWord;
             //
             string category = null;
-            if(SearchModel.IsCategoryChecked)
+            if (SearchModel.IsCategoryChecked)
             {
                 category = ComboBoxCategory[SearchModel.CategoryIndex];
             }
@@ -133,7 +172,7 @@ namespace ESBtest.ViewModel
             {
                 category = null;
             }
-            
+
             string start = SearchModel.StartDate > new DateTime(2022, 1, 1) && SearchModel.IsSamplingTimeChecked ? SearchModel.StartDate.ToShortDateString() : null;
             string end = SearchModel.EndDate > new DateTime(2022, 1, 1) && SearchModel.IsSamplingTimeChecked ? SearchModel.EndDate.ToShortDateString() : null;
             //待实现：范围选取设定
@@ -176,7 +215,7 @@ namespace ESBtest.ViewModel
         /// <param name="w">MainView</param>
         private void InsertSampleInfo(object w)
         {
-            if(string.IsNullOrEmpty(SampleModel.SampleName))
+            if (string.IsNullOrEmpty(SampleModel.SampleName))
             {
                 MessageBox.Show((w as Window), "样品名称不能为空", "提示");
             }
@@ -184,11 +223,11 @@ namespace ESBtest.ViewModel
             {
                 MessageBox.Show((w as Window), "样品种类不能为空", "提示");
             }
-            else if(SampleModel.SamplingDateTime == null)
+            else if (SampleModel.SamplingDateTime == null)
             {
                 MessageBox.Show((w as Window), "样品采样时间不能为空", "提示");
             }
-            else if(string.IsNullOrEmpty(SampleModel.Longitude)|| string.IsNullOrEmpty(SampleModel.Latitude))
+            else if (string.IsNullOrEmpty(SampleModel.Longitude) || string.IsNullOrEmpty(SampleModel.Latitude))
             {
                 MessageBox.Show((w as Window), "样品采样地点不能为空", "提示");
             }
@@ -212,7 +251,7 @@ namespace ESBtest.ViewModel
             }
         }
         /// <summary>
-        /// 选择样品数据文件
+        /// 选择批量导入样品数据文件路径
         /// </summary>
         /// <param name="w">MainView</param>
         private void InsertFileDialog(object w)
@@ -260,20 +299,30 @@ namespace ESBtest.ViewModel
             }
         }
         /// <summary>
+        /// 获取DataGrid中所有被选中的行的ID值
+        /// </summary>
+        /// <param name="dg"></param>
+        /// <returns></returns>
+        private List<int> GetSelectedSamples(DataGrid dg)
+        {
+            List<int> iList = new List<int>();
+            List<SampleModel> sList = (List<SampleModel>)dg.ItemsSource;
+            foreach (SampleModel s in sList)
+            {
+                if (s.IsSelected)
+                {
+                    iList.Add(int.Parse(s.SampleID));
+                }
+            }
+            return iList;
+        }
+        /// <summary>
         /// 删除选中的样品信息
         /// </summary>
         /// <param name="w">MainWindow</param>
         private void DeleteSample(object w)
         {
-            List<int> iList = new List<int>();
-            List<SampleModel> sList = (List<SampleModel>)(w as MainView).SampleDataGrid.ItemsSource;
-            foreach (SampleModel s in sList)
-            {
-                if(s.IsSelected)
-                {
-                    iList.Add(int.Parse(s.SampleID));
-                }
-            }
+            List<int> iList = GetSelectedSamples((w as MainView).SampleDataGrid);
             if (iList.Count > 0)
             {
                 string str = "";
@@ -290,6 +339,46 @@ namespace ESBtest.ViewModel
                     RefreshDataGrid((w as MainView).SampleDataGrid);
                 }
             }
+            else
+            {
+                MessageBox.Show((w as Window), "请先选择样品！", "提示");
+            }
         }
+        /// <summary>
+        /// 选择批量导出样品数据文件路径
+        /// </summary>
+        /// <param name="w">MainView</param>
+        private void OutputFileDialog(object w)
+        {
+            SaveFileDialog sfp = new SaveFileDialog() { Title = "选择保存路径", Filter = "Txt files(*.txt)|*.txt|Csv files(*.csv)|*.csv|Excel files(*.xlsx, *.xls)|*.xlsx;*.xls|All files(*.*)|*.*" };
+            if (sfp.ShowDialog() == true)
+            {
+                (w as MainView).TextBoxOutputFilePath.Text = sfp.FileName;
+            }
+        }
+        /// <summary>
+        /// 批量导出样品数据
+        /// </summary>
+        /// <param name="w">MainView</param>
+        private void OutputSample(object w)
+        {
+            List<int> iList = GetSelectedSamples((w as MainView).SampleDataGrid);
+            if (iList.Count > 0)
+            {
+                if(FileControl.WriteFile((w as MainView).TextBoxOutputFilePath.Text, dBControl.SearchSample(iList)))
+                {
+                    MessageBox.Show((w as Window), "导出成功", "提示");
+                }
+                else
+                {
+                    MessageBox.Show((w as Window), "导出失败", "提示");
+                }
+            }
+            else
+            {
+                MessageBox.Show((w as Window), "请先选择样品！", "提示");
+            }
+        }
+        #endregion 功能命令实现
     }
 }
