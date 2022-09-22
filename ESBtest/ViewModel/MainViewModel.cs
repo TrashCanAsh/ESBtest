@@ -32,6 +32,8 @@ namespace ESBtest.ViewModel
         public CommandBase MaxWindowCommand { get; set; }
 
         public CommandBase MenuSearchSampleCommand { get; set; }
+        public CommandBase MenuInsertDataCommand { get; set; }
+        public CommandBase MenuOutputDataCommand { get; set; }
 
         public CommandBase SearchCommand { get; set; }
         public CommandBase SearchResetCommand { get; set; }
@@ -92,9 +94,15 @@ namespace ESBtest.ViewModel
             #region 菜单栏命令
             //创建命令实例
             this.MenuSearchSampleCommand = new CommandBase();
+            this.MenuInsertDataCommand = new CommandBase();
+            this.MenuOutputDataCommand = new CommandBase();
 
-            //菜单栏选择搜索样品信息命令
+            //菜单栏选择样品信息搜索命令
             this.MenuSearchSampleCommand.ExecuteAction = new Action<object>(MenuSearchSample);
+            //菜单栏选择样品信息导入命令
+            this.MenuInsertDataCommand.ExecuteAction = new Action<object>(MenuInsertData);
+            //菜单栏选择样品信息导出命令
+            this.MenuOutputDataCommand.ExecuteAction = new Action<object>(MenuOutputData);
             #endregion 菜单栏命令
 
             #region 功能命令
@@ -128,19 +136,35 @@ namespace ESBtest.ViewModel
             this.DeleteSelectedSampleCommand.ExecuteAction = new Action<object>(DeleteSample);
             //打开选择导出数据文件路径窗口命令
             this.OpenOutputFileDialogCommand.ExecuteAction = new Action<object>(OutputFileDialog);
-            //
+            //导出被选中的样品数据命令
             this.OutputFileDataCommand.ExecuteAction = new Action<object>(OutputSample);
             #endregion 功能命令
         }
 
         #region 菜单栏命令实现
         /// <summary>
-        /// 将标签页设置到第一页（搜索样品数据）
+        /// 将标签页设置到第一页（样品数据搜索）
         /// </summary>
         /// <param name="w">TabControl</param>
         private void MenuSearchSample(object w)
         {
             (w as TabControl).SelectedIndex = 0;
+        }
+        /// <summary>
+        /// 将标签页设置到第二页（数据导入）
+        /// </summary>
+        /// <param name="w">TabControl</param>
+        private void MenuInsertData(object w)
+        {
+            (w as TabControl).SelectedIndex = 1;
+        }
+        /// <summary>
+        /// 将标签页设置到第三页（数据导出）
+        /// </summary>
+        /// <param name="w">TabControl</param>
+        private void MenuOutputData(object w)
+        {
+            (w as TabControl).SelectedIndex = 2;
         }
         #endregion 菜单栏命令实现
 

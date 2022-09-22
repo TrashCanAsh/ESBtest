@@ -36,9 +36,12 @@
                     <ColumnDefinition Width="30"/>
                 </Grid.ColumnDefinitions>
                 <Label VerticalAlignment="Top" Height="20" MouseDown="Label_MouseDown" Grid.Column="0"/>
-                <Menu VerticalAlignment="Top" Background="#EEEEEE"  Height="20" FontSize="14" HorizontalAlignment="Left">
+                <Menu x:Name="MainMenu" VerticalAlignment="Top" Background="#EEEEEE"  Height="20" FontSize="14" HorizontalAlignment="Left">
                     <MenuItem Header="功能" >
-                        <MenuItem Header="查找样品" Command="{Binding MenuSearchSampleCommand}" CommandParameter="{Binding ElementName=TabControlFunction}"/>
+                        <MenuItem Header="样品查询" Command="{Binding MenuSearchSampleCommand}" CommandParameter="{Binding ElementName=TabControlFunction}" />
+                        <MenuItem Header="数据导入" Command="{Binding MenuInsertDataCommand}" CommandParameter="{Binding ElementName=TabControlFunction}" />
+                        <MenuItem Header="数据导出" Command="{Binding MenuOutputDataCommand}" CommandParameter="{Binding ElementName=TabControlFunction}" />
+                        <Separator/>
                         <MenuItem Header="样品借出申请">
                             <!-- *待实现：新窗口 -->
                             <MenuItem Header="填写申请"/>
@@ -89,9 +92,9 @@
                         <DropShadowEffect Color="LightGray" ShadowDepth="0" BlurRadius="5" Opacity="0.3" Direction="0"/>
                     </Border.Effect>
                     <!--  标签页  -->
-                    <TabControl Grid.Column="0" x:Name="TabControlFunction">
+                    <TabControl Grid.Column="0" x:Name="TabControlFunction" >
                         <!--  查询标签页  -->
-                        <TabItem Header="查询" IsSelected="True">
+                        <TabItem Header="查询" IsSelected="True"  Visibility="Collapsed">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="auto"/>
@@ -160,7 +163,7 @@
                             </Grid>
                         </TabItem>
                         <!--  导入标签页  -->
-                        <TabItem Header="导入">
+                        <TabItem Header="导入"  Visibility="Collapsed">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="auto"/>
@@ -221,7 +224,7 @@
                             </Grid>
                         </TabItem>
                         <!--  导出标签页  -->
-                        <TabItem Header="导出">
+                        <TabItem Header="导出"  Visibility="Collapsed">
                             <StackPanel Margin="10 20 10 0">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
