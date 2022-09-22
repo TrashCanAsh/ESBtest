@@ -64,11 +64,9 @@
             </Grid>
             <!--  工具栏  -->
             <ToolBar Grid.Row="1">
-                <Button Content="导入"/>
-                <Separator/>
+                
                 <Button Content="删除" Command="{Binding DeleteSelectedSampleCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
-                <Separator/>
-                <Button Content="导出"/>
+                
                 
             </ToolBar>
             <!--  主体部分  -->

@@ -274,16 +274,20 @@ namespace ESBtest.ViewModel
                     iList.Add(int.Parse(s.SampleID));
                 }
             }
-            if(iList.Count > 0)
+            if (iList.Count > 0)
             {
-                string str = "正在删除：";
+                string str = "";
                 foreach (int i in iList)
                 {
                     str += i + ";";
                 }
-                if(MessageBox.Show((w as Window), str, "提示")==MessageBoxResult.Yes)
+                if (MessageBox.Show((w as Window), "正在删除：" + str, "提示", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
-
+                    if (dBControl.DeleteSampleTable(iList) > 0)
+                    {
+                        MessageBox.Show((w as Window), "成功删除：" + str, "提示");
+                    }
+                    RefreshDataGrid((w as MainView).SampleDataGrid);
                 }
             }
         }

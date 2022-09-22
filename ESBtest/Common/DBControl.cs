@@ -189,7 +189,21 @@ namespace ESBtest.Common
             {
                 TryConnection();
                 //DELETE FROM table_name WHERE (situation)
-                string sqlcmd = "DELETE FROM samples WHERE idsamples = ";
+                string sqlcmd = "DELETE FROM samples WHERE (";
+                bool isFirst = true;
+                foreach (int i in idList)
+                {
+                    if(isFirst)
+                    {
+                        sqlcmd += "idsamples = " + i;
+                        isFirst = false;
+                    }
+                    else
+                    {
+                        sqlcmd += " or idsamples = " + i;
+                    }
+                }
+                sqlcmd += ")";
                 Console.WriteLine(sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 return mysqlCmd.ExecuteNonQuery();
@@ -351,17 +365,24 @@ namespace ESBtest.Common
         {
             try
             {
-                TryConnection();
-                //SELECT * FROM table_name ORDER BY column_name DESC LIMIT 1;
-                string sqlcmd = "select * from " + tablename + " order by id" + tablename + " desc limit 1";
-                Console.WriteLine(sqlcmd);
-                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
-                MySqlDataReader reader = mysqlCmd.ExecuteReader();
-                //默认位置 SqlDataReader 位于第一条记录之前。 因此，必须调用 Read 才能开始访问任何数据。
-                reader.Read();
-                int n = reader.GetInt32(0);
-                reader.Close();
-                return n;
+                if (NumOfTableRow(tablename) > 0)
+                {
+                    TryConnection();
+                    //SELECT * FROM table_name ORDER BY column_name DESC LIMIT 1;
+                    string sqlcmd = "select * from " + tablename + " order by id" + tablename + " desc limit 1";
+                    Console.WriteLine(sqlcmd);
+                    mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
+                    MySqlDataReader reader = mysqlCmd.ExecuteReader();
+                    //默认位置 SqlDataReader 位于第一条记录之前。 因此，必须调用 Read 才能开始访问任何数据。
+                    reader.Read();
+                    int n = reader.GetInt32(0);
+                    reader.Close();
+                    return n;
+                }
+                else
+                {
+                    return 0;
+                }
             }
             catch (Exception ex)
             {
