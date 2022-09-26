@@ -11,7 +11,7 @@ namespace ESBtest.Common
     /// <summary>
     /// 全局变量
     /// </summary>
-    public static class GlobalValue
+    public class GlobalValue
     {
         public static DateTime FirstSamplingTime = new DateTime(2022, 08, 10);
         public static UserModel CurrentUser;

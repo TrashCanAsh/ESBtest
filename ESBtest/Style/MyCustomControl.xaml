@@ -192,11 +192,71 @@
         <Setter Property="Height" Value="20"/>
         <Setter Property="Width" Value="30"/>
     </Style>
-    
-    <!-- -->
 
 
+    <!--  Style:  CheckBox Favorites  -->
+    <Style x:Key="CheckBoxStyleFavorites" BasedOn="{StaticResource {x:Static ToolBar.ToggleButtonStyleKey}}" TargetType="{x:Type CheckBox}">
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="IsTabStop" Value="False" />
+        <!--把OverridesDefaultStyle设置为True，表示这个控件不使用当前Themes的任何属性。-->
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Style.Triggers>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type CheckBox}">
+                            <Grid Background="Transparent">
+                                <TextBlock x:Name="icon" Text="&#xe658;" FontFamily="/ESBtest;component/Assets/Fonts/#iconfont"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+            <Trigger Property="IsChecked" Value="False">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type CheckBox}">
+                            <Grid Background="Transparent">
+                                <TextBlock x:Name="icon" Text="&#xe657;" FontFamily="/ESBtest;component/Assets/Fonts/#iconfont"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 
+    <!--  Style:  CheckBox Cart  -->
+    <Style x:Key="CheckBoxStyleCart" BasedOn="{StaticResource {x:Static ToolBar.ToggleButtonStyleKey}}" TargetType="{x:Type CheckBox}">
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="IsTabStop" Value="False" />
+        <!--把OverridesDefaultStyle设置为True，表示这个控件不使用当前Themes的任何属性。-->
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Style.Triggers>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type CheckBox}">
+                            <Grid Background="Transparent">
+                                <TextBlock x:Name="icon" Text="&#xe77b;" FontFamily="/ESBtest;component/Assets/Fonts/#iconfont"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+            <Trigger Property="IsChecked" Value="False">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type CheckBox}">
+                            <Grid Background="Transparent">
+                                <TextBlock x:Name="icon" Text="&#xe7b2;" FontFamily="/ESBtest;component/Assets/Fonts/#iconfont"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 
 
 

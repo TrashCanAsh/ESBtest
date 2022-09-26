@@ -57,8 +57,8 @@ namespace ESBtest.Common
                     };
                     sList.Add(sample);
                 }
-                strFile.Close();
             }
+            strFile.Close();
             return sList;
         }
         /// <summary>

@@ -70,10 +70,10 @@ namespace ESBtest.ViewModel
                 if (dBControl.IsUserNameAndPasswordMatch(userModel.UserName, userModel.Password))
                 {
                     MessageBox.Show((w as Window), "登录成功", "登录提示");
+                    GlobalValue.CurrentUser = dBControl.GetUserInformation(userModel.UserName);
                     MainView mainWindow = new MainView();
                     mainWindow.Show();
                     (w as Window).Close();
-                    GlobalValue.CurrentUser = dBControl.GetUserInformation(userModel.UserName);
                 }
                 else
                 {

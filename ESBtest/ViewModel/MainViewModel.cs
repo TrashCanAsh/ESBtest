@@ -23,7 +23,6 @@ namespace ESBtest.ViewModel
 
         public ObservableCollection<string> ComboBoxCategory { get; set; }
 
-        public UserModel UserModel { get; set; }
         public SampleModel SampleModel { get; set; }
         public SearchModel SearchModel { get; set; }
 
@@ -46,6 +45,9 @@ namespace ESBtest.ViewModel
         public CommandBase OpenOutputFileDialogCommand { get; set; }
         public CommandBase OutputFileDataCommand { get; set; }
 
+        public CommandBase FavoritesCommand { get; set; }
+        public CommandBase CartCommand { get; set; }
+
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -63,8 +65,6 @@ namespace ESBtest.ViewModel
         {
             //创建数据库操作实例
             this.dBControl = new DBControl();
-            //创建用户数据实例
-            this.UserModel = new UserModel();
             //创建样品信息实例
             this.SampleModel = new SampleModel();
             //创建搜索条件实例
@@ -117,6 +117,9 @@ namespace ESBtest.ViewModel
             this.DeleteSelectedSampleCommand = new CommandBase();
             this.OpenOutputFileDialogCommand = new CommandBase();
             this.OutputFileDataCommand = new CommandBase();
+            this.FavoritesCommand = new CommandBase();
+            this.CartCommand = new CommandBase();
+
 
             //搜索样品信息命令
             this.SearchCommand.ExecuteAction = new Action<object>(SearchSample);
@@ -138,7 +141,12 @@ namespace ESBtest.ViewModel
             this.OpenOutputFileDialogCommand.ExecuteAction = new Action<object>(OutputFileDialog);
             //导出被选中的样品数据命令
             this.OutputFileDataCommand.ExecuteAction = new Action<object>(OutputSample);
+            //
+            this.FavoritesCommand.ExecuteAction = new Action<object>(Favorites);
+            //
+            this.CartCommand.ExecuteAction = new Action<object>(Cart);
             #endregion 功能命令
+
         }
 
         #region 菜单栏命令实现
@@ -148,7 +156,10 @@ namespace ESBtest.ViewModel
         /// <param name="w">TabControl</param>
         private void MenuSearchSample(object w)
         {
-            (w as TabControl).SelectedIndex = 0;
+            (w as MainView).TabControlFunction.SelectedIndex = 0;
+            (w as MainView).MenuItemSearch.IsChecked = true;
+            (w as MainView).MenuItemInsert.IsChecked = false;
+            (w as MainView).MenuItemOutput.IsChecked = false;
         }
         /// <summary>
         /// 将标签页设置到第二页（数据导入）
@@ -156,7 +167,10 @@ namespace ESBtest.ViewModel
         /// <param name="w">TabControl</param>
         private void MenuInsertData(object w)
         {
-            (w as TabControl).SelectedIndex = 1;
+            (w as MainView).TabControlFunction.SelectedIndex = 1;
+            (w as MainView).MenuItemSearch.IsChecked = false;
+            (w as MainView).MenuItemInsert.IsChecked = true;
+            (w as MainView).MenuItemOutput.IsChecked = false;
         }
         /// <summary>
         /// 将标签页设置到第三页（数据导出）
@@ -164,7 +178,10 @@ namespace ESBtest.ViewModel
         /// <param name="w">TabControl</param>
         private void MenuOutputData(object w)
         {
-            (w as TabControl).SelectedIndex = 2;
+            (w as MainView).TabControlFunction.SelectedIndex = 2;
+            (w as MainView).MenuItemSearch.IsChecked = false;
+            (w as MainView).MenuItemInsert.IsChecked = false;
+            (w as MainView).MenuItemOutput.IsChecked = true;
         }
         #endregion 菜单栏命令实现
 
@@ -331,11 +348,14 @@ namespace ESBtest.ViewModel
         {
             List<int> iList = new List<int>();
             List<SampleModel> sList = (List<SampleModel>)dg.ItemsSource;
-            foreach (SampleModel s in sList)
+            if(sList != null)
             {
-                if (s.IsSelected)
+                foreach (SampleModel s in sList)
                 {
-                    iList.Add(int.Parse(s.SampleID));
+                    if (s.IsSelected)
+                    {
+                        iList.Add(int.Parse(s.SampleID));
+                    }
                 }
             }
             return iList;
@@ -401,6 +421,30 @@ namespace ESBtest.ViewModel
             else
             {
                 MessageBox.Show((w as Window), "请先选择样品！", "提示");
+            }
+        }
+        //
+        private void Favorites(object w)
+        {
+            if((w as SampleModel).IsFavorited)
+            {
+                dBControl.InsertIntoFavoriteTable(GlobalValue.CurrentUser.UserID, (w as SampleModel).SampleID);
+            }
+            else
+            {
+                dBControl.DeleteFavoriteTable(GlobalValue.CurrentUser.UserID, (w as SampleModel).SampleID);
+            }
+        }
+        //
+        private void Cart(object w)
+        {
+            if ((w as SampleModel).IsInCart)
+            {
+                dBControl.InsertIntoCartTable(GlobalValue.CurrentUser.UserID, (w as SampleModel).SampleID);
+            }
+            else
+            {
+                dBControl.DeleteCartTable(GlobalValue.CurrentUser.UserID, (w as SampleModel).SampleID);
             }
         }
         #endregion 功能命令实现

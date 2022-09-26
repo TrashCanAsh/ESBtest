@@ -177,6 +177,64 @@ namespace ESBtest.Common
             }
             return -1;
         }
+        /// <summary>
+        /// 向用户收藏表中添加数据
+        /// </summary>
+        /// <param name="iduser"></param>
+        /// <param name="idsamples"></param>
+        /// <returns></returns>
+        public int InsertIntoFavoriteTable(int iduser, string idsamples)
+        {
+            try
+            {
+                string num = (NumOfTableRow("userfavorites") + 1).ToString();
+                TryConnection();
+                string sqlcmd = "insert into userfavorites (iduserfavorites, iduser, idsamples) values (" + num + ", " + iduser + ", " + idsamples + ")";
+                Console.WriteLine(sqlcmd);
+                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
+                //For UPDATE, INSERT, and DELETE statements
+                //返回值为受影响的列数，如果为-1则为操作失败
+                return mysqlCmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                sqlDispose();
+            }
+            return -1;
+        }
+        /// <summary>
+        /// 向用户购物车表中添加数据
+        /// </summary>
+        /// <param name="iduser"></param>
+        /// <param name="idsamples"></param>
+        /// <returns></returns>
+        public int InsertIntoCartTable(int iduser, string idsamples)
+        {
+            try
+            {
+                string num = (NumOfTableRow("usercarts") + 1).ToString();
+                TryConnection();
+                string sqlcmd = "insert into usercarts (idusercarts, iduser, idsamples) values (" + num + ", " + iduser + ", " + idsamples + ")";
+                Console.WriteLine(sqlcmd);
+                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
+                //For UPDATE, INSERT, and DELETE statements
+                //返回值为受影响的列数，如果为-1则为操作失败
+                return mysqlCmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                sqlDispose();
+            }
+            return -1;
+        }
         #endregion 增
 
         #region 删
@@ -206,6 +264,60 @@ namespace ESBtest.Common
                     }
                 }
                 sqlcmd += ")";
+                Console.WriteLine(sqlcmd);
+                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
+                return mysqlCmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                sqlDispose();
+            }
+            return -1;
+        }
+        /// <summary>
+        /// 根据用户ID和样品ID删除收藏夹对应信息
+        /// </summary>
+        /// <param name="iduser"></param>
+        /// <param name="idsamples"></param>
+        /// <returns></returns>
+        public int DeleteFavoriteTable(int iduser, string idsamples)
+        {
+            try
+            {
+                TryConnection();
+                //DELETE FROM table_name WHERE (situation)
+                string sqlcmd = "DELETE FROM userfavorites WHERE ( iduser = " + iduser + " AND idsamples = " + idsamples + " )";
+                Console.WriteLine(sqlcmd);
+                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
+                return mysqlCmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                sqlDispose();
+            }
+            return -1;
+        }
+        /// <summary>
+        /// 根据用户ID和样品ID删除购物车对应信息
+        /// </summary>
+        /// <param name="iduser"></param>
+        /// <param name="idsamples"></param>
+        /// <returns></returns>
+        public int DeleteCartTable(int iduser, string idsamples)
+        {
+            try
+            {
+                TryConnection();
+                //DELETE FROM table_name WHERE (situation)
+                string sqlcmd = "DELETE FROM usercarts WHERE ( iduser = " + iduser + " AND idsamples = " + idsamples + " )";
                 Console.WriteLine(sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 return mysqlCmd.ExecuteNonQuery();
@@ -470,7 +582,6 @@ namespace ESBtest.Common
                 {
                     sList = GetSampleList(reader);
                 }
-                reader.Close();
                 return sList;
             }
             catch (Exception ex)
@@ -581,7 +692,6 @@ namespace ESBtest.Common
                 {
                     sList = GetSampleList(reader);
                 }
-                reader.Close();
                 return sList;
             }
             catch (Exception ex)
@@ -628,7 +738,6 @@ namespace ESBtest.Common
                 {
                     sList = GetSampleList(reader);
                 }
-                reader.Close();
                 return sList;
             }
             catch (Exception ex)
@@ -640,6 +749,118 @@ namespace ESBtest.Common
                 sqlDispose();
             }
             return null;
+        }
+        /// <summary>
+        /// 根据用户ID来查询收藏样品信息
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// <returns>对应用户的收藏夹中的样品ID列表</returns>
+        public List<int> SearchFavorited(int UserID)
+        {
+            List<int> fList = new List<int>();
+            try
+            {
+                TryConnection();
+                string sqlcmd = "select * from userfavorites where iduser = " + UserID;
+
+                Console.WriteLine(sqlcmd);
+
+                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
+                MySqlDataReader reader = mysqlCmd.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        fList.Add(reader.GetInt32(2));
+                    }
+                }
+                reader.Close();
+                return fList;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                sqlDispose();
+            }
+            return null;
+        }
+        /// <summary>
+        /// 根据用户ID来查询购物车中样品信息
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// <returns>对应用户购物车中的样品ID列表</returns>
+        public List<int> SearchInCart(int UserID)
+        {
+            List<int> cList = new List<int>();
+            try
+            {
+                TryConnection();
+                string sqlcmd = "select * from usercarts where iduser = " + UserID;
+
+                Console.WriteLine(sqlcmd);
+
+                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
+                MySqlDataReader reader = mysqlCmd.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        cList.Add(reader.GetInt32(2));
+                    }
+                }
+                reader.Close();
+                return cList;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                sqlDispose();
+            }
+            return null;
+        }
+        /// <summary>
+        /// 向SampleModel列表中添加收藏夹和购物车信息
+        /// </summary>
+        /// <param name="sList"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        public List<SampleModel> SearchFC(List<SampleModel> sList, int UserID)
+        {
+            if(UserID > 0)
+            {
+                List<int> fList = SearchFavorited(UserID);
+                List<int> cList = SearchInCart(UserID);
+                foreach (SampleModel sample in sList)
+                {
+                    foreach (int f in fList)
+                    {
+                        if(sample.SampleID == f.ToString())
+                        {
+                            sample.IsFavorited = true;
+                            fList.Remove(f);
+                            break;
+                        }
+                    }
+                    foreach (int c in cList)
+                    {
+                        if (sample.SampleID == c.ToString())
+                        {
+                            sample.IsFavorited = true;
+                            cList.Remove(c);
+                            break;
+                        }
+                    }
+                    if (fList.Count == 0 && cList.Count == 0)
+                        break;
+                }
+            }
+            return sList;
         }
         #endregion 查
 
@@ -684,7 +905,8 @@ namespace ESBtest.Common
                 }
                 sList.Add(s);
             }
-            return sList;
+            reader.Close();
+            return SearchFC(sList, GlobalValue.CurrentUser.UserID);
         }
         #endregion 辅助函数
 

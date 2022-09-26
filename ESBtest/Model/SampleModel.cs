@@ -138,10 +138,37 @@ namespace ESBtest.Model
             }
         }
 
+        private bool isFavorited;
+
+        public bool IsFavorited
+        {
+            get { return isFavorited; }
+            set
+            {
+                isFavorited = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool isInCart;
+
+        public bool IsInCart
+        {
+            get { return isInCart; }
+            set
+            {
+                isInCart = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
         public SampleModel()
         {
             this.SamplingDateTime = DateTime.Now;
             this.IsSelected = false;
+            this.IsFavorited = false;
+            this.IsInCart = false;
         }
 
 
