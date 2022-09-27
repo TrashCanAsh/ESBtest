@@ -22,6 +22,7 @@ namespace ESBtest.ViewModel
         private DBControl dBControl;
 
         public ObservableCollection<string> ComboBoxCategory { get; set; }
+        public ObservableCollection<SampleModel> SampleModelList { get; set; }
 
         public SampleModel SampleModel { get; set; }
         public SearchModel SearchModel { get; set; }
@@ -33,6 +34,8 @@ namespace ESBtest.ViewModel
         public CommandBase MenuSearchSampleCommand { get; set; }
         public CommandBase MenuInsertDataCommand { get; set; }
         public CommandBase MenuOutputDataCommand { get; set; }
+        public CommandBase MenuFavoriteCommand { get; set; }
+        public CommandBase MenuCartCommand { get; set; }
 
         public CommandBase SearchCommand { get; set; }
         public CommandBase SearchResetCommand { get; set; }
@@ -45,6 +48,7 @@ namespace ESBtest.ViewModel
         public CommandBase OpenOutputFileDialogCommand { get; set; }
         public CommandBase OutputFileDataCommand { get; set; }
 
+        public CommandBase CheckAllCommand { get; set; }
         public CommandBase FavoritesCommand { get; set; }
         public CommandBase CartCommand { get; set; }
 
@@ -71,6 +75,8 @@ namespace ESBtest.ViewModel
             this.SearchModel = new SearchModel();
             //下拉框内容
             this.ComboBoxCategory = new ObservableCollection<string>() { "null", "solid", "liquid", "gas", "bio" };
+            //创建表格数据源实例
+            this.SampleModelList = new ObservableCollection<SampleModel>() ;
         }
         /// <summary>
         /// 命令合集
@@ -96,6 +102,8 @@ namespace ESBtest.ViewModel
             this.MenuSearchSampleCommand = new CommandBase();
             this.MenuInsertDataCommand = new CommandBase();
             this.MenuOutputDataCommand = new CommandBase();
+            this.MenuFavoriteCommand = new CommandBase();
+            this.MenuCartCommand = new CommandBase();
 
             //菜单栏选择样品信息搜索命令
             this.MenuSearchSampleCommand.ExecuteAction = new Action<object>(MenuSearchSample);
@@ -103,6 +111,10 @@ namespace ESBtest.ViewModel
             this.MenuInsertDataCommand.ExecuteAction = new Action<object>(MenuInsertData);
             //菜单栏选择样品信息导出命令
             this.MenuOutputDataCommand.ExecuteAction = new Action<object>(MenuOutputData);
+            //菜单栏打开当前用户的收藏夹
+            this.MenuFavoriteCommand.ExecuteAction = new Action<object>(MenuFavorite);
+            //菜单栏打开当前用户的购物车
+            this.MenuCartCommand.ExecuteAction = new Action<object>(MenuCart);
             #endregion 菜单栏命令
 
             #region 功能命令
@@ -117,6 +129,7 @@ namespace ESBtest.ViewModel
             this.DeleteSelectedSampleCommand = new CommandBase();
             this.OpenOutputFileDialogCommand = new CommandBase();
             this.OutputFileDataCommand = new CommandBase();
+            this.CheckAllCommand = new CommandBase();
             this.FavoritesCommand = new CommandBase();
             this.CartCommand = new CommandBase();
 
@@ -141,9 +154,11 @@ namespace ESBtest.ViewModel
             this.OpenOutputFileDialogCommand.ExecuteAction = new Action<object>(OutputFileDialog);
             //导出被选中的样品数据命令
             this.OutputFileDataCommand.ExecuteAction = new Action<object>(OutputSample);
-            //
+            //表格全选or全不选命令
+            this.CheckAllCommand.ExecuteAction = new Action<object>(CheckAll);
+            //表格单击收藏样品命令
             this.FavoritesCommand.ExecuteAction = new Action<object>(Favorites);
-            //
+            //表格单击加入购物车命令
             this.CartCommand.ExecuteAction = new Action<object>(Cart);
             #endregion 功能命令
 
@@ -153,7 +168,7 @@ namespace ESBtest.ViewModel
         /// <summary>
         /// 将标签页设置到第一页（样品数据搜索）
         /// </summary>
-        /// <param name="w">TabControl</param>
+        /// <param name="w">MainView</param>
         private void MenuSearchSample(object w)
         {
             (w as MainView).TabControlFunction.SelectedIndex = 0;
@@ -164,7 +179,7 @@ namespace ESBtest.ViewModel
         /// <summary>
         /// 将标签页设置到第二页（数据导入）
         /// </summary>
-        /// <param name="w">TabControl</param>
+        /// <param name="w">MainView</param>
         private void MenuInsertData(object w)
         {
             (w as MainView).TabControlFunction.SelectedIndex = 1;
@@ -175,13 +190,33 @@ namespace ESBtest.ViewModel
         /// <summary>
         /// 将标签页设置到第三页（数据导出）
         /// </summary>
-        /// <param name="w">TabControl</param>
+        /// <param name="w">MainView</param>
         private void MenuOutputData(object w)
         {
             (w as MainView).TabControlFunction.SelectedIndex = 2;
             (w as MainView).MenuItemSearch.IsChecked = false;
             (w as MainView).MenuItemInsert.IsChecked = false;
             (w as MainView).MenuItemOutput.IsChecked = true;
+        }
+        /// <summary>
+        /// 打开当前用户的收藏夹
+        /// </summary>
+        /// <param name="w"></param>
+        private void MenuFavorite(object w)
+        {
+            FavoriteView favoriteView = new FavoriteView();
+            favoriteView.ShowDialog();
+            RefreshDataGrid((w as MainView).SampleDataGrid);
+        }
+        /// <summary>
+        /// 打开当前用户的购物车
+        /// </summary>
+        /// <param name="w"></param>
+        private void MenuCart(object w)
+        {
+            CartView cartView = new CartView();
+            cartView.ShowDialog();
+            RefreshDataGrid((w as MainView).SampleDataGrid);
         }
         #endregion 菜单栏命令实现
 
@@ -193,7 +228,8 @@ namespace ESBtest.ViewModel
         private void RefreshDataGrid(DataGrid dg)
         {
             dg.ItemsSource = null;
-            dg.ItemsSource = dBControl.SearchSample();
+            SampleModelList = dBControl.SearchSample();
+            dg.ItemsSource = SampleModelList;
         }
         /// <summary>
         /// 根据搜索条件对样品数据进行搜索
@@ -347,7 +383,7 @@ namespace ESBtest.ViewModel
         private List<int> GetSelectedSamples(DataGrid dg)
         {
             List<int> iList = new List<int>();
-            List<SampleModel> sList = (List<SampleModel>)dg.ItemsSource;
+            ObservableCollection<SampleModel> sList = (ObservableCollection<SampleModel>)dg.ItemsSource;
             if(sList != null)
             {
                 foreach (SampleModel s in sList)
@@ -423,7 +459,21 @@ namespace ESBtest.ViewModel
                 MessageBox.Show((w as Window), "请先选择样品！", "提示");
             }
         }
-        //
+        /// <summary>
+        /// 表格表头全选或全不选
+        /// </summary>
+        /// <param name="w">isChecked</param>
+        private void CheckAll(object w)
+        {
+            foreach (SampleModel sample in SampleModelList)
+            {
+                sample.IsSelected = (bool)w;
+            }
+        }
+        /// <summary>
+        /// 添加或删除收藏样品
+        /// </summary>
+        /// <param name="w">DataGrid.SelectedItem</param>
         private void Favorites(object w)
         {
             if((w as SampleModel).IsFavorited)
@@ -435,7 +485,10 @@ namespace ESBtest.ViewModel
                 dBControl.DeleteFavoriteTable(GlobalValue.CurrentUser.UserID, (w as SampleModel).SampleID);
             }
         }
-        //
+        /// <summary>
+        /// 添加或删除购物车中样品
+        /// </summary>
+        /// <param name="w">DataGrid.SelectedItem</param>
         private void Cart(object w)
         {
             if ((w as SampleModel).IsInCart)

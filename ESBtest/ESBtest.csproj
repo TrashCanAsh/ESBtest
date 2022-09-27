@@ -114,10 +114,18 @@
     <Compile Include="Model\UserModel.cs" />
     <Compile Include="ViewModel\Base\CommandBase.cs" />
     <Compile Include="ViewModel\Base\NotifyBase.cs" />
+    <Compile Include="ViewModel\CartViewModel.cs" />
+    <Compile Include="ViewModel\FavoriteViewModel.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\UpdateViewModel.cs" />
     <Compile Include="ViewModel\SigninViewModel.cs" />
+    <Compile Include="View\CartView.xaml.cs">
+      <DependentUpon>CartView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\FavoriteView.xaml.cs">
+      <DependentUpon>FavoriteView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\UpdateView.xaml.cs">
       <DependentUpon>UpdateView.xaml</DependentUpon>
     </Compile>
@@ -125,6 +133,14 @@
       <DependentUpon>SigninView.xaml</DependentUpon>
     </Compile>
     <Page Include="Style\MyCustomControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CartView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\FavoriteView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

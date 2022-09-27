@@ -59,7 +59,7 @@ namespace ESBtest.ViewModel
             this.CloseWindowCommand.ExecuteAction = new Action<object>(GlobalFunc.CloseWindow);
             //最小化窗口命令
             this.MinWindowCommand.ExecuteAction = new Action<object>(GlobalFunc.MinWindow);
-            //
+            //确认修改信息命令
             this.UpdateSampleCommand.ExecuteAction = new Action<object>(UpdateSample);
             //取消修改命令
             this.CancelCommand.ExecuteAction = new Action<object>(GlobalFunc.CloseWindow);

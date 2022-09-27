@@ -1,6 +1,7 @@
 ﻿using ESBtest.Model;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -67,7 +68,7 @@ namespace ESBtest.Common
         /// <param name="filepath">目标文件路径</param>
         /// <param name="sList">选中的样品信息</param>
         /// <returns></returns>
-        public static bool WriteFile(string filepath, List<SampleModel> sList)
+        public static bool WriteFile(string filepath, ObservableCollection<SampleModel> sList)
         {
             if(sList != null && !string.IsNullOrEmpty(filepath))
             {

@@ -96,3 +96,7 @@ D:\vs workspace\ESBtest\ESBtest\bin\Debug\zxing.presentation.dll
 D:\vs workspace\ESBtest\ESBtest\bin\Debug\zxing.xml
 D:\vs workspace\ESBtest\ESBtest\bin\Debug\zxing.presentation.xml
 D:\vs workspace\ESBtest\ESBtest\obj\Debug\ESBtest.csprojAssemblyReference.cache
+D:\vs workspace\ESBtest\ESBtest\obj\Debug\View\FavoriteView.g.cs
+D:\vs workspace\ESBtest\ESBtest\obj\Debug\View\FavoriteView.baml
+D:\vs workspace\ESBtest\ESBtest\obj\Debug\View\CartView.g.cs
+D:\vs workspace\ESBtest\ESBtest\obj\Debug\View\CartView.baml

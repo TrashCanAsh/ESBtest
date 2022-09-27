@@ -7,6 +7,7 @@ using System.Windows;
 //
 using MySql.Data.MySqlClient;
 using ESBtest.Model;
+using System.Collections.ObjectModel;
 
 namespace ESBtest.Common
 {
@@ -96,7 +97,7 @@ namespace ESBtest.Common
         {
             try
             {
-                string num = (NumOfTableRow("user") + 1).ToString();
+                string num = (NumOfLastID("user") + 1).ToString();
                 TryConnection();
                 string sqlcmd = "insert into user (iduser, name, username, password, LOA) values (" + num + ", '" + name + "', '"
                     + username + "', '" + password + "', 'normal_user')";
@@ -187,13 +188,44 @@ namespace ESBtest.Common
         {
             try
             {
-                string num = (NumOfTableRow("userfavorites") + 1).ToString();
+                string num = (NumOfLastID("userfavorites") + 1).ToString();
                 TryConnection();
                 string sqlcmd = "insert into userfavorites (iduserfavorites, iduser, idsamples) values (" + num + ", " + iduser + ", " + idsamples + ")";
                 Console.WriteLine(sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 //For UPDATE, INSERT, and DELETE statements
                 //返回值为受影响的列数，如果为-1则为操作失败
+                return mysqlCmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                sqlDispose();
+            }
+            return -1;
+        }
+        /// <summary>
+        /// 向用户收藏表中批量添加数据
+        /// </summary>
+        /// <param name="iduser"></param>
+        /// <param name="iList"></param>
+        /// <returns></returns>
+        public int InsertIntoFavoriteTable(int iduser, List<int> iList)
+        {
+            try
+            {
+                int num = (NumOfLastID("userfavorites") + 1);
+                TryConnection();
+                string sqlcmd = "";
+                foreach (int i in iList)
+                {
+                    sqlcmd += "INSERT INTO userfavorites (iduserfavorites, iduser, idsamples) VALUES (" + num++ + "," + iduser + "," + i + ");\n";
+                }
+                Console.WriteLine(sqlcmd);
+                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 return mysqlCmd.ExecuteNonQuery();
             }
             catch (Exception ex)
@@ -216,13 +248,44 @@ namespace ESBtest.Common
         {
             try
             {
-                string num = (NumOfTableRow("usercarts") + 1).ToString();
+                string num = (NumOfLastID("usercarts") + 1).ToString();
                 TryConnection();
                 string sqlcmd = "insert into usercarts (idusercarts, iduser, idsamples) values (" + num + ", " + iduser + ", " + idsamples + ")";
                 Console.WriteLine(sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 //For UPDATE, INSERT, and DELETE statements
                 //返回值为受影响的列数，如果为-1则为操作失败
+                return mysqlCmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                sqlDispose();
+            }
+            return -1;
+        }
+        /// <summary>
+        /// 向用户购物车表中批量添加数据
+        /// </summary>
+        /// <param name="iduser"></param>
+        /// <param name="iList"></param>
+        /// <returns></returns>
+        public int InsertIntoCartTable(int iduser, List<int> iList)
+        {
+            try
+            {
+                int num = (NumOfLastID("usercarts") + 1);
+                TryConnection();
+                string sqlcmd = "";
+                foreach (int i in iList)
+                {
+                    sqlcmd += "INSERT INTO usercarts (idusercarts, iduser, idsamples) VALUES (" + num++ + "," + iduser + "," + i + ");\n";
+                }
+                Console.WriteLine(sqlcmd);
+                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 return mysqlCmd.ExecuteNonQuery();
             }
             catch (Exception ex)
@@ -279,6 +342,47 @@ namespace ESBtest.Common
             return -1;
         }
         /// <summary>
+        /// 根据选中的样品ID和当前用户ID来删除对应收藏夹中数据
+        /// </summary>
+        /// <param name="idList"></param>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public int DeleteFavoriteTable(List<int> idList, int userID)
+        {
+            try
+            {
+                TryConnection();
+                //DELETE FROM table_name WHERE (situation)
+                string sqlcmd = "DELETE FROM userfavorites WHERE ( iduser = " + userID + " AND ( ";
+                bool isFirst = true;
+                foreach (int i in idList)
+                {
+                    if (isFirst)
+                    {
+                        sqlcmd += "idsamples = " + i;
+                        isFirst = false;
+                    }
+                    else
+                    {
+                        sqlcmd += " or idsamples = " + i;
+                    }
+                }
+                sqlcmd += "))";
+                Console.WriteLine(sqlcmd);
+                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
+                return mysqlCmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                sqlDispose();
+            }
+            return -1;
+        }
+        /// <summary>
         /// 根据用户ID和样品ID删除收藏夹对应信息
         /// </summary>
         /// <param name="iduser"></param>
@@ -291,6 +395,47 @@ namespace ESBtest.Common
                 TryConnection();
                 //DELETE FROM table_name WHERE (situation)
                 string sqlcmd = "DELETE FROM userfavorites WHERE ( iduser = " + iduser + " AND idsamples = " + idsamples + " )";
+                Console.WriteLine(sqlcmd);
+                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
+                return mysqlCmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                sqlDispose();
+            }
+            return -1;
+        }
+        /// <summary>
+        /// 根据选中的样品ID和当前用户ID来删除对应购物车中数据
+        /// </summary>
+        /// <param name="idList"></param>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public int DeleteCartTable(List<int> idList, int userID)
+        {
+            try
+            {
+                TryConnection();
+                //DELETE FROM table_name WHERE (situation)
+                string sqlcmd = "DELETE FROM usercarts WHERE ( iduser = " + userID + " AND ( ";
+                bool isFirst = true;
+                foreach (int i in idList)
+                {
+                    if (isFirst)
+                    {
+                        sqlcmd += "idsamples = " + i;
+                        isFirst = false;
+                    }
+                    else
+                    {
+                        sqlcmd += " or idsamples = " + i;
+                    }
+                }
+                sqlcmd += "))";
                 Console.WriteLine(sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 return mysqlCmd.ExecuteNonQuery();
@@ -533,14 +678,14 @@ namespace ESBtest.Common
         {
             try
             {
-                if (NumOfTableRow(tablename) > 0)
+                TryConnection();
+                //SELECT * FROM table_name ORDER BY column_name DESC LIMIT 1;
+                string sqlcmd = "select * from " + tablename + " order by id" + tablename + " desc limit 1";
+                Console.WriteLine(sqlcmd);
+                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
+                MySqlDataReader reader = mysqlCmd.ExecuteReader();
+                if(reader.HasRows)
                 {
-                    TryConnection();
-                    //SELECT * FROM table_name ORDER BY column_name DESC LIMIT 1;
-                    string sqlcmd = "select * from " + tablename + " order by id" + tablename + " desc limit 1";
-                    Console.WriteLine(sqlcmd);
-                    mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
-                    MySqlDataReader reader = mysqlCmd.ExecuteReader();
                     //默认位置 SqlDataReader 位于第一条记录之前。 因此，必须调用 Read 才能开始访问任何数据。
                     reader.Read();
                     int n = reader.GetInt32(0);
@@ -566,9 +711,9 @@ namespace ESBtest.Common
         /// 搜索全部内容
         /// </summary>
         /// <returns></returns>
-        public List<SampleModel> SearchSample()
+        public ObservableCollection<SampleModel> SearchSample()
         {
-            List<SampleModel> sList = new List<SampleModel>();
+            ObservableCollection<SampleModel> sList = new ObservableCollection<SampleModel>();
             try
             {
                 TryConnection();
@@ -604,9 +749,9 @@ namespace ESBtest.Common
         /// <param name="NW">左上角坐标</param>
         /// <param name="SE">右下角坐标</param>
         /// <returns></returns>
-        public List<SampleModel> SearchSample(string sampleName, string category, string start, string end, Location NW, Location SE)
+        public ObservableCollection<SampleModel> SearchSample(string sampleName, string category, string start, string end, Location NW, Location SE)
         {
-            List<SampleModel> sList = new List<SampleModel>();
+            ObservableCollection<SampleModel> sList = new ObservableCollection<SampleModel>();
             try
             {
                 TryConnection();
@@ -709,27 +854,35 @@ namespace ESBtest.Common
         /// </summary>
         /// <param name="idList">样品ID列表</param>
         /// <returns></returns>
-        public List<SampleModel> SearchSample(List<int> idList)
+        public ObservableCollection<SampleModel> SearchSample(List<int> idList)
         {
-            List<SampleModel> sList = new List<SampleModel>();
+            ObservableCollection<SampleModel> sList = new ObservableCollection<SampleModel>();
             try
             {
                 TryConnection();
                 string sqlcmd = "SELECT * FROM samples WHERE (";
-                bool isFirst = true;
-                foreach (int i in idList)
+                if(idList.Count>0)
                 {
-                    if (isFirst)
+                    bool isFirst = true;
+                    foreach (int i in idList)
                     {
-                        sqlcmd += "idsamples = " + i;
-                        isFirst = false;
+                        if (isFirst)
+                        {
+                            sqlcmd += "idsamples = " + i;
+                            isFirst = false;
+                        }
+                        else
+                        {
+                            sqlcmd += " or idsamples = " + i;
+                        }
                     }
-                    else
-                    {
-                        sqlcmd += " or idsamples = " + i;
-                    }
+                    sqlcmd += ")";
                 }
-                sqlcmd += ")";
+                else
+                {
+                    return null;
+                }
+                
                 Console.WriteLine(sqlcmd);
 
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
@@ -824,44 +977,6 @@ namespace ESBtest.Common
             }
             return null;
         }
-        /// <summary>
-        /// 向SampleModel列表中添加收藏夹和购物车信息
-        /// </summary>
-        /// <param name="sList"></param>
-        /// <param name="UserID"></param>
-        /// <returns></returns>
-        public List<SampleModel> SearchFC(List<SampleModel> sList, int UserID)
-        {
-            if(UserID > 0)
-            {
-                List<int> fList = SearchFavorited(UserID);
-                List<int> cList = SearchInCart(UserID);
-                foreach (SampleModel sample in sList)
-                {
-                    foreach (int f in fList)
-                    {
-                        if(sample.SampleID == f.ToString())
-                        {
-                            sample.IsFavorited = true;
-                            fList.Remove(f);
-                            break;
-                        }
-                    }
-                    foreach (int c in cList)
-                    {
-                        if (sample.SampleID == c.ToString())
-                        {
-                            sample.IsFavorited = true;
-                            cList.Remove(c);
-                            break;
-                        }
-                    }
-                    if (fList.Count == 0 && cList.Count == 0)
-                        break;
-                }
-            }
-            return sList;
-        }
         #endregion 查
 
         #region 辅助函数
@@ -870,9 +985,9 @@ namespace ESBtest.Common
         /// </summary>
         /// <param name="reader">MySqlDataReader</param>
         /// <returns></returns>
-        private List<SampleModel> GetSampleList(MySqlDataReader reader)
+        private ObservableCollection<SampleModel> GetSampleList(MySqlDataReader reader)
         {
-            List<SampleModel> sList = new List<SampleModel>();
+            ObservableCollection<SampleModel> sList = new ObservableCollection<SampleModel>();
             while (reader.Read())
             {
                 SampleModel s = new SampleModel
@@ -908,6 +1023,45 @@ namespace ESBtest.Common
             reader.Close();
             return SearchFC(sList, GlobalValue.CurrentUser.UserID);
         }
+        /// <summary>
+        /// 向SampleModel列表中添加收藏夹和购物车信息
+        /// </summary>
+        /// <param name="sList"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        public ObservableCollection<SampleModel> SearchFC(ObservableCollection<SampleModel> sList, int UserID)
+        {
+            if (UserID > 0)
+            {
+                List<int> fList = SearchFavorited(UserID);
+                List<int> cList = SearchInCart(UserID);
+                foreach (SampleModel sample in sList)
+                {
+                    foreach (int f in fList)
+                    {
+                        if (sample.SampleID == f.ToString())
+                        {
+                            sample.IsFavorited = true;
+                            fList.Remove(f);
+                            break;
+                        }
+                    }
+                    foreach (int c in cList)
+                    {
+                        if (sample.SampleID == c.ToString())
+                        {
+                            sample.IsInCart = true;
+                            cList.Remove(c);
+                            break;
+                        }
+                    }
+                    if (fList.Count == 0 && cList.Count == 0)
+                        break;
+                }
+            }
+            return sList;
+        }
+
         #endregion 辅助函数
 
     }

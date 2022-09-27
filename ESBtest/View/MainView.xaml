@@ -60,10 +60,10 @@
                         <Separator/>
                         <MenuItem Header="关于"/>
                     </MenuItem>
-                    <!-- *待实现：新窗口 -->
-                    <MenuItem Header="收藏夹" Command="{Binding}"/>
-                    <!-- *待实现：新窗口 -->
-                    <MenuItem Header="购物车" Command="{Binding}"/>
+                    <!-- 收藏夹 -->
+                    <MenuItem Header="收藏夹" Command="{Binding MenuFavoriteCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
+                    <!-- 购物车 -->
+                    <MenuItem Header="购物车" Command="{Binding MenuCartCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
                 </Menu>
                 <Button x:Name="ButtonMini" Style="{StaticResource MinimizeWindowButtonStyle}" 
                         Command="{Binding MinWindowCommand}" CommandParameter="{Binding ElementName=MainWindow}" Grid.Column="1"/>
@@ -253,7 +253,7 @@
                 
                 
                 <!--  数据展示  -->
-                <DataGrid Name="SampleDataGrid" Grid.Column="2" ItemsSource="{Binding}" FontSize="14"
+                <DataGrid Name="SampleDataGrid" Grid.Column="2" ItemsSource="{Binding SampleModelList, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" FontSize="14" 
                           AutoGenerateColumns="False" CanUserAddRows="False" >
                     <DataGrid.RowStyle >
                         <Style TargetType="DataGridRow">
@@ -280,9 +280,21 @@
                     </DataGrid.CellStyle>
                     <DataGrid.Columns>
                         <DataGridCheckBoxColumn Binding="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <DataGridCheckBoxColumn.HeaderTemplate >
+                                <DataTemplate>
+                                    <CheckBox HorizontalAlignment="Center" VerticalAlignment="Center" Command= "{Binding Path=DataContext.CheckAllCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                              CommandParameter= "{Binding Path=IsChecked, RelativeSource={RelativeSource Self}}"/>
+                                </DataTemplate>
+                            </DataGridCheckBoxColumn.HeaderTemplate>
                             <DataGridCheckBoxColumn.ElementStyle>
                                 <Style TargetType="CheckBox"/>
                             </DataGridCheckBoxColumn.ElementStyle>
+                            <DataGridCheckBoxColumn.CellStyle>
+                                <Style>
+                                    <Setter Property="CheckBox.VerticalAlignment"  Value="Center"/>
+                                    <Setter Property="CheckBox.HorizontalAlignment"  Value="Center"/>
+                                </Style>
+                            </DataGridCheckBoxColumn.CellStyle>
                         </DataGridCheckBoxColumn>
                         <DataGridTextColumn Header="编号" Binding="{Binding SampleID}" IsReadOnly="True"/>
                         <DataGridTextColumn Header="名称" Binding="{Binding SampleName}" IsReadOnly="True"/>
