@@ -79,8 +79,8 @@
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
                 <ToolBar Grid.Column="0">
-                    <Button Content="加入收藏"/>
-                    <Button Content="加入购物车"/>
+                    <Button Content="加入收藏" Command="{Binding AddFavoriteCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
+                    <Button Content="加入购物车" Command="{Binding AddIntoCartCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
                     <Separator/>
                     <Button Content="删除" Command="{Binding DeleteSelectedSampleCommand}" CommandParameter="{Binding ElementName=MainWindow}" />
                     <Separator/>

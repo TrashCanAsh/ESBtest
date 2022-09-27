@@ -44,6 +44,8 @@ namespace ESBtest.ViewModel
         public CommandBase OpenInsertFileDialogCommand { get; set; }
         public CommandBase InsertFileDataCommand { get; set; }
         public CommandBase DataGridDoubleClickCommand { get; set; }
+        public CommandBase AddFavoriteCommand { get; set; }
+        public CommandBase AddIntoCartCommand { get; set; }
         public CommandBase DeleteSelectedSampleCommand { get; set; }
         public CommandBase OpenOutputFileDialogCommand { get; set; }
         public CommandBase OutputFileDataCommand { get; set; }
@@ -126,6 +128,8 @@ namespace ESBtest.ViewModel
             this.OpenInsertFileDialogCommand = new CommandBase();
             this.InsertFileDataCommand = new CommandBase();
             this.DataGridDoubleClickCommand = new CommandBase();
+            this.AddFavoriteCommand = new CommandBase();
+            this.AddIntoCartCommand = new CommandBase();
             this.DeleteSelectedSampleCommand = new CommandBase();
             this.OpenOutputFileDialogCommand = new CommandBase();
             this.OutputFileDataCommand = new CommandBase();
@@ -148,6 +152,10 @@ namespace ESBtest.ViewModel
             this.InsertFileDataCommand.ExecuteAction = new Action<object>(InsertFileData);
             //DataGrid双击事件
             this.DataGridDoubleClickCommand.ExecuteAction = new Action<object>(DataGridDoubleClick);
+            //
+            this.AddFavoriteCommand.ExecuteAction = new Action<object>(AddFavorite);
+            //
+            this.AddIntoCartCommand.ExecuteAction = new Action<object>(AddIntoCart);
             //删除选中样品命令
             this.DeleteSelectedSampleCommand.ExecuteAction = new Action<object>(DeleteSample);
             //打开选择导出数据文件路径窗口命令
@@ -372,6 +380,38 @@ namespace ESBtest.ViewModel
                 {
                     //刷新表中内容
                     RefreshDataGrid((w as DataGrid));
+                }
+            }
+        }
+        /// <summary>
+        /// 将选中的样品添加至当前用户的收藏夹中
+        /// </summary>
+        /// <param name="w"></param>
+        private void AddFavorite(object w)
+        {
+            List<int> iList = GetSelectedSamples((w as MainView).SampleDataGrid);
+            if(iList.Count>0)
+            {
+                if(dBControl.InsertIntoFavoriteTable(GlobalValue.CurrentUser.UserID, iList) > 0)
+                {
+                    MessageBox.Show((w as Window), "收藏成功", "提示");
+                    RefreshDataGrid((w as MainView).SampleDataGrid);
+                }
+            }
+        }
+        /// <summary>
+        /// 将选中的样品添加至当前用户的购物车中
+        /// </summary>
+        /// <param name="w"></param>
+        private void AddIntoCart(object w)
+        {
+            List<int> iList = GetSelectedSamples((w as MainView).SampleDataGrid);
+            if (iList.Count > 0)
+            {
+                if (dBControl.InsertIntoCartTable(GlobalValue.CurrentUser.UserID, iList) > 0)
+                {
+                    MessageBox.Show((w as Window), "加入购物车成功", "提示");
+                    RefreshDataGrid((w as MainView).SampleDataGrid);
                 }
             }
         }
