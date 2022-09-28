@@ -21,6 +21,7 @@ namespace ESBtest.ViewModel
         public CommandBase MinWindowCommand { get; set; }
         public CommandBase LoginCommand { get; set; }
         public CommandBase SigninCommand { get; set; }
+        public CommandBase GuestLoginCommand { get; set; }
 
         public LoginViewModel()
         {
@@ -48,6 +49,7 @@ namespace ESBtest.ViewModel
             this.MinWindowCommand = new CommandBase();
             this.LoginCommand = new CommandBase();
             this.SigninCommand = new CommandBase();
+            this.GuestLoginCommand = new CommandBase();
 
             //关闭窗口命令
             this.CloseWindowCommand.ExecuteAction = new Action<object>(GlobalFunc.CloseWindow);
@@ -57,6 +59,8 @@ namespace ESBtest.ViewModel
             this.LoginCommand.ExecuteAction = new Action<object>(LoginFunc);
             //注册命令
             this.SigninCommand.ExecuteAction = new Action<object>(SigninFunc);
+            //
+            this.GuestLoginCommand.ExecuteAction = new Action<object>(GuestLoginFunc);
         }
         /// <summary>
         /// 登录命令
@@ -93,6 +97,22 @@ namespace ESBtest.ViewModel
         {
             SigninView signinWindow = new SigninView();
             signinWindow.Show();
+            (w as Window).Close();
+        }
+        /// <summary>
+        /// 游客登录
+        /// </summary>
+        /// <param name="w"></param>
+        private void GuestLoginFunc(object w)
+        {
+            MessageBox.Show((w as Window), "游客登录成功", "登录提示");
+            GlobalValue.CurrentUser = new UserModel() {
+                Name = "Guest",
+                UserRight = 0
+            };
+
+            MainView mainWindow = new MainView();
+            mainWindow.Show();
             (w as Window).Close();
         }
     }

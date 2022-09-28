@@ -49,6 +49,7 @@ namespace ESBtest.ViewModel
         public CommandBase DeleteSelectedSampleCommand { get; set; }
         public CommandBase OpenOutputFileDialogCommand { get; set; }
         public CommandBase OutputFileDataCommand { get; set; }
+        public CommandBase UserInfoCommand { get; set; }
 
         public CommandBase CheckAllCommand { get; set; }
         public CommandBase FavoritesCommand { get; set; }
@@ -107,16 +108,20 @@ namespace ESBtest.ViewModel
             this.MenuFavoriteCommand = new CommandBase();
             this.MenuCartCommand = new CommandBase();
 
-            //菜单栏选择样品信息搜索命令
+            //菜单栏选择样品信息搜索命令 权限：游客、普通用户、管理员
             this.MenuSearchSampleCommand.ExecuteAction = new Action<object>(MenuSearchSample);
-            //菜单栏选择样品信息导入命令
+            //菜单栏选择样品信息导入命令 权限：管理员
             this.MenuInsertDataCommand.ExecuteAction = new Action<object>(MenuInsertData);
-            //菜单栏选择样品信息导出命令
+            this.MenuInsertDataCommand.CanExecuteFunc = new Func<object, bool>(GlobalFunc.AdminRight);
+            //菜单栏选择样品信息导出命令 权限：普通用户、管理员
             this.MenuOutputDataCommand.ExecuteAction = new Action<object>(MenuOutputData);
-            //菜单栏打开当前用户的收藏夹
+            this.MenuOutputDataCommand.CanExecuteFunc = new Func<object, bool>(GlobalFunc.NormalUserRight);
+            //菜单栏打开当前用户的收藏夹 权限：普通用户、管理员
             this.MenuFavoriteCommand.ExecuteAction = new Action<object>(MenuFavorite);
-            //菜单栏打开当前用户的购物车
+            this.MenuFavoriteCommand.CanExecuteFunc = new Func<object, bool>(GlobalFunc.NormalUserRight);
+            //菜单栏打开当前用户的购物车 权限：普通用户、管理员
             this.MenuCartCommand.ExecuteAction = new Action<object>(MenuCart);
+            this.MenuCartCommand.CanExecuteFunc = new Func<object, bool>(GlobalFunc.NormalUserRight);
             #endregion 菜单栏命令
 
             #region 功能命令
@@ -136,38 +141,52 @@ namespace ESBtest.ViewModel
             this.CheckAllCommand = new CommandBase();
             this.FavoritesCommand = new CommandBase();
             this.CartCommand = new CommandBase();
+            this.UserInfoCommand = new CommandBase();
 
 
-            //搜索样品信息命令
+            //搜索样品信息命令 权限：游客、普通用户、管理员
             this.SearchCommand.ExecuteAction = new Action<object>(SearchSample);
-            //重置搜索条件命令
+            //重置搜索条件命令 权限：游客、普通用户、管理员
             this.SearchResetCommand.ExecuteAction = new Action<object>(SearchReset);
-            //重置搜索结果命令
+            //重置搜索结果命令 权限：游客、普通用户、管理员
             this.SearchClearCommand.ExecuteAction = new Action<object>(SearchClear);
-            //手动逐条添加样品命令
+            //手动逐条添加样品命令 权限：管理员
             this.InsertSampleInfoCommand.ExecuteAction = new Action<object>(InsertSampleInfo);
-            //打开选择导入数据文件路径窗口命令
+            this.InsertSampleInfoCommand.CanExecuteFunc = new Func<object, bool>(GlobalFunc.AdminRight);
+            //打开选择导入数据文件路径窗口命令 权限：管理员
             this.OpenInsertFileDialogCommand.ExecuteAction = new Action<object>(InsertFileDialog);
-            //批量导入样品命令
+            this.OpenInsertFileDialogCommand.CanExecuteFunc = new Func<object, bool>(GlobalFunc.AdminRight);
+            //批量导入样品命令 权限：管理员
             this.InsertFileDataCommand.ExecuteAction = new Action<object>(InsertFileData);
-            //DataGrid双击事件
+            this.InsertFileDataCommand.CanExecuteFunc = new Func<object, bool>(GlobalFunc.AdminRight);
+            //DataGrid双击事件 权限：游客、普通用户、管理员
             this.DataGridDoubleClickCommand.ExecuteAction = new Action<object>(DataGridDoubleClick);
-            //
+            //批量添加收藏事件 权限：普通用户、管理员
             this.AddFavoriteCommand.ExecuteAction = new Action<object>(AddFavorite);
-            //
+            this.AddFavoriteCommand.CanExecuteFunc = new Func<object, bool>(GlobalFunc.NormalUserRight);
+            //批量添加购物车事件 权限：普通用户、管理员
             this.AddIntoCartCommand.ExecuteAction = new Action<object>(AddIntoCart);
-            //删除选中样品命令
+            this.AddIntoCartCommand.CanExecuteFunc = new Func<object, bool>(GlobalFunc.NormalUserRight);
+            //删除选中样品命令 权限：管理员
             this.DeleteSelectedSampleCommand.ExecuteAction = new Action<object>(DeleteSample);
-            //打开选择导出数据文件路径窗口命令
+            this.DeleteSelectedSampleCommand.CanExecuteFunc = new Func<object, bool>(GlobalFunc.AdminRight);
+            //打开选择导出数据文件路径窗口命令 权限：普通用户、管理员
             this.OpenOutputFileDialogCommand.ExecuteAction = new Action<object>(OutputFileDialog);
-            //导出被选中的样品数据命令
+            this.OpenOutputFileDialogCommand.CanExecuteFunc = new Func<object, bool>(GlobalFunc.NormalUserRight);
+            //导出被选中的样品数据命令 权限：普通用户、管理员
             this.OutputFileDataCommand.ExecuteAction = new Action<object>(OutputSample);
-            //表格全选or全不选命令
+            this.OutputFileDataCommand.CanExecuteFunc = new Func<object, bool>(GlobalFunc.NormalUserRight);
+            //表格全选or全不选命令 权限：普通用户、管理员
             this.CheckAllCommand.ExecuteAction = new Action<object>(CheckAll);
-            //表格单击收藏样品命令
+            this.CheckAllCommand.CanExecuteFunc = new Func<object, bool>(GlobalFunc.NormalUserRight);
+            //表格单击收藏样品命令 权限：普通用户、管理员
             this.FavoritesCommand.ExecuteAction = new Action<object>(Favorites);
-            //表格单击加入购物车命令
+            this.FavoritesCommand.CanExecuteFunc = new Func<object, bool>(GlobalFunc.NormalUserRight);
+            //表格单击加入购物车命令 权限：普通用户、管理员
             this.CartCommand.ExecuteAction = new Action<object>(Cart);
+            this.CartCommand.CanExecuteFunc = new Func<object, bool>(GlobalFunc.NormalUserRight);
+            //获取当前用户信息 权限：游客、普通用户、管理员
+            this.UserInfoCommand.ExecuteAction = new Action<object>(UserInfo);
             #endregion 功能命令
 
         }
@@ -539,6 +558,15 @@ namespace ESBtest.ViewModel
             {
                 dBControl.DeleteCartTable(GlobalValue.CurrentUser.UserID, (w as SampleModel).SampleID);
             }
+        }
+        /// <summary>
+        /// 查看当前用户信息
+        /// </summary>
+        /// <param name="w"></param>
+        private void UserInfo(object w)
+        {
+            string str = "用户名称：" + GlobalValue.CurrentUser.Name + "\n用户权限：" + GlobalValue.CurrentUser.UserRight;
+            MessageBox.Show(str, "用户信息");
         }
         #endregion 功能命令实现
     }

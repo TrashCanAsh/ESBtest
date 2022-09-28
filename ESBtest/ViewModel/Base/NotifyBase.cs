@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace ESBtest.ViewModel.Base
 {
+    /// <summary>
+    /// 变量基础类
+    /// </summary>
     public class NotifyBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;

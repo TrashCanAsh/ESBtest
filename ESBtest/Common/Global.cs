@@ -68,6 +68,24 @@ namespace ESBtest.Common
                 (w as Window).WindowState = WindowState.Maximized;
             }
         }
+        /// <summary>
+        /// 是否为管理员及以上权限
+        /// </summary>
+        /// <param name="w"></param>
+        /// <returns></returns>
+        public static bool AdminRight(object w)
+        {
+            return GlobalValue.CurrentUser.UserRight > 1 ? true : false;
+        }
+        /// <summary>
+        /// 是否为普通用户及以上权限
+        /// </summary>
+        /// <param name="w"></param>
+        /// <returns></returns>
+        public static bool NormalUserRight(object w)
+        {
+            return GlobalValue.CurrentUser.UserRight > 0 ? true : false;
+        }
     }
     
 }

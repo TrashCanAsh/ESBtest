@@ -100,3 +100,5 @@ D:\vs workspace\ESBtest\ESBtest\obj\Debug\View\FavoriteView.g.cs
 D:\vs workspace\ESBtest\ESBtest\obj\Debug\View\FavoriteView.baml
 D:\vs workspace\ESBtest\ESBtest\obj\Debug\View\CartView.g.cs
 D:\vs workspace\ESBtest\ESBtest\obj\Debug\View\CartView.baml
+D:\vs workspace\ESBtest\ESBtest\obj\Debug\View\SampleRequestView.g.cs
+D:\vs workspace\ESBtest\ESBtest\obj\Debug\View\SampleRequestView.baml
