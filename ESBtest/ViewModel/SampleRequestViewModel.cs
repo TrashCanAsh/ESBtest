@@ -20,6 +20,8 @@ namespace ESBtest.ViewModel
         public CommandBase MinWindowCommand { get; set; }
         public CommandBase MaxWindowCommand { get; set; }
 
+
+
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -58,6 +60,10 @@ namespace ESBtest.ViewModel
             //最大化窗口命令
             this.MaxWindowCommand.ExecuteAction = new Action<object>(GlobalFunc.MaxWindow);
             #endregion 窗口命令
+
+            #region 功能命令
+
+            #endregion
         }
 
 

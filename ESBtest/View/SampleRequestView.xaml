@@ -43,48 +43,41 @@
             </ToolBar>
             <TabControl Grid.Row="2" Name="TabControlFunction">
                 <TabItem Header="申请填写" Visibility="Collapsed">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <!--  数据展示  -->
-                        <DataGrid Name="SampleDataGrid" Grid.Row="0" ItemsSource="{Binding SampleModelList, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" FontSize="14" 
-                          AutoGenerateColumns="False" CanUserAddRows="False" IsHitTestVisible="True" >
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="编号" Binding="{Binding SampleID}" />
-                                <DataGridTextColumn Header="名称" Binding="{Binding SampleName}" />
-                                <DataGridTextColumn Header="种类" Binding="{Binding Category}" />
-                                <DataGridTextColumn Header="采样时间" Binding="{Binding SamplingTime}" />
-                                <DataGridTextColumn Header="采样地点" Binding="{Binding SamplingLocation}" />
-                            </DataGrid.Columns>
-                        </DataGrid>
-                        <GroupBox Grid.Row="1" Header="样品借出申请">
-                            <Grid>
+                    <GroupBox Header="样品借出申请">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="2*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <!--  数据展示  -->
+                            <DataGrid Name="SampleDataGrid" Grid.Row="0" ItemsSource="{Binding SampleModelList, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" FontSize="14" 
+                                AutoGenerateColumns="False" CanUserAddRows="False" IsHitTestVisible="True" Margin="0 10 0 20">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="编号" Binding="{Binding SampleID}" />
+                                    <DataGridTextColumn Header="名称" Binding="{Binding SampleName}" />
+                                    <DataGridTextColumn Header="种类" Binding="{Binding Category}" />
+                                    <DataGridTextColumn Header="采样时间" Binding="{Binding SamplingTime}" />
+                                    <DataGridTextColumn Header="采样地点" Binding="{Binding SamplingLocation}" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <Grid Grid.Row="1">
                                 <Grid.RowDefinitions>
-                                    <RowDefinition/>
+                                    <RowDefinition Height="auto"/>
                                     <RowDefinition Height="auto"/>
                                 </Grid.RowDefinitions>
-                                <Grid Grid.Row="0">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                    </Grid.RowDefinitions>
-                                    <StackPanel Grid.Row="0" Orientation="Horizontal">
-                                        <Label Content="选择借出日期"/>
-                                        <DatePicker/>
-                                    </StackPanel>
-                                    <StackPanel Grid.Row="1" Orientation="Horizontal">
-                                    </StackPanel>
-                                </Grid>
-                                <StackPanel Grid.Row="1" Orientation="Horizontal">
-                                    <Button Content="提交申请" Margin="40 0 10 0"/>
-                                    <Button Content="取消"/>
+                                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                                    <Label Content="选择借出日期" />
+                                    <DatePicker SelectedDate="{Binding todo, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                                 </StackPanel>
                             </Grid>
-                        </GroupBox>
-                    </Grid>
-                    
+                            <StackPanel Grid.Row="2" Orientation="Horizontal">
+                                <Button Content="提交申请" Margin="40 0 10 0"/>
+                                <Button Content="取消"/>
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox>
+
                 </TabItem>
                 <TabItem Header="进度查询" Visibility="Collapsed">
                     <!--  数据展示  -->

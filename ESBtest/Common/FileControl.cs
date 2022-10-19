@@ -54,8 +54,26 @@ namespace ESBtest.Common
                         Category = strsplit[1],
                         SamplingTime = strsplit[2],
                         Longitude = strsplit[3],
-                        Latitude = strsplit[4]
+                        Latitude = strsplit[4],
+                        State = int.Parse(strsplit[5])
                     };
+                    switch (sample.State)
+                    {
+                        case 0:
+                            sample.StateStr = "unknown";
+                            break;
+                        case 1:
+                            sample.StateStr = "in stock";
+                            break;
+                        case 2:
+                            sample.StateStr = "locked";
+                            break;
+                        case 3:
+                            sample.StateStr = "out on loan";
+                            break;
+                        default:
+                            break;
+                    }
                     sList.Add(sample);
                 }
             }
@@ -91,7 +109,7 @@ namespace ESBtest.Common
                     foreach (SampleModel sample in sList)
                     {
                         write += sample.SampleName + spliter + sample.Category + spliter + sample.SamplingTime + spliter + sample.Longitude
-                            + spliter + sample.Latitude + spliter + "\n";
+                            + spliter + sample.Latitude + spliter + sample.State + "\n";
                     }
                     Console.WriteLine(write);
                     sw.Write(write);

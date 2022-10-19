@@ -1024,7 +1024,7 @@ namespace ESBtest.Common
                     Latitude = reader.GetValue(5).ToString(),
                     State = reader.GetInt32(6)
                 };
-                switch (reader.GetValue(2).ToString())
+                switch (s.Category)
                 {
                     case "solid":
                         s.CategoryIndex = 1;

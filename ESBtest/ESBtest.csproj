@@ -111,6 +111,7 @@
     <Compile Include="Common\PasswordBoxHelper.cs" />
     <Compile Include="Common\TextBoxAttachedProperties.cs" />
     <Compile Include="Model\SampleModel.cs" />
+    <Compile Include="Model\SampleRecord.cs" />
     <Compile Include="Model\SearchModel.cs" />
     <Compile Include="Model\UserModel.cs" />
     <Compile Include="ViewModel\Base\CommandBase.cs" />
