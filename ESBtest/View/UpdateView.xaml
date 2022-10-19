@@ -34,32 +34,38 @@
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
                         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0 10 0 0">
                             <Label Content="样品编号"/>
-                            <TextBox Text="{Binding sampleUpdated.SampleID}" Width="125" IsReadOnly="True"/>
+                            <TextBox Text="{Binding SampleUpdated.SampleID}" Width="125" IsReadOnly="True"/>
                         </StackPanel>
                         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0 10 0 0">
                             <Label Content="样品名称"/>
-                            <TextBox Text="{Binding sampleUpdated.SampleName}" Width="125"/>
+                            <TextBox Text="{Binding SampleUpdated.SampleName}" Width="125"/>
                         </StackPanel>
                         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0 10 0 0">
                             <Label Content="样品种类"/>
-                            <ComboBox x:Name="ComboBoxCategoryUpdate" Width="125" SelectedIndex="{Binding sampleUpdated.CategoryIndex, Mode=TwoWay}" 
-                                                ItemsSource="{Binding comboBoxCategory, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                            <ComboBox x:Name="ComboBoxCategoryUpdate" Width="125" SelectedIndex="{Binding SampleUpdated.CategoryIndex, Mode=TwoWay}" 
+                                                ItemsSource="{Binding ComboBoxCategory, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                         </StackPanel>
                         <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0 10 0 0">
                             <Label Content="采样时间"/>
-                            <DatePicker x:Name="DatePikerStartDateUpdate" SelectedDate="{Binding sampleUpdated.SamplingDateTime, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="125"/>
+                            <DatePicker x:Name="DatePikerStartDateUpdate" SelectedDate="{Binding SampleUpdated.SamplingDateTime, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="125"/>
                         </StackPanel>
                         <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="0 10 0 0">
                             <Label Content="采样地点"/>
                             <Label Content="x: "/>
-                            <TextBox Width="40" Text="{Binding sampleUpdated.Longitude, StringFormat='f2', Mode=TwoWay}" common:TextBoxAttachedProperties.MyIsOnlyNumber="True"/>
+                            <TextBox Width="40" Text="{Binding SampleUpdated.Longitude, StringFormat='f2', Mode=TwoWay}" common:TextBoxAttachedProperties.MyIsOnlyNumber="True"/>
                             <Label Content="y: "/>
-                            <TextBox Width="40" Text="{Binding sampleUpdated.Latitude, StringFormat='f2', Mode=TwoWay}" common:TextBoxAttachedProperties.MyIsOnlyNumber="True"/>
+                            <TextBox Width="40" Text="{Binding SampleUpdated.Latitude, StringFormat='f2', Mode=TwoWay}" common:TextBoxAttachedProperties.MyIsOnlyNumber="True"/>
                         </StackPanel>
                         <StackPanel Grid.Row="5" Orientation="Horizontal" Margin="0 10 0 0">
+                            <Label Content="样品状态"/>
+                            <ComboBox x:Name="ComboBoxStateInsert" Width="125" SelectedIndex="{Binding SampleUpdated.State, Mode=TwoWay}" 
+                                                ItemsSource="{Binding ComboBoxState, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="6" Orientation="Horizontal" Margin="0 10 0 0">
                             <Button Content="确认修改" Width="80" Margin="20 0 0 0" Command="{Binding UpdateSampleCommand}" CommandParameter="{Binding ElementName=UpdateWindow}"/>
                             <Button Content="取消" Width="80" Margin="20 0 0 0" Command="{Binding CancelCommand}" CommandParameter="{Binding ElementName=UpdateWindow}"/>
                         </StackPanel>

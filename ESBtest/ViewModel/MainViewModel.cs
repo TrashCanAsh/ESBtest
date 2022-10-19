@@ -22,6 +22,7 @@ namespace ESBtest.ViewModel
         private DBControl dBControl;
 
         public ObservableCollection<string> ComboBoxCategory { get; set; }
+        public ObservableCollection<string> ComboBoxState { get; set; }
         public ObservableCollection<SampleModel> SampleModelList { get; set; }
 
         public SampleModel SampleModel { get; set; }
@@ -78,6 +79,7 @@ namespace ESBtest.ViewModel
             this.SearchModel = new SearchModel();
             //下拉框内容
             this.ComboBoxCategory = new ObservableCollection<string>() { "null", "solid", "liquid", "gas", "bio" };
+            this.ComboBoxState = new ObservableCollection<string>() { "unknown", "in stock", "locked", "out on loan" };
             //创建表格数据源实例
             this.SampleModelList = new ObservableCollection<SampleModel>() ;
         }
@@ -335,6 +337,10 @@ namespace ESBtest.ViewModel
             {
                 MessageBox.Show((w as Window), "样品采样地点不能为空", "提示");
             }
+            else if (SampleModel.State <= 0)
+            {
+                MessageBox.Show((w as Window), "样品状态不能为空", "提示");
+            }
             else
             {
                 string name = SampleModel.SampleName;
@@ -342,7 +348,8 @@ namespace ESBtest.ViewModel
                 string time = SampleModel.SamplingDateTime.ToShortDateString();
                 string longitude = SampleModel.Longitude;
                 string latitude = SampleModel.Latitude;
-                if (dBControl.InsertIntoSampleTable(name, category, time, longitude, latitude) > 0)
+                int state = SampleModel.State;
+                if (dBControl.InsertIntoSampleTable(name, category, time, longitude, latitude, state) > 0)
                 {
                     MessageBox.Show((w as Window), "导入成功", "提示");
                     //刷新表中内容
@@ -394,7 +401,7 @@ namespace ESBtest.ViewModel
             if (sample != null)
             {
                 UpdateView updateView = new UpdateView();
-                (updateView.DataContext as UpdateViewModel).sampleUpdated = sample;
+                (updateView.DataContext as UpdateViewModel).SampleUpdated = sample;
                 if (updateView.ShowDialog().Value)
                 {
                     //刷新表中内容

@@ -125,14 +125,14 @@ namespace ESBtest.Common
         /// <param name="lo"></param>
         /// <param name="la"></param>
         /// <returns></returns>
-        public int InsertIntoSampleTable(string name, string category, string samplingTime, string lo, string la)
+        public int InsertIntoSampleTable(string name, string category, string samplingTime, string lo, string la, int state)
         {
             try
             {
                 string num = (NumOfLastID("samples") + 1).ToString();
                 TryConnection();
-                string sqlcmd = "INSERT INTO samples (idsamples, name, category, samplingtime, longitude, latitude) VALUES (" + num + ",'" + name + "','"
-                    + category + "','" + samplingTime + "'," + lo + "," + la + ")";
+                string sqlcmd = "INSERT INTO samples (idsamples, name, category, samplingtime, longitude, latitude, state) VALUES (" + num + ",'" + name + "','"
+                    + category + "','" + samplingTime + "'," + lo + "," + la + "," + state + ")";
                 Console.WriteLine(sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 return mysqlCmd.ExecuteNonQuery();
@@ -161,8 +161,8 @@ namespace ESBtest.Common
                 string sqlcmd = "";
                 foreach (SampleModel sample in sList)
                 {
-                    sqlcmd += "insert into samples (idsamples, name, category, samplingtime, longitude, latitude) values (" + num++ + ",'" + sample.SampleName + "','"
-                    + sample.Category + "','" + sample.SamplingTime + "'," + sample.Longitude + "," + sample.Latitude + ");\n";
+                    sqlcmd += "insert into samples (idsamples, name, category, samplingtime, longitude, latitude, state) values (" + num++ + ",'" + sample.SampleName + "','"
+                    + sample.Category + "','" + sample.SamplingTime + "'," + sample.Longitude + "," + sample.Latitude + "," + sample.State + ");\n";
                 }
                 Console.WriteLine(sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
@@ -489,15 +489,16 @@ namespace ESBtest.Common
         /// <param name="samplingTime"></param>
         /// <param name="longitude"></param>
         /// <param name="latitude"></param>
+        /// <param name="state"></param>
         /// <returns></returns>
-        public int UpdateSampleTable(string sampleID, string sampleName, string category, string samplingTime, string longitude, string latitude)
+        public int UpdateSampleTable(string sampleID, string sampleName, string category, string samplingTime, string longitude, string latitude, int state)
         {
             try
             {
                 TryConnection();
                 //UPDATE table_name SET column_name1 = new_value, column_name2 = new_value, ... WHERE ( situation);
                 string sqlcmd = "UPDATE samples SET name = '" + sampleName + "', category = '" + category + "', samplingtime = '" + samplingTime + 
-                    "', longitude = " + longitude + ", latitude = " + latitude + " WHERE idsamples = " + sampleID;
+                    "', longitude = " + longitude + ", latitude = " + latitude + ", state = " + state + " WHERE idsamples = " + sampleID;
                 Console.WriteLine(sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 return mysqlCmd.ExecuteNonQuery();
@@ -512,7 +513,7 @@ namespace ESBtest.Common
             }
             return -1;
         }
-
+        //修改样品借出表中内容
         public int UpdateRecordTable()
         {
             try
@@ -1020,7 +1021,8 @@ namespace ESBtest.Common
                     SamplingDateTime = (DateTime)reader.GetValue(3),
                     SamplingLocation = reader.GetValue(4).ToString() + ", " + reader.GetValue(5).ToString(),
                     Longitude = reader.GetValue(4).ToString(),
-                    Latitude = reader.GetValue(5).ToString()
+                    Latitude = reader.GetValue(5).ToString(),
+                    State = reader.GetInt32(6)
                 };
                 switch (reader.GetValue(2).ToString())
                 {
@@ -1035,6 +1037,23 @@ namespace ESBtest.Common
                         break;
                     case "bio":
                         s.CategoryIndex = 4;
+                        break;
+                    default:
+                        break;
+                }
+                switch (s.State)
+                {
+                    case 0:
+                        s.StateStr = "unknown";
+                        break;
+                    case 1:
+                        s.StateStr = "in stock";
+                        break;
+                    case 2:
+                        s.StateStr = "locked";
+                        break;
+                    case 3:
+                        s.StateStr = "out on loan";
                         break;
                     default:
                         break;

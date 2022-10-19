@@ -24,9 +24,10 @@ namespace ESBtest.ViewModel
     {
         private DBControl dBControl;
 
-        public ObservableCollection<string> comboBoxCategory { get; set; }
+        public ObservableCollection<string> ComboBoxCategory { get; set; }
+        public ObservableCollection<string> ComboBoxState { get; set; }
 
-        public SampleModel sampleUpdated { get; set; }
+        public SampleModel SampleUpdated { get; set; }
         public ImageSource QRcode { get; set; }
 
         public CommandBase CloseWindowCommand { get; set; }
@@ -51,11 +52,12 @@ namespace ESBtest.ViewModel
             //创建数据库操作实例
             this.dBControl = new DBControl();
             //创建样品信息实例
-            this.sampleUpdated = new SampleModel();
+            this.SampleUpdated = new SampleModel();
             //
             this.QRcode = null;
             //下拉框内容
-            comboBoxCategory = new ObservableCollection<string>() { "null", "solid", "liquid", "gas", "bio" };
+            this.ComboBoxCategory = new ObservableCollection<string>() { "null", "solid", "liquid", "gas", "bio" };
+            this.ComboBoxState = new ObservableCollection<string>() { "unknown", "in stock", "locked", "out on loan" };
         }
         /// <summary>
         /// 命令合集
@@ -91,7 +93,7 @@ namespace ESBtest.ViewModel
         private void UpdateSample(object w)
         {
             //修改数据库内容
-            if (dBControl.UpdateSampleTable(sampleUpdated.SampleID, sampleUpdated.SampleName, comboBoxCategory[sampleUpdated.CategoryIndex] , sampleUpdated.SamplingDateTime.ToShortDateString(), sampleUpdated.Longitude, sampleUpdated.Latitude) > 0)
+            if (dBControl.UpdateSampleTable(SampleUpdated.SampleID, SampleUpdated.SampleName, ComboBoxCategory[SampleUpdated.CategoryIndex] , SampleUpdated.SamplingDateTime.ToShortDateString(), SampleUpdated.Longitude, SampleUpdated.Latitude, SampleUpdated.State) > 0)
             {
                 MessageBox.Show((w  as Window), "修改成功", "提示");
                 (w as Window).DialogResult = true;
@@ -108,8 +110,8 @@ namespace ESBtest.ViewModel
         /// <param name="w"></param>
         private void GenerateQRcode(object w)
         {
-            string msg = sampleUpdated.SampleID + ", " + sampleUpdated.SampleName + ", " + sampleUpdated.Category + ", " + sampleUpdated.SamplingTime 
-                + ", " + sampleUpdated.Longitude + ", " + sampleUpdated.Latitude;
+            string msg = SampleUpdated.SampleID + ", " + SampleUpdated.SampleName + ", " + SampleUpdated.Category + ", " + SampleUpdated.SamplingTime 
+                + ", " + SampleUpdated.Longitude + ", " + SampleUpdated.Latitude + ", " + SampleUpdated.StateStr;
             QRcode = CreateQRCode(msg, 200, 200);
             (w as UpdateView).QRcodeImage.Source = QRcode;
         }

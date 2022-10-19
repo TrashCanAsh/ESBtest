@@ -68,11 +68,13 @@
                                 <Grid Grid.Row="0">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="auto"/>
-                                        <RowDefinition/>
+                                        <RowDefinition Height="auto"/>
                                     </Grid.RowDefinitions>
-                                    <StackPanel Orientation="Horizontal">
+                                    <StackPanel Grid.Row="0" Orientation="Horizontal">
                                         <Label Content="选择借出日期"/>
                                         <DatePicker/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Row="1" Orientation="Horizontal">
                                     </StackPanel>
                                 </Grid>
                                 <StackPanel Grid.Row="1" Orientation="Horizontal">

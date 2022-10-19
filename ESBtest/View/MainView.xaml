@@ -184,6 +184,7 @@
                                             <RowDefinition Height="auto"/>
                                             <RowDefinition Height="auto"/>
                                             <RowDefinition Height="auto"/>
+                                            <RowDefinition Height="auto"/>
                                         </Grid.RowDefinitions>
                                         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0 10 0 0">
                                             <Label Content="样品名称"/>
@@ -205,7 +206,12 @@
                                             <Label Content="y: "/>
                                             <TextBox Width="40" Text="{Binding SampleModel.Latitude, StringFormat='f2', Mode=TwoWay}" common:TextBoxAttachedProperties.MyIsOnlyNumber="True"/>
                                         </StackPanel>
-                                        <StackPanel Grid.Row="4" Margin="0 10 0 0">
+                                        <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="0 10 0 0">
+                                            <Label Content="样品状态"/>
+                                            <ComboBox x:Name="ComboBoxStateInsert" Width="125" SelectedIndex="{Binding SampleModel.State, Mode=TwoWay}" 
+                                                ItemsSource="{Binding ComboBoxCategory, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="5" Margin="0 10 0 0">
                                             <Button Content="导入" Command="{Binding InsertSampleInfoCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
                                         </StackPanel>
                                     </Grid>
@@ -298,6 +304,7 @@
                         <DataGridTextColumn Header="种类" Binding="{Binding Category}" IsReadOnly="True"/>
                         <DataGridTextColumn Header="采样时间" Binding="{Binding SamplingTime}" IsReadOnly="True"/>
                         <DataGridTextColumn Header="采样地点" Binding="{Binding SamplingLocation}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="样品状态" Binding="{Binding StateStr}" IsReadOnly="True"/>
                         <DataGridTemplateColumn>
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
