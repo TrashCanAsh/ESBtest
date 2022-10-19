@@ -43,7 +43,8 @@
                         <MenuItem x:Name="MenuItemOutput" Header="数据导出" Command="{Binding MenuOutputDataCommand}" CommandParameter="{Binding ElementName=MainWindow}" IsCheckable="True"/>
                         <Separator/>
                         <MenuItem Header="样品借出相关"/>
-
+                        <Separator/>
+                        <MenuItem Header="登出"/>
                     </MenuItem>
                     <MenuItem Header="设置" >
                         <MenuItem Header="个人信息设置" Command="{Binding UserInformationCommand}"/>

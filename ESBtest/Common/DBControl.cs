@@ -495,7 +495,7 @@ namespace ESBtest.Common
             try
             {
                 TryConnection();
-                //UPDATE table_name SET column_name1 = new_value, column_name2 = new_value WHERE ( situation);
+                //UPDATE table_name SET column_name1 = new_value, column_name2 = new_value, ... WHERE ( situation);
                 string sqlcmd = "UPDATE samples SET name = '" + sampleName + "', category = '" + category + "', samplingtime = '" + samplingTime + 
                     "', longitude = " + longitude + ", latitude = " + latitude + " WHERE idsamples = " + sampleID;
                 Console.WriteLine(sqlcmd);
@@ -513,6 +513,27 @@ namespace ESBtest.Common
             return -1;
         }
 
+        public int UpdateRecordTable()
+        {
+            try
+            {
+                TryConnection();
+                //UPDATE table_name SET column_name1 = new_value, column_name2 = new_value, ... WHERE ( situation);
+                string sqlcmd = "UPDATE samplesrecord SET ";
+                Console.WriteLine(sqlcmd);
+                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
+                return mysqlCmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                sqlDispose();
+            }
+            return -1;
+        }
         #endregion 改
 
         #region 查

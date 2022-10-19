@@ -41,13 +41,63 @@
                 <Separator/>
                 <Button Content="管理员审批"/>
             </ToolBar>
-            <TabControl Grid.Row="2">
+            <TabControl Grid.Row="2" Name="TabControlFunction">
                 <TabItem Header="申请填写" Visibility="Collapsed">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <!--  数据展示  -->
+                        <DataGrid Name="SampleDataGrid" Grid.Row="0" ItemsSource="{Binding SampleModelList, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" FontSize="14" 
+                          AutoGenerateColumns="False" CanUserAddRows="False" IsHitTestVisible="True" >
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="编号" Binding="{Binding SampleID}" />
+                                <DataGridTextColumn Header="名称" Binding="{Binding SampleName}" />
+                                <DataGridTextColumn Header="种类" Binding="{Binding Category}" />
+                                <DataGridTextColumn Header="采样时间" Binding="{Binding SamplingTime}" />
+                                <DataGridTextColumn Header="采样地点" Binding="{Binding SamplingLocation}" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <GroupBox Grid.Row="1" Header="样品借出申请">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Content="选择借出日期"/>
+                                        <DatePicker/>
+                                    </StackPanel>
+                                </Grid>
+                                <StackPanel Grid.Row="1" Orientation="Horizontal">
+                                    <Button Content="提交申请" Margin="40 0 10 0"/>
+                                    <Button Content="取消"/>
+                                </StackPanel>
+                            </Grid>
+                        </GroupBox>
+                    </Grid>
                     
                 </TabItem>
                 <TabItem Header="进度查询" Visibility="Collapsed">
+                    <!--  数据展示  -->
+                    <DataGrid Name="RequestDataGrid" Grid.Row="0" ItemsSource="{Binding abc, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" FontSize="14" 
+                          AutoGenerateColumns="False" CanUserAddRows="False" IsHitTestVisible="True" >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="申请编号" Binding="{Binding }" />
+                            <DataGridTextColumn Header="申请人" Binding="{Binding }" />
+                            <DataGridTextColumn Header="申请时间" Binding="{Binding }" />
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </TabItem>
                 <TabItem Header="历史记录" Visibility="Collapsed">
+                </TabItem>
+                <TabItem Header="管理员审批" Visibility="Collapsed">
                 </TabItem>
             </TabControl>
         </Grid>
