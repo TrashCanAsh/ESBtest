@@ -37,6 +37,8 @@ namespace ESBtest.ViewModel
         public CommandBase MenuOutputDataCommand { get; set; }
         public CommandBase MenuFavoriteCommand { get; set; }
         public CommandBase MenuCartCommand { get; set; }
+        public CommandBase MenuSampleLendCommand { get; set; }
+        public CommandBase MenuLogOutCommand { get; set; }
 
         public CommandBase SearchCommand { get; set; }
         public CommandBase SearchResetCommand { get; set; }
@@ -109,6 +111,8 @@ namespace ESBtest.ViewModel
             this.MenuOutputDataCommand = new CommandBase();
             this.MenuFavoriteCommand = new CommandBase();
             this.MenuCartCommand = new CommandBase();
+            this.MenuSampleLendCommand = new CommandBase();
+            this.MenuLogOutCommand = new CommandBase();
 
             //菜单栏选择样品信息搜索命令 权限：游客、普通用户、管理员
             this.MenuSearchSampleCommand.ExecuteAction = new Action<object>(MenuSearchSample);
@@ -124,6 +128,11 @@ namespace ESBtest.ViewModel
             //菜单栏打开当前用户的购物车 权限：普通用户、管理员
             this.MenuCartCommand.ExecuteAction = new Action<object>(MenuCart);
             this.MenuCartCommand.CanExecuteFunc = new Func<object, bool>(GlobalFunc.NormalUserRight);
+            //菜单栏打开样品借出申请界面 权限：普通用户、管理员
+            this.MenuSampleLendCommand.ExecuteAction = new Action<object>(MenuSampleLend);
+            this.MenuSampleLendCommand.CanExecuteFunc = new Func<object, bool>(GlobalFunc.NormalUserRight);
+            //菜单栏登出当前用户并返回登录界面 权限：游客、普通用户、管理员
+            this.MenuLogOutCommand.ExecuteAction = new Action<object>(MenuLogOut);
             #endregion 菜单栏命令
 
             #region 功能命令
@@ -246,6 +255,28 @@ namespace ESBtest.ViewModel
             CartView cartView = new CartView();
             cartView.ShowDialog();
             RefreshDataGrid((w as MainView).SampleDataGrid);
+        }
+        /// <summary>
+        /// 打开样品借出界面
+        /// </summary>
+        /// <param name="w"></param>
+        private void MenuSampleLend(object w)
+        {
+            SampleRequestView SampleRequestWindow = new SampleRequestView();
+
+            SampleRequestWindow.ShowDialog();
+        }
+        /// <summary>
+        /// 登出当前用户
+        /// </summary>
+        /// <param name="w"></param>
+        private void MenuLogOut(object w)
+        {
+            GlobalValue.CurrentUser = null;
+            MessageBox.Show((w as Window), "当前用户已登出\n正在返回登录界面...", "提示");
+            LoginView loginWindow = new LoginView();
+            loginWindow.Show();
+            (w as Window).Close();
         }
         #endregion 菜单栏命令实现
 

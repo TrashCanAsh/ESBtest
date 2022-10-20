@@ -14,11 +14,15 @@ namespace ESBtest.ViewModel
     {
         private DBControl dBControl;
 
+        public SampleRecord SampleRecord { get; set; }
+
         public ObservableCollection<SampleModel> SampleModelList { get; set; }
 
         public CommandBase CloseWindowCommand { get; set; }
         public CommandBase MinWindowCommand { get; set; }
         public CommandBase MaxWindowCommand { get; set; }
+
+        public CommandBase UploadRequestCommand { get; set; }
 
 
 
@@ -40,7 +44,7 @@ namespace ESBtest.ViewModel
             //创建数据库操作实例
             this.dBControl = new DBControl();
             //创建表格数据源实例
-            this.SampleModelList = new ObservableCollection<SampleModel>();
+            this.SampleModelList = dBControl.SearchSample(dBControl.SearchInCart(GlobalValue.CurrentUser.UserID));
         }
         /// <summary>
         /// 命令合集
@@ -62,10 +66,22 @@ namespace ESBtest.ViewModel
             #endregion 窗口命令
 
             #region 功能命令
+            //
+            this.UploadRequestCommand = new CommandBase();
 
+            //
+            this.UploadRequestCommand.ExecuteAction = new Action<object>(UploadRequest);
             #endregion
         }
 
+        #region 功能命令实现
+        private void UploadRequest(object w)
+        {
+            List<int> iList = dBControl.SearchInCart(GlobalValue.CurrentUser.UserID);
+            string requestDate = SampleRecord.RequestDate.ToShortDateString().ToString();
+
+        }
+        #endregion
 
     }
 }

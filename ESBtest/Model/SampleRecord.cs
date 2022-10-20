@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ESBtest.Model
 {
-    class SampleRecord : NotifyBase
+    public class SampleRecord : NotifyBase
     {
         #region property
         private int num;
@@ -55,7 +55,7 @@ namespace ESBtest.Model
         }
 
         private DateTime requestDate;
-        public DateTime RequestTime
+        public DateTime RequestDate
         {
             get { return requestDate; }
             set
@@ -109,7 +109,13 @@ namespace ESBtest.Model
             }
         }
 
-
+        public SampleRecord()
+        {
+            this.RequestDate = DateTime.Now;
+            this.Approvaldate = DateTime.Now;
+            this.OutDate = DateTime.Now;
+            this.InDate = DateTime.Now;
+        }
 
 
         #endregion

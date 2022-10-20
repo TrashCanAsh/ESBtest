@@ -298,6 +298,32 @@ namespace ESBtest.Common
             }
             return -1;
         }
+
+        public int InsertIntoSampleRecordTable(List<int> iList, string requestDate, int userID, int state)
+        {
+            try
+            {
+                int num = (NumOfLastID("samplesrecord") + 1);
+                TryConnection();
+                string sqlcmd = "";
+                foreach (int i in iList)
+                {
+                    sqlcmd += "INSERT INTO samplesrecord (idusercarts, iduser, idsamples) VALUES (" + num++ + "," + iduser + "," + i + ");\n";
+                }
+                Console.WriteLine(sqlcmd);
+                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
+                return mysqlCmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                sqlDispose();
+            }
+            return -1;
+        }
         #endregion 增
 
         #region 删

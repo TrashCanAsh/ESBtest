@@ -68,11 +68,11 @@
                                 </Grid.RowDefinitions>
                                 <StackPanel Grid.Row="0" Orientation="Horizontal">
                                     <Label Content="选择借出日期" />
-                                    <DatePicker SelectedDate="{Binding todo, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                    <DatePicker SelectedDate="{Binding SampleRecord.RequestDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                                 </StackPanel>
                             </Grid>
                             <StackPanel Grid.Row="2" Orientation="Horizontal">
-                                <Button Content="提交申请" Margin="40 0 10 0"/>
+                                <Button Content="提交申请" Command="{Binding UploadRequestCommand}" CommandParameter="{Binding ElementName=SampleRequestWindow}" Margin="40 0 10 0"/>
                                 <Button Content="取消"/>
                             </StackPanel>
                         </Grid>

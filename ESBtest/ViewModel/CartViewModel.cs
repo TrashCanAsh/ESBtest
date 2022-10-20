@@ -42,7 +42,7 @@ namespace ESBtest.ViewModel
         {
             //创建数据库操作实例
             this.dBControl = new DBControl();
-            //创建表格数据源实例,赋值：当前用户的收藏夹内容
+            //创建表格数据源实例,赋值：当前用户的购物车内容
             this.SampleModelList = dBControl.SearchSample(dBControl.SearchInCart(GlobalValue.CurrentUser.UserID));
         }
         /// <summary>
