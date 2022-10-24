@@ -53,7 +53,7 @@ namespace ESBtest.ViewModel
             this.dBControl = new DBControl();
             //创建样品信息实例
             this.SampleUpdated = new SampleModel();
-            //
+            //二维码相关实例
             this.QRcode = null;
             //下拉框内容
             this.ComboBoxCategory = new ObservableCollection<string>() { "null", "solid", "liquid", "gas", "bio" };
@@ -93,7 +93,7 @@ namespace ESBtest.ViewModel
         private void UpdateSample(object w)
         {
             //修改数据库内容
-            if (dBControl.UpdateSampleTable(SampleUpdated.SampleID, SampleUpdated.SampleName, ComboBoxCategory[SampleUpdated.CategoryIndex] , SampleUpdated.SamplingDateTime.ToShortDateString(), SampleUpdated.Longitude, SampleUpdated.Latitude, SampleUpdated.State) > 0)
+            if (dBControl.UpdateSampleTable(SampleUpdated.SampleID, SampleUpdated.SampleName, ComboBoxCategory[SampleUpdated.CategoryIndex] , SampleUpdated.SamplingDateTime.ToShortDateString(), SampleUpdated.Longitude, SampleUpdated.Latitude, SampleUpdated.State, SampleUpdated.Comment) > 0)
             {
                 MessageBox.Show((w  as Window), "修改成功", "提示");
                 (w as Window).DialogResult = true;
@@ -111,7 +111,7 @@ namespace ESBtest.ViewModel
         private void GenerateQRcode(object w)
         {
             string msg = SampleUpdated.SampleID + ", " + SampleUpdated.SampleName + ", " + SampleUpdated.Category + ", " + SampleUpdated.SamplingTime 
-                + ", " + SampleUpdated.Longitude + ", " + SampleUpdated.Latitude + ", " + SampleUpdated.StateStr;
+                + ", " + SampleUpdated.Longitude + ", " + SampleUpdated.Latitude + ", " + SampleUpdated.StateStr + ", " + SampleUpdated.Comment;
             QRcode = CreateQRCode(msg, 200, 200);
             (w as UpdateView).QRcodeImage.Source = QRcode;
         }

@@ -35,13 +35,14 @@
                         Command="{Binding CloseWindowCommand}" CommandParameter="{Binding ElementName=SampleRequestWindow}" Grid.Column="3"/>
             </Grid>
             <ToolBar Grid.Row="1">
-                <Button Content="申请填写"/>
-                <Button Content="进度查询"/>
-                <Button Content="历史记录"/>
+                <Button Content="申请填写" Command="{Binding ToolSampleRequestTab}" CommandParameter="{Binding ElementName=SampleRequestWindow}"/>
+                <Button Content="进度查询" Command="{Binding ToolProgressTab}" CommandParameter="{Binding ElementName=SampleRequestWindow}"/>
+                <Button Content="历史记录" Command="{Binding ToolHistoryTab}" CommandParameter="{Binding ElementName=SampleRequestWindow}"/>
                 <Separator/>
                 <Button Content="管理员审批"/>
             </ToolBar>
             <TabControl Grid.Row="2" Name="TabControlFunction">
+                <!--  申请填写  -->
                 <TabItem Header="申请填写" Visibility="Collapsed">
                     <GroupBox Header="样品借出申请">
                         <Grid>
@@ -79,19 +80,46 @@
                     </GroupBox>
 
                 </TabItem>
+                <!--  进度查询  -->
                 <TabItem Header="进度查询" Visibility="Collapsed">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <!--  数据展示  -->
+                        <DataGrid Name="ProgressDataGrid" Grid.Row="0" ItemsSource="{Binding SampleRecordModelList, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" FontSize="14" 
+                          AutoGenerateColumns="False" CanUserAddRows="False" IsHitTestVisible="True" >
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="申请编号" Binding="{Binding IdRecord}" />
+                                <DataGridTextColumn Header="申请时间" Binding="{Binding RequestDate}" />
+                                <DataGridTextColumn Header="申请状态" Binding="{Binding StateStr}" />
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Content="详情" Command="{Binding }"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <StackPanel Grid.Row="1" Orientation="Horizontal">
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
+                <!--  历史记录  -->
+                <TabItem Header="历史记录" Visibility="Collapsed">
                     <!--  数据展示  -->
-                    <DataGrid Name="RequestDataGrid" Grid.Row="0" ItemsSource="{Binding abc, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" FontSize="14" 
+                    <DataGrid Name="HistoryDataGrid" Grid.Row="0" ItemsSource="{Binding SampleRecordModelList, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" FontSize="14" 
                           AutoGenerateColumns="False" CanUserAddRows="False" IsHitTestVisible="True" >
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="申请编号" Binding="{Binding }" />
                             <DataGridTextColumn Header="申请人" Binding="{Binding }" />
-                            <DataGridTextColumn Header="申请时间" Binding="{Binding }" />
+                            <DataGridTextColumn Header="申请时间" Binding="{Binding RequestDate}" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </TabItem>
-                <TabItem Header="历史记录" Visibility="Collapsed">
-                </TabItem>
+                <!--  管理员审批  -->
                 <TabItem Header="管理员审批" Visibility="Collapsed">
                 </TabItem>
             </TabControl>

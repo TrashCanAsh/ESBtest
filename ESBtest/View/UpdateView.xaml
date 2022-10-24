@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ESBtest.View"
         xmlns:common="clr-namespace:ESBtest.Common"
         mc:Ignorable="d" Name="UpdateWindow"
-        Title="修改界面" Height="300" Width="250" ResizeMode="NoResize"
+        Title="修改界面" Height="380" Width="220" ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"  WindowStyle="None"
         AllowsTransparency="True" Background="{x:Null}">
     <Border Margin="5" Background="#FAFAFA" >
@@ -28,6 +28,7 @@
                 <TabItem Header="修改样品信息"  >
                     <Grid>
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>
@@ -66,6 +67,10 @@
                                                 ItemsSource="{Binding ComboBoxState, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                         </StackPanel>
                         <StackPanel Grid.Row="6" Orientation="Horizontal" Margin="0 10 0 0">
+                            <Label Content="备注"/>
+                            <TextBox Width="125" Height="50" Text="{Binding SampleUpdated.Comment}" Margin="24 0 0 0" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="7" Orientation="Horizontal" Margin="0 10 0 0">
                             <Button Content="确认修改" Width="80" Margin="20 0 0 0" Command="{Binding UpdateSampleCommand}" CommandParameter="{Binding ElementName=UpdateWindow}"/>
                             <Button Content="取消" Width="80" Margin="20 0 0 0" Command="{Binding CancelCommand}" CommandParameter="{Binding ElementName=UpdateWindow}"/>
                         </StackPanel>

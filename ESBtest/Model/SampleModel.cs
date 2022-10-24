@@ -182,6 +182,19 @@ namespace ESBtest.Model
             }
         }
 
+        /// <summary>
+        /// 样品备注
+        /// </summary>
+        private string comment;
+        public string Comment
+        {
+            get { return comment; }
+            set
+            {
+                comment = value;
+                RaisePropertyChanged();
+            }
+        }
 
         /// <summary>
         /// 是否为当前用户收藏夹中样品（表格）
@@ -210,7 +223,6 @@ namespace ESBtest.Model
                 RaisePropertyChanged();
             }
         }
-
 
         public SampleModel()
         {

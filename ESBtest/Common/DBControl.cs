@@ -125,14 +125,14 @@ namespace ESBtest.Common
         /// <param name="lo"></param>
         /// <param name="la"></param>
         /// <returns></returns>
-        public int InsertIntoSampleTable(string name, string category, string samplingTime, string lo, string la, int state)
+        public int InsertIntoSampleTable(string name, string category, string samplingTime, string lo, string la, int state, string comment)
         {
             try
             {
                 string num = (NumOfLastID("samples") + 1).ToString();
                 TryConnection();
-                string sqlcmd = "INSERT INTO samples (idsamples, name, category, samplingtime, longitude, latitude, state) VALUES (" + num + ",'" + name + "','"
-                    + category + "','" + samplingTime + "'," + lo + "," + la + "," + state + ")";
+                string sqlcmd = "INSERT INTO samples (idsamples, name, category, samplingtime, longitude, latitude, state, comment) VALUES (" + num + ",'" + name + "','"
+                    + category + "','" + samplingTime + "'," + lo + "," + la + "," + state + ",'" + comment + "')";
                 Console.WriteLine(sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 return mysqlCmd.ExecuteNonQuery();
@@ -298,17 +298,26 @@ namespace ESBtest.Common
             }
             return -1;
         }
-
-        public int InsertIntoSampleRecordTable(List<int> iList, string requestDate, int userID, int state)
+        /// <summary>
+        /// 向样品借出申请表中添加数据
+        /// </summary>
+        /// <param name="sList">样品ID列表</param>
+        /// <param name="requestDate">申请日期</param>
+        /// <param name="userID">申请用户ID</param>
+        /// <param name="state">申请状态</param>
+        /// <returns></returns>
+        public int InsertIntoSampleRecordTable(List<int> sList, string requestDate, int userID, int state)
         {
             try
             {
                 int num = (NumOfLastID("samplesrecord") + 1);
+                int idrecord = SearchLastSampleRecordId(userID) + 1;
                 TryConnection();
                 string sqlcmd = "";
-                foreach (int i in iList)
+                foreach (int s in sList)
                 {
-                    sqlcmd += "INSERT INTO samplesrecord (idusercarts, iduser, idsamples) VALUES (" + num++ + "," + iduser + "," + i + ");\n";
+                    sqlcmd += "INSERT INTO samplesrecord (idsamplesrecord, idrecord, iduser, idsamples, requestdate, state) VALUES (" + num++ + "," + idrecord + "," 
+                        + userID + "," + s + ",'" + requestDate + "'," + state + ");\n";
                 }
                 Console.WriteLine(sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
@@ -503,6 +512,32 @@ namespace ESBtest.Common
             }
             return -1;
         }
+        /// <summary>
+        /// 根据用户ID来删除购物车中所有对应信息
+        /// </summary>
+        /// <param name="iduser"></param>
+        /// <returns></returns>
+        public int DeleteCartTable(int iduser)
+        {
+            try
+            {
+                TryConnection();
+                //DELETE FROM table_name WHERE (situation)
+                string sqlcmd = "DELETE FROM usercarts WHERE ( iduser = " + iduser + " )";
+                Console.WriteLine(sqlcmd);
+                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
+                return mysqlCmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                sqlDispose();
+            }
+            return -1;
+        }
         #endregion 删
 
         #region 改
@@ -517,14 +552,14 @@ namespace ESBtest.Common
         /// <param name="latitude"></param>
         /// <param name="state"></param>
         /// <returns></returns>
-        public int UpdateSampleTable(string sampleID, string sampleName, string category, string samplingTime, string longitude, string latitude, int state)
+        public int UpdateSampleTable(string sampleID, string sampleName, string category, string samplingTime, string longitude, string latitude, int state, string comment)
         {
             try
             {
                 TryConnection();
                 //UPDATE table_name SET column_name1 = new_value, column_name2 = new_value, ... WHERE ( situation);
                 string sqlcmd = "UPDATE samples SET name = '" + sampleName + "', category = '" + category + "', samplingtime = '" + samplingTime + 
-                    "', longitude = " + longitude + ", latitude = " + latitude + ", state = " + state + " WHERE idsamples = " + sampleID;
+                    "', longitude = " + longitude + ", latitude = " + latitude + ", state = " + state + ", comment = '" + comment + "' WHERE idsamples = " + sampleID;
                 Console.WriteLine(sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 return mysqlCmd.ExecuteNonQuery();
@@ -954,15 +989,15 @@ namespace ESBtest.Common
         /// <summary>
         /// 根据用户ID来查询收藏样品信息
         /// </summary>
-        /// <param name="UserID"></param>
+        /// <param name="userID"></param>
         /// <returns>对应用户的收藏夹中的样品ID列表</returns>
-        public List<int> SearchFavorited(int UserID)
+        public List<int> SearchFavorited(int userID)
         {
             List<int> fList = new List<int>();
             try
             {
                 TryConnection();
-                string sqlcmd = "select * from userfavorites where iduser = " + UserID;
+                string sqlcmd = "select * from userfavorites where iduser = " + userID;
 
                 Console.WriteLine(sqlcmd);
 
@@ -991,15 +1026,15 @@ namespace ESBtest.Common
         /// <summary>
         /// 根据用户ID来查询购物车中样品信息
         /// </summary>
-        /// <param name="UserID"></param>
+        /// <param name="userID"></param>
         /// <returns>对应用户购物车中的样品ID列表</returns>
-        public List<int> SearchInCart(int UserID)
+        public List<int> SearchInCart(int userID)
         {
             List<int> cList = new List<int>();
             try
             {
                 TryConnection();
-                string sqlcmd = "select * from usercarts where iduser = " + UserID;
+                string sqlcmd = "select * from usercarts where iduser = " + userID;
 
                 Console.WriteLine(sqlcmd);
 
@@ -1025,6 +1060,49 @@ namespace ESBtest.Common
             }
             return null;
         }
+        /// <summary>
+        /// 根据用户ID来查询借出申请表中最后一个申请的ID值
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public int SearchLastSampleRecordId(int userID)
+        {
+            try
+            {
+                TryConnection();
+                //SELECT * FROM table_name ORDER BY column_name DESC LIMIT 1;
+                string sqlcmd = "select * from samplesrecord where iduser = " + userID + " order by idrecord desc limit 1 ";
+                Console.WriteLine(sqlcmd);
+                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
+                MySqlDataReader reader = mysqlCmd.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    //默认位置 SqlDataReader 位于第一条记录之前。 因此，必须调用 Read 才能开始访问任何数据。
+                    reader.Read();
+                    int n = reader.GetInt32(1);//读取idrecord信息
+                    reader.Close();
+                    return n;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                sqlDispose();
+            }
+            return -1;
+        }
+
+        public ObservableCollection<SampleRecordModel> SearchRecord(int userid)
+        {
+
+        }
         #endregion 查
 
         #region 辅助函数
@@ -1048,7 +1126,8 @@ namespace ESBtest.Common
                     SamplingLocation = reader.GetValue(4).ToString() + ", " + reader.GetValue(5).ToString(),
                     Longitude = reader.GetValue(4).ToString(),
                     Latitude = reader.GetValue(5).ToString(),
-                    State = reader.GetInt32(6)
+                    State = reader.GetInt32(6),
+                    Comment = reader.GetValue(7).ToString()
                 };
                 switch (s.Category)
                 {

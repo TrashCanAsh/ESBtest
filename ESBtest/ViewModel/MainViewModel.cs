@@ -380,7 +380,8 @@ namespace ESBtest.ViewModel
                 string longitude = SampleModel.Longitude;
                 string latitude = SampleModel.Latitude;
                 int state = SampleModel.State;
-                if (dBControl.InsertIntoSampleTable(name, category, time, longitude, latitude, state) > 0)
+                string comment = string.IsNullOrEmpty(SampleModel.Comment) ? null : SampleModel.Comment;
+                if (dBControl.InsertIntoSampleTable(name, category, time, longitude, latitude, state, comment) > 0)
                 {
                     MessageBox.Show((w as Window), "导入成功", "提示");
                     //刷新表中内容

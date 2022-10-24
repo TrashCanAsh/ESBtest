@@ -7,11 +7,14 @@ using System.Threading.Tasks;
 
 namespace ESBtest.Model
 {
-    public class SampleRecord : NotifyBase
+    public class SampleRecordModel : NotifyBase
     {
         #region property
-        private int num;
-        public int Num
+        /// <summary>
+        /// 申请计数
+        /// </summary>
+        private int idSamplesRecord;
+        public int IdSamplesRecord
         {
             get { return num; }
             set
@@ -20,7 +23,11 @@ namespace ESBtest.Model
                 RaisePropertyChanged();
             }
         }
-
+        
+        /// <summary>
+        /// 用户申请记录
+        /// 同一次申请会放在一次记录中
+        /// </summary>
         private int idRecord;
         public int IdRecord
         {
@@ -32,6 +39,10 @@ namespace ESBtest.Model
             }
         }
 
+        /// <summary>
+        /// 申请用户ID
+        /// 外键
+        /// </summary>
         private int idUser;
         public int IdUser
         {
@@ -43,6 +54,10 @@ namespace ESBtest.Model
             }
         }
 
+        /// <summary>
+        /// 申请样品ID
+        /// 外键
+        /// </summary>
         private int idSamples;
         public int IdSamples
         {
@@ -54,6 +69,9 @@ namespace ESBtest.Model
             }
         }
 
+        /// <summary>
+        /// 申请日期
+        /// </summary>
         private DateTime requestDate;
         public DateTime RequestDate
         {
@@ -65,6 +83,9 @@ namespace ESBtest.Model
             }
         }
 
+        /// <summary>
+        /// 申请通过日期
+        /// </summary>
         private DateTime approvalDate;
         public DateTime Approvaldate
         {
@@ -76,6 +97,9 @@ namespace ESBtest.Model
             }
         }
 
+        /// <summary>
+        /// 借出日期
+        /// </summary>
         private DateTime outDate;
         public DateTime OutDate
         {
@@ -87,6 +111,9 @@ namespace ESBtest.Model
             }
         }
 
+        /// <summary>
+        /// 还入日期
+        /// </summary>
         private DateTime inDate;
         public DateTime InDate
         {
@@ -98,6 +125,10 @@ namespace ESBtest.Model
             }
         }
 
+        /// <summary>
+        /// 申请状态(int)
+        /// 0-未知 1-正在审批 2-审批通过 3-已借出 4-已归还
+        /// </summary>
         private int state;
         public int State
         {
@@ -109,7 +140,22 @@ namespace ESBtest.Model
             }
         }
 
-        public SampleRecord()
+        /// <summary>
+        /// 申请状态（字符串）
+        /// </summary>
+        private string stateStr;
+        public string StateStr
+        {
+            get { return stateStr; }
+            set
+            {
+                stateStr = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        public SampleRecordModel()
         {
             this.RequestDate = DateTime.Now;
             this.Approvaldate = DateTime.Now;
