@@ -120,6 +120,7 @@
     <Compile Include="ViewModel\FavoriteViewModel.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\SampleRecordDetailViewModel.cs" />
     <Compile Include="ViewModel\SampleRequestViewModel.cs" />
     <Compile Include="ViewModel\UpdateViewModel.cs" />
     <Compile Include="ViewModel\SigninViewModel.cs" />
@@ -128,6 +129,9 @@
     </Compile>
     <Compile Include="View\FavoriteView.xaml.cs">
       <DependentUpon>FavoriteView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SampleRecordDetailView.xaml.cs">
+      <DependentUpon>SampleRecordDetailView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\SampleRequestView.xaml.cs">
       <DependentUpon>SampleRequestView.xaml</DependentUpon>
@@ -169,6 +173,10 @@
       <DependentUpon>MainView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\SampleRecordDetailView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\SampleRequestView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

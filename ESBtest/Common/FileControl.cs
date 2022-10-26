@@ -52,7 +52,7 @@ namespace ESBtest.Common
                     {
                         SampleName = strsplit[0],
                         Category = strsplit[1],
-                        SamplingTime = strsplit[2],
+                        SamplingDate = strsplit[2],
                         Longitude = strsplit[3],
                         Latitude = strsplit[4],
                         State = int.Parse(strsplit[5])
@@ -108,7 +108,7 @@ namespace ESBtest.Common
                     string write = "";
                     foreach (SampleModel sample in sList)
                     {
-                        write += sample.SampleName + spliter + sample.Category + spliter + sample.SamplingTime + spliter + sample.Longitude
+                        write += sample.SampleName + spliter + sample.Category + spliter + sample.SamplingDate + spliter + sample.Longitude
                             + spliter + sample.Latitude + spliter + sample.State + "\n";
                     }
                     Console.WriteLine(write);

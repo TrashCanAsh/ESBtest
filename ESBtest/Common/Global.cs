@@ -1,6 +1,7 @@
 ﻿using ESBtest.Model;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,9 @@ namespace ESBtest.Common
     {
         public static DateTime FirstSamplingTime = new DateTime(2022, 08, 10);
         public static UserModel CurrentUser;
+        public static ObservableCollection<string> SampleCategory = new ObservableCollection<string>() { "null", "solid", "liquid", "gas", "bio" };
+        public static ObservableCollection<string> SampleState = new ObservableCollection<string>() { "unknown", "in stock", "locked", "out on loan" };
+        public static ObservableCollection<string> RecordState = new ObservableCollection<string>() { "unknown", "in approval", "approved", "out on loan", "returned", "approval failed", "6", "7", "8", "9" };
     }
     /// <summary>
     /// 地点类
@@ -73,6 +77,10 @@ namespace ESBtest.Common
         /// </summary>
         /// <param name="w"></param>
         /// <returns></returns>
+        public static bool AdminRight()
+        {
+            return GlobalValue.CurrentUser.UserRight > 1 ? true : false;
+        }
         public static bool AdminRight(object w)
         {
             return GlobalValue.CurrentUser.UserRight > 1 ? true : false;

@@ -16,10 +16,10 @@ namespace ESBtest.Model
         private int idSamplesRecord;
         public int IdSamplesRecord
         {
-            get { return num; }
+            get { return idSamplesRecord; }
             set
             {
-                num = value;
+                idSamplesRecord = value;
                 RaisePropertyChanged();
             }
         }
@@ -55,6 +55,21 @@ namespace ESBtest.Model
         }
 
         /// <summary>
+        /// 申请用户名称
+        /// </summary>
+        private string userName;
+        public string UserName
+        {
+            get { return userName; }
+            set
+            {
+                userName = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        /// <summary>
         /// 申请样品ID
         /// 外键
         /// </summary>
@@ -87,7 +102,7 @@ namespace ESBtest.Model
         /// 申请通过日期
         /// </summary>
         private DateTime approvalDate;
-        public DateTime Approvaldate
+        public DateTime ApprovalDate
         {
             get { return approvalDate; }
             set
@@ -127,7 +142,8 @@ namespace ESBtest.Model
 
         /// <summary>
         /// 申请状态(int)
-        /// 0-未知 1-正在审批 2-审批通过 3-已借出 4-已归还
+        /// 0-未知 1-正在审批 2-审批通过 3-已借出 4-已归还 9-审批未通过
+        /// 10-用户取消 
         /// </summary>
         private int state;
         public int State
@@ -158,7 +174,7 @@ namespace ESBtest.Model
         public SampleRecordModel()
         {
             this.RequestDate = DateTime.Now;
-            this.Approvaldate = DateTime.Now;
+            this.ApprovalDate = DateTime.Now;
             this.OutDate = DateTime.Now;
             this.InDate = DateTime.Now;
         }

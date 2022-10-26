@@ -17,16 +17,16 @@ using System.Windows.Shapes;
 namespace ESBtest.View
 {
     /// <summary>
-    /// SampleRequestView.xaml 的交互逻辑
+    /// SampleRecordDetailView.xaml 的交互逻辑
     /// </summary>
-    public partial class SampleRequestView : Window
+    public partial class SampleRecordDetailView : Window
     {
-        public SampleRequestView()
+        public SampleRecordDetailView()
         {
             //初始化组件
             InitializeComponent();
             //关联ViewModel
-            this.DataContext = new SampleRequestViewModel();
+            this.DataContext = new SampleRecordDetailViewModel();
         }
         //鼠标拖动窗口事件
         private void Label_MouseDown(object sender, MouseButtonEventArgs e)

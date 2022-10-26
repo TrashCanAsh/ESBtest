@@ -86,13 +86,13 @@ namespace ESBtest.Model
         /// <summary>
         /// 采样时间信息（字符串类型）
         /// </summary>
-        private string samplingTime;
-        public string SamplingTime
+        private string samplingDate;
+        public string SamplingDate
         {
-            get { return samplingTime; }
+            get { return samplingDate; }
             set
             {
-                samplingTime = value;
+                samplingDate = value;
                 RaisePropertyChanged();
             }
         }

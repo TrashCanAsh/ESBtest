@@ -82,7 +82,7 @@
                     <DataGridTextColumn Header="编号" Binding="{Binding SampleID}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="名称" Binding="{Binding SampleName}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="种类" Binding="{Binding Category}" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="采样时间" Binding="{Binding SamplingTime}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="采样时间" Binding="{Binding SamplingDate}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="采样地点" Binding="{Binding SamplingLocation}" IsReadOnly="True"/>
                 </DataGrid.Columns>
             </DataGrid>

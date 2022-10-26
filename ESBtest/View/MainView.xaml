@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ESBtest"
         xmlns:common="clr-namespace:ESBtest.Common"
         mc:Ignorable="d" Name="MainWindow"
-        Title="MainWindow" Height="450" Width="800" MinHeight="400" MinWidth="400"
+        Title="MainWindow" Height="450" Width="900" MinHeight="400" MinWidth="400"
         WindowStartupLocation="CenterScreen"  WindowStyle="None"
         AllowsTransparency="True" Background="{x:Null}" ResizeMode="CanResizeWithGrip">
 
@@ -56,9 +56,9 @@
                         <MenuItem Header="关于"/>
                     </MenuItem>
                     <!-- 收藏夹 -->
-                    <MenuItem Header="收藏夹" Command="{Binding MenuFavoriteCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
+                    <MenuItem x:Name="UserFavorite" Header="收藏夹" Command="{Binding MenuFavoriteCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
                     <!-- 购物车 -->
-                    <MenuItem Header="购物车" Command="{Binding MenuCartCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
+                    <MenuItem x:Name="UserCart" Header="购物车" Command="{Binding MenuCartCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
                 </Menu>
                 <Button x:Name="ButtonMini" Style="{StaticResource MinimizeWindowButtonStyle}" 
                         Command="{Binding MinWindowCommand}" CommandParameter="{Binding ElementName=MainWindow}" Grid.Column="1"/>
@@ -307,7 +307,7 @@
                         <DataGridTextColumn Header="编号" Binding="{Binding SampleID}" IsReadOnly="True"/>
                         <DataGridTextColumn Header="名称" Binding="{Binding SampleName}" IsReadOnly="True"/>
                         <DataGridTextColumn Header="种类" Binding="{Binding Category}" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="采样时间" Binding="{Binding SamplingTime}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="采样时间" Binding="{Binding SamplingDate}" IsReadOnly="True"/>
                         <DataGridTextColumn Header="采样地点" Binding="{Binding SamplingLocation}" IsReadOnly="True"/>
                         <DataGridTextColumn Header="样品状态" Binding="{Binding StateStr}" IsReadOnly="True"/>
                         <DataGridTextColumn Header="备注" Binding="{Binding Comment}" IsReadOnly="True"/>

@@ -162,7 +162,7 @@ namespace ESBtest.Common
                 foreach (SampleModel sample in sList)
                 {
                     sqlcmd += "insert into samples (idsamples, name, category, samplingtime, longitude, latitude, state) values (" + num++ + ",'" + sample.SampleName + "','"
-                    + sample.Category + "','" + sample.SamplingTime + "'," + sample.Longitude + "," + sample.Latitude + "," + sample.State + ");\n";
+                    + sample.Category + "','" + sample.SamplingDate + "'," + sample.Longitude + "," + sample.Latitude + "," + sample.State + ");\n";
                 }
                 Console.WriteLine(sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
@@ -574,14 +574,24 @@ namespace ESBtest.Common
             }
             return -1;
         }
-        //修改样品借出表中内容
-        public int UpdateRecordTable()
+        /// <summary>
+        /// 修改样品借出表中内容
+        /// </summary>
+        /// <param name="idRecord"></param>
+        /// <param name="idUser"></param>
+        /// <param name="approvalDate"></param>
+        /// <param name="outDate"></param>
+        /// <param name="inDate"></param>
+        /// <param name="State"></param>
+        /// <returns></returns>
+        public int UpdateRecordTable(int idRecord, int idUser, DateTime approvalDate, DateTime outDate, DateTime inDate, int State)
         {
             try
             {
                 TryConnection();
                 //UPDATE table_name SET column_name1 = new_value, column_name2 = new_value, ... WHERE ( situation);
-                string sqlcmd = "UPDATE samplesrecord SET ";
+                string sqlcmd = "UPDATE samplesrecord SET approvaldate = '" + approvalDate.ToShortDateString() + "', outdate = '" + outDate.ToShortDateString() 
+                    + "', indate = '" + inDate.ToShortDateString() + "', state = " + State + " WHERE (idrecord = " + idRecord + " AND iduser = " + idUser + ")";
                 Console.WriteLine(sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 return mysqlCmd.ExecuteNonQuery();
@@ -1099,9 +1109,163 @@ namespace ESBtest.Common
             return -1;
         }
 
-        public ObservableCollection<SampleRecordModel> SearchRecord(int userid)
+        public ObservableCollection<SampleRecordModel> SearchRecord()
         {
+            ObservableCollection<SampleRecordModel> srList = new ObservableCollection<SampleRecordModel>();
+            try
+            {
+                TryConnection();
+                //select distinct username, idrecord, requestdate, state from samplesrecord, user where samplesrecord.state = 1;
+                //选中所有“待审批状态”（state = 1）的记录
+                string sqlcmd = "SELECT DISTINCT username, idrecord, requestdate FROM samplesrecord, user WHERE samplesrecord.state = 1";
 
+                Console.WriteLine(sqlcmd);
+
+                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
+                MySqlDataReader reader = mysqlCmd.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        SampleRecordModel sr = new SampleRecordModel()
+                        {
+                        };
+                        srList.Add(sr);
+                    }
+                }
+                return srList;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                sqlDispose();
+            }
+            return null;
+        }
+        /// <summary>
+        /// 根据用户ID来查询样品申请表中对应用户的样品申请记录（记录编号，申请日期，申请状态）
+        /// </summary>
+        /// <param name="iduser"></param>
+        /// <returns></returns>
+        public ObservableCollection<SampleRecordModel> SearchRecord(int iduser)
+        {
+            ObservableCollection<SampleRecordModel> srList = new ObservableCollection<SampleRecordModel>();
+            try
+            {
+                TryConnection();
+                string sqlcmd = "SELECT DISTINCT idrecord, requestdate, state FROM samplesrecord WHERE iduser = " + iduser;
+
+                Console.WriteLine(sqlcmd);
+
+                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
+                MySqlDataReader reader = mysqlCmd.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        SampleRecordModel sr = new SampleRecordModel()
+                        {
+                            IdRecord = reader.GetInt32(0),
+                            RequestDate = reader.GetDateTime(1).Date,
+                            State = reader.GetInt32(2)
+                        };
+                        if(sr.State<10)
+                        {
+                            sr.StateStr = GlobalValue.RecordState[sr.State];
+                            srList.Add(sr);
+                        }
+                    }
+                }
+                return srList;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                sqlDispose();
+            }
+            return null;
+        }
+        /// <summary>
+        /// 根据用户ID和样品申请记录ID来查询对应的申请记录信息（申请日期，申请人姓名）
+        /// </summary>
+        /// <param name="idrecord"></param>
+        /// <param name="iduser"></param>
+        /// <returns></returns>
+        public SampleRecordModel SearchRecord(int idrecord, int iduser)
+        {
+            try
+            {
+                TryConnection();
+                //select distinct username, idrecord, requestdate, state from samplesrecord, user where user.iduser = 1 and samplesrecord.idrecord = 1;
+                string sqlcmd = "SELECT DISTINCT username, requestdate FROM samplesrecord, user WHERE user.iduser = " + iduser + " AND samplesrecord.idrecord = " + idrecord;
+
+                Console.WriteLine(sqlcmd);
+                SampleRecordModel sr = null;
+                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
+                MySqlDataReader reader = mysqlCmd.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    reader.Read();
+                    sr = new SampleRecordModel()
+                    {
+                        UserName = reader.GetValue(0).ToString(),
+                        RequestDate = reader.GetDateTime(1)
+                    };
+                }
+                return sr;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                sqlDispose();
+            }
+            return null;
+        }
+        /// <summary>
+        /// 根据用户ID和记录ID来查询某一样品申请的具体内容
+        /// </summary>
+        /// <param name="idrecord"></param>
+        /// <param name="iduser"></param>
+        /// <returns></returns>
+        public List<int> SearchSampleRecord(int idrecord, int iduser)
+        {
+            List<int> iList = new List<int>();
+            try
+            {
+                TryConnection();
+                string sqlcmd = "SELECT idsamples FROM samplesrecord WHERE iduser = " + iduser + " AND idrecord = " + idrecord;
+
+                Console.WriteLine(sqlcmd);
+
+                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
+                MySqlDataReader reader = mysqlCmd.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        iList.Add(reader.GetInt32(0));
+                    }
+                }
+                return iList;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                sqlDispose();
+            }
+            return null;
         }
         #endregion 查
 
@@ -1121,7 +1285,7 @@ namespace ESBtest.Common
                     SampleID = reader.GetValue(0).ToString(),
                     SampleName = reader.GetValue(1).ToString(),
                     Category = reader.GetValue(2).ToString(),
-                    SamplingTime = ((DateTime)reader.GetValue(3)).ToShortDateString(),
+                    SamplingDate = ((DateTime)reader.GetValue(3)).ToShortDateString(),
                     SamplingDateTime = (DateTime)reader.GetValue(3),
                     SamplingLocation = reader.GetValue(4).ToString() + ", " + reader.GetValue(5).ToString(),
                     Longitude = reader.GetValue(4).ToString(),
@@ -1167,6 +1331,24 @@ namespace ESBtest.Common
             }
             reader.Close();
             return SearchFC(sList, GlobalValue.CurrentUser.UserID);
+        }
+        /// <summary>
+        /// 通过已有的MySqlDataReader来将数据存储到SampleRecordModel的List中并返回
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <returns></returns>
+        private ObservableCollection<SampleRecordModel> GetSampleRecordList(MySqlDataReader reader)
+        {
+            ObservableCollection<SampleRecordModel> srList = new ObservableCollection<SampleRecordModel>();
+            while (reader.Read())
+            {
+                SampleRecordModel sr = new SampleRecordModel
+                {
+                };
+                srList.Add(sr);
+            }
+            reader.Close();
+            return srList;
         }
         /// <summary>
         /// 向SampleModel列表中添加收藏夹和购物车信息
