@@ -76,6 +76,12 @@ namespace ESBtest.ViewModel
                     MessageBox.Show((w as Window), "登录成功", "登录提示");
                     GlobalValue.CurrentUser = dBControl.GetUserInformation(userModel.UserName);
                     MainView mainWindow = new MainView();
+                    //权限设置
+                    if(!GlobalFunc.AdminRight())
+                    {
+                        mainWindow.MenuItemInsert.Visibility = Visibility.Collapsed;
+                        mainWindow.AdminDeleteButton.Visibility = Visibility.Collapsed;
+                    }
                     mainWindow.Show();
                     (w as Window).Close();
                 }
@@ -113,6 +119,7 @@ namespace ESBtest.ViewModel
 
             MainView mainWindow = new MainView();
             mainWindow.Show();
+            mainWindow.SampleDataGrid.IsHitTestVisible = false;
             (w as Window).Close();
         }
     }

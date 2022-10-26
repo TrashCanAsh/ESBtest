@@ -35,6 +35,7 @@ namespace ESBtest.ViewModel
 
         public CommandBase CheckDetailsCommand { get; set; }
         public CommandBase CancelRequestCommand { get; set; }
+        public CommandBase AdminCheckDetailsCommand { get; set; }
 
 
 
@@ -90,6 +91,7 @@ namespace ESBtest.ViewModel
             this.UploadRequestCommand = new CommandBase();
             this.CheckDetailsCommand = new CommandBase();
             this.CancelRequestCommand = new CommandBase();
+            this.AdminCheckDetailsCommand = new CommandBase();
 
             //转到样品申请界面命令
             this.ToolSampleRequestTab.ExecuteAction = new Action<object>(SampleRequsetTab);
@@ -105,6 +107,8 @@ namespace ESBtest.ViewModel
             this.CheckDetailsCommand.ExecuteAction = new Action<object>(CheckDetails);
             //取消申请命令
             this.CancelRequestCommand.ExecuteAction = new Action<object>(CancelRequest);
+            //管理员审批查看详情命令
+            this.AdminCheckDetailsCommand.ExecuteAction = new Action<object>(AdminCheckDetails);
             #endregion
         }
 
@@ -122,7 +126,7 @@ namespace ESBtest.ViewModel
             }
             else if (flag == 2)
             {
-
+                this.SampleRecordModelList = dBControl.SearchRecord();
             }
             dg.ItemsSource = this.SampleRecordModelList;
         }
@@ -158,7 +162,7 @@ namespace ESBtest.ViewModel
         private void ApprovalTab(object w)
         {
             (w as SampleRequestView).TabControlFunction.SelectedIndex = 3;
-
+            RefreshSampleRecordDataGrid((w as SampleRequestView).ApprovalDataGrid, 2);
         }
         /// <summary>
         /// 提交样品申请
@@ -214,9 +218,21 @@ namespace ESBtest.ViewModel
                 if(dBControl.UpdateRecordTable(sr.IdRecord, GlobalValue.CurrentUser.UserID, DateTime.Now, DateTime.Now, DateTime.Now, 10) > 0)
                 {
                     MessageBox.Show("取消成功", "提示");
-                    RefreshSampleRecordDataGrid((w as SampleRequestView).ProgressDataGrid);
+                    RefreshSampleRecordDataGrid((w as SampleRequestView).ProgressDataGrid, 1);
                 }
             }
+        }
+        /// <summary>
+        /// 管理员审批界面查看选中的样品申请的详情，并进行审批
+        /// </summary>
+        /// <param name="w"></param>
+        private void AdminCheckDetails(object w)
+        {
+            SampleRecordDetailView srdv = new SampleRecordDetailView();
+            List<int> iList = dBControl.SearchSampleRecord((w as SampleRecordModel).IdRecord, GlobalValue.CurrentUser.UserID);
+            (srdv.DataContext as SampleRecordDetailViewModel).SampleModelList = dBControl.SearchSample(iList);
+            (srdv.DataContext as SampleRecordDetailViewModel).SampleRecordModel = dBControl.SearchRecord((w as SampleRecordModel).IdRecord, GlobalValue.CurrentUser.UserID);
+            srdv.ShowDialog();
         }
         #endregion
 

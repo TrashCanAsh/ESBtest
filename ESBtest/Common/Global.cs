@@ -90,6 +90,10 @@ namespace ESBtest.Common
         /// </summary>
         /// <param name="w"></param>
         /// <returns></returns>
+        public static bool NormalUserRight()
+        {
+            return GlobalValue.CurrentUser.UserRight > 0 ? true : false;
+        }
         public static bool NormalUserRight(object w)
         {
             return GlobalValue.CurrentUser.UserRight > 0 ? true : false;

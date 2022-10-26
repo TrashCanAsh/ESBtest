@@ -263,7 +263,10 @@ namespace ESBtest.ViewModel
         private void MenuSampleLend(object w)
         {
             SampleRequestView SampleRequestWindow = new SampleRequestView();
-
+            if(!GlobalFunc.AdminRight())
+            {
+                SampleRequestWindow.ToolAdminApproval.Visibility = Visibility.Hidden;
+            }
             SampleRequestWindow.ShowDialog();
         }
         /// <summary>
@@ -434,6 +437,18 @@ namespace ESBtest.ViewModel
             {
                 UpdateView updateView = new UpdateView();
                 (updateView.DataContext as UpdateViewModel).SampleUpdated = sample;
+                if(!GlobalFunc.AdminRight())
+                {
+                    updateView.TextBoxSampleID.IsEnabled = false;
+                    updateView.TextBoxSampleName.IsEnabled = false;
+                    updateView.ComboBoxCategoryUpdate.IsEnabled = false;
+                    updateView.DatePikerStartDateUpdate.IsEnabled = false;
+                    updateView.TextBoxSampleLocX.IsEnabled = false;
+                    updateView.TextBoxSampleLocY.IsEnabled = false;
+                    updateView.ComboBoxStateUpdate.IsEnabled = false;
+                    updateView.TextBoxSampleComment.IsEnabled = false;
+                    updateView.AdminController.Visibility = Visibility.Collapsed;
+                }
                 if (updateView.ShowDialog().Value)
                 {
                     //刷新表中内容

@@ -1108,16 +1108,19 @@ namespace ESBtest.Common
             }
             return -1;
         }
-
+        /// <summary>
+        /// 查询所有“待审批”状态的申请记录
+        /// </summary>
+        /// <returns></returns>
         public ObservableCollection<SampleRecordModel> SearchRecord()
         {
             ObservableCollection<SampleRecordModel> srList = new ObservableCollection<SampleRecordModel>();
             try
             {
                 TryConnection();
-                //select distinct username, idrecord, requestdate, state from samplesrecord, user where samplesrecord.state = 1;
-                //选中所有“待审批状态”（state = 1）的记录
-                string sqlcmd = "SELECT DISTINCT username, idrecord, requestdate FROM samplesrecord, user WHERE samplesrecord.state = 1";
+                //select distinct username, idrecord, requestdate, state from samplesrecord, user where samplesrecord.iduser = user.iduser and samplesrecord.state = 1;
+                //选中所有“待审批”状态（state = 1）的记录
+                string sqlcmd = "SELECT DISTINCT name, idrecord, requestdate, state FROM samplesrecord, user WHERE samplesrecord.iduser = user.iduser AND samplesrecord.state = 1";
 
                 Console.WriteLine(sqlcmd);
 
@@ -1129,7 +1132,12 @@ namespace ESBtest.Common
                     {
                         SampleRecordModel sr = new SampleRecordModel()
                         {
+                            UserName = reader.GetValue(0).ToString(),
+                            IdRecord = reader.GetInt32(1),
+                            RequestDate = reader.GetDateTime(2),
+                            State = reader.GetInt32(3)
                         };
+                        sr.StateStr = GlobalValue.RecordState[sr.State];
                         srList.Add(sr);
                     }
                 }
@@ -1203,7 +1211,7 @@ namespace ESBtest.Common
             {
                 TryConnection();
                 //select distinct username, idrecord, requestdate, state from samplesrecord, user where user.iduser = 1 and samplesrecord.idrecord = 1;
-                string sqlcmd = "SELECT DISTINCT username, requestdate FROM samplesrecord, user WHERE user.iduser = " + iduser + " AND samplesrecord.idrecord = " + idrecord;
+                string sqlcmd = "SELECT DISTINCT name, requestdate FROM samplesrecord, user WHERE user.iduser = " + iduser + " AND samplesrecord.idrecord = " + idrecord;
 
                 Console.WriteLine(sqlcmd);
                 SampleRecordModel sr = null;
