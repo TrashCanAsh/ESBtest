@@ -48,6 +48,7 @@ namespace ESBtest.Common
                         default:
                             break;
                     }
+                    Console.WriteLine(strsplit.Count());
                     SampleModel sample = new SampleModel
                     {
                         SampleName = strsplit[0],
@@ -55,7 +56,8 @@ namespace ESBtest.Common
                         SamplingDate = strsplit[2],
                         Longitude = strsplit[3],
                         Latitude = strsplit[4],
-                        State = int.Parse(strsplit[5])
+                        State = int.Parse(strsplit[5]),
+                        Comment = strsplit.Count() > 6 ? strsplit[6] : "",
                     };
                     switch (sample.State)
                     {

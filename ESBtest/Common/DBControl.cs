@@ -161,8 +161,8 @@ namespace ESBtest.Common
                 string sqlcmd = "";
                 foreach (SampleModel sample in sList)
                 {
-                    sqlcmd += "insert into samples (idsamples, name, category, samplingtime, longitude, latitude, state) values (" + num++ + ",'" + sample.SampleName + "','"
-                    + sample.Category + "','" + sample.SamplingDate + "'," + sample.Longitude + "," + sample.Latitude + "," + sample.State + ");\n";
+                    sqlcmd += "insert into samples (idsamples, name, category, samplingtime, longitude, latitude, state, comment) values (" + num++ + ",'" + sample.SampleName + "','"
+                    + sample.Category + "','" + sample.SamplingDate + "'," + sample.Longitude + "," + sample.Latitude + "," + sample.State + ",'" + sample.Comment + "');\n";
                 }
                 Console.WriteLine(sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
@@ -584,14 +584,59 @@ namespace ESBtest.Common
         /// <param name="inDate"></param>
         /// <param name="State"></param>
         /// <returns></returns>
-        public int UpdateRecordTable(int idRecord, int idUser, DateTime approvalDate, DateTime outDate, DateTime inDate, int State)
+        public int UpdateRecordTable(int idRecord, int idUser, string approvalDate, string outDate, string inDate, int State)
         {
             try
             {
                 TryConnection();
                 //UPDATE table_name SET column_name1 = new_value, column_name2 = new_value, ... WHERE ( situation);
-                string sqlcmd = "UPDATE samplesrecord SET approvaldate = '" + approvalDate.ToShortDateString() + "', outdate = '" + outDate.ToShortDateString() 
-                    + "', indate = '" + inDate.ToShortDateString() + "', state = " + State + " WHERE (idrecord = " + idRecord + " AND iduser = " + idUser + ")";
+                bool isFirst = true;
+                //string sqlcmd = "UPDATE samplesrecord SET approvaldate = '" + approvalDate + "', outdate = '" + outDate 
+                //    + "', indate = '" + inDate + "', state = " + State + " WHERE (idrecord = " + idRecord + " AND iduser = " + idUser + ")";
+                string sqlcmd = "UPDATE samplesrecord SET ";
+                //approvalDate
+                if (!string.IsNullOrEmpty(approvalDate))
+                {
+                    sqlcmd += "approvaldate = '" + approvalDate + "'";
+                    isFirst = false;
+                }
+                //outDate
+                if (!string.IsNullOrEmpty(outDate))
+                {
+                    if(isFirst)
+                    {
+                        sqlcmd += "outdate = '" + outDate + "'";
+                        isFirst = false;
+                    }
+                    else
+                    {
+                        sqlcmd += ", outdate = '" + outDate + "'";
+                    }
+                }
+                //inDate
+                if (!string.IsNullOrEmpty(inDate))
+                {
+                    if (isFirst)
+                    {
+                        sqlcmd += "indate = '" + inDate + "'";
+                        isFirst = false;
+                    }
+                    else
+                    {
+                        sqlcmd += ", indate = '" + inDate + "'";
+                    }
+                }
+                //state
+                if (isFirst)
+                {
+                    sqlcmd += "state = " + State;
+                    isFirst = false;
+                }
+                else
+                {
+                    sqlcmd += ", state = " + State;
+                }
+                sqlcmd += " WHERE (idrecord = " + idRecord + " AND iduser = " + idUser + ")";
                 Console.WriteLine(sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 return mysqlCmd.ExecuteNonQuery();
@@ -702,20 +747,6 @@ namespace ESBtest.Common
                         Name = reader.GetValue(1).ToString(),
                         UserName = reader.GetValue(2).ToString()
                     };
-                    switch (reader.GetValue(4).ToString())
-                    {
-                        case "guest":
-                            user.UserRight = 0;
-                            break;
-                        case "normal_user":
-                            user.UserRight = 1;
-                            break;
-                        case "admin":
-                            user.UserRight = 2;
-                            break;
-                        default:
-                            break;
-                    }
                     return user;
                 }
                 else
@@ -1108,10 +1139,7 @@ namespace ESBtest.Common
             }
             return -1;
         }
-        /// <summary>
-        /// 查询所有“待审批”状态的申请记录
-        /// </summary>
-        /// <returns></returns>
+
         public ObservableCollection<SampleRecordModel> SearchRecord()
         {
             ObservableCollection<SampleRecordModel> srList = new ObservableCollection<SampleRecordModel>();
@@ -1120,7 +1148,7 @@ namespace ESBtest.Common
                 TryConnection();
                 //select distinct username, idrecord, requestdate, state from samplesrecord, user where samplesrecord.iduser = user.iduser and samplesrecord.state = 1;
                 //选中所有“待审批”状态（state = 1）的记录
-                string sqlcmd = "SELECT DISTINCT name, idrecord, requestdate, state FROM samplesrecord, user WHERE samplesrecord.iduser = user.iduser AND samplesrecord.state = 1";
+                string sqlcmd = "SELECT DISTINCT name, idrecord, user.iduser, requestdate, state FROM samplesrecord, user WHERE samplesrecord.iduser = user.iduser AND samplesrecord.state = " + state;
 
                 Console.WriteLine(sqlcmd);
 
@@ -1134,8 +1162,55 @@ namespace ESBtest.Common
                         {
                             UserName = reader.GetValue(0).ToString(),
                             IdRecord = reader.GetInt32(1),
-                            RequestDate = reader.GetDateTime(2),
-                            State = reader.GetInt32(3)
+                            IdUser = reader.GetInt32(2),
+                            RequestDate = reader.GetDateTime(3),
+                            State = reader.GetInt32(4)
+                        };
+                        sr.StateStr = GlobalValue.RecordState[sr.State];
+                        srList.Add(sr);
+                    }
+                }
+                return srList;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                sqlDispose();
+            }
+            return null;
+        }
+        /// <summary>
+        /// 根据申请状态查询对应的申请记录
+        /// </summary>
+        /// <returns></returns>
+        public ObservableCollection<SampleRecordModel> SearchRecord(string state)
+        {
+            ObservableCollection<SampleRecordModel> srList = new ObservableCollection<SampleRecordModel>();
+            try
+            {
+                TryConnection();
+                //select distinct username, idrecord, requestdate, state from samplesrecord, user where samplesrecord.iduser = user.iduser and samplesrecord.state = 1;
+                //选中所有“待审批”状态（state = 1）的记录
+                string sqlcmd = "SELECT DISTINCT name, idrecord, user.iduser, requestdate, state FROM samplesrecord, user WHERE samplesrecord.iduser = user.iduser AND samplesrecord.state = " + state;
+
+                Console.WriteLine(sqlcmd);
+
+                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
+                MySqlDataReader reader = mysqlCmd.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        SampleRecordModel sr = new SampleRecordModel()
+                        {
+                            UserName = reader.GetValue(0).ToString(),
+                            IdRecord = reader.GetInt32(1),
+                            IdUser = reader.GetInt32(2),
+                            RequestDate = reader.GetDateTime(3),
+                            State = reader.GetInt32(4)
                         };
                         sr.StateStr = GlobalValue.RecordState[sr.State];
                         srList.Add(sr);
@@ -1176,11 +1251,12 @@ namespace ESBtest.Common
                     {
                         SampleRecordModel sr = new SampleRecordModel()
                         {
+                            IdUser = iduser,
                             IdRecord = reader.GetInt32(0),
                             RequestDate = reader.GetDateTime(1).Date,
                             State = reader.GetInt32(2)
                         };
-                        if(sr.State<10)
+                        if (sr.State < 10)
                         {
                             sr.StateStr = GlobalValue.RecordState[sr.State];
                             srList.Add(sr);
@@ -1211,7 +1287,7 @@ namespace ESBtest.Common
             {
                 TryConnection();
                 //select distinct username, idrecord, requestdate, state from samplesrecord, user where user.iduser = 1 and samplesrecord.idrecord = 1;
-                string sqlcmd = "SELECT DISTINCT name, requestdate FROM samplesrecord, user WHERE user.iduser = " + iduser + " AND samplesrecord.idrecord = " + idrecord;
+                string sqlcmd = "SELECT DISTINCT name, requestdate, state FROM samplesrecord, user WHERE user.iduser = " + iduser + " AND samplesrecord.idrecord = " + idrecord;
 
                 Console.WriteLine(sqlcmd);
                 SampleRecordModel sr = null;
@@ -1222,9 +1298,13 @@ namespace ESBtest.Common
                     reader.Read();
                     sr = new SampleRecordModel()
                     {
+                        IdRecord = idrecord,
+                        IdUser = iduser,
                         UserName = reader.GetValue(0).ToString(),
-                        RequestDate = reader.GetDateTime(1)
+                        RequestDate = reader.GetDateTime(1),
+                        State = reader.GetInt32(2),
                     };
+                    sr.StateStr = GlobalValue.RecordState[sr.State];
                 }
                 return sr;
             }

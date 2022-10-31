@@ -37,8 +37,8 @@
             <ToolBar Grid.Row="1">
                 <Button Content="申请填写" Command="{Binding ToolSampleRequestTab}" CommandParameter="{Binding ElementName=SampleRequestWindow}"/>
                 <Button Content="进度查询" Command="{Binding ToolProgressTab}" CommandParameter="{Binding ElementName=SampleRequestWindow}"/>
-                <Button Content="历史记录" Command="{Binding ToolHistoryTab}" CommandParameter="{Binding ElementName=SampleRequestWindow}"/>
                 <Separator/>
+                <Button x:Name="ToolAdminHistory" Content="历史记录" Command="{Binding ToolHistoryTab}" CommandParameter="{Binding ElementName=SampleRequestWindow}"/>
                 <Button x:Name="ToolAdminApproval" Content="管理员审批" Command="{Binding ToolApprovalTab}" CommandParameter="{Binding ElementName=SampleRequestWindow}"/>
             </ToolBar>
             <TabControl Grid.Row="2" Name="TabControlFunction">
@@ -60,6 +60,7 @@
                                     <DataGridTextColumn Header="种类" Binding="{Binding Category}" />
                                     <DataGridTextColumn Header="采样时间" Binding="{Binding SamplingDate}" />
                                     <DataGridTextColumn Header="采样地点" Binding="{Binding SamplingLocation}" />
+                                    <DataGridTextColumn Header="备注" Binding="{Binding Comment}" IsReadOnly="True"/>
                                 </DataGrid.Columns>
                             </DataGrid>
                             <Grid Grid.Row="1">
@@ -104,14 +105,6 @@
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <Button Content="详情" Command="{Binding Path=DataContext.CheckDetailsCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
-                                                    CommandParameter= "{Binding Path=SelectedItem, RelativeSource={RelativeSource AncestorType= DataGrid}}"/>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <DataGridTemplateColumn>
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Button Content="取消申请" Command="{Binding Path=DataContext.CancelRequestCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                                     CommandParameter= "{Binding ElementName=ProgressDataGrid}"/>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
@@ -128,8 +121,8 @@
                     <DataGrid Name="HistoryDataGrid" Grid.Row="0" ItemsSource="{Binding SampleRecordModelList, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" FontSize="14" 
                           AutoGenerateColumns="False" CanUserAddRows="False" IsHitTestVisible="True" >
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="申请编号" Binding="{Binding }" />
-                            <DataGridTextColumn Header="申请人" Binding="{Binding }" />
+                            <DataGridTextColumn Header="申请编号" Binding="{Binding IdRecord}" />
+                            <DataGridTextColumn Header="申请人" Binding="{Binding UserName}" />
                             <DataGridTemplateColumn Header="申请时间" IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -141,20 +134,6 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding ApprovalDate, StringFormat='{}{0:yyyy-MM-dd}'}" />
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="出库时间" IsReadOnly="True">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding OutDate, StringFormat='{}{0:yyyy-MM-dd}'}" />
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="入库时间" IsReadOnly="True">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding InDate, StringFormat='{}{0:yyyy-MM-dd}'}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

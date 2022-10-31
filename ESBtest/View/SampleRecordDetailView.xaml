@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ESBtest.View"
         mc:Ignorable="d" Name="SampleRecordDetailWindow"
-        Title="SampleRecordDetailWindow" Height="360" Width="600"
+        Title="SampleRecordDetailWindow" Height="400" Width="600"
         WindowStartupLocation="CenterScreen"  WindowStyle="None"
         AllowsTransparency="True" Background="{x:Null}" ResizeMode="NoResize">
     
@@ -44,6 +44,7 @@
                         <DataGridTextColumn Header="种类" Binding="{Binding Category}" />
                         <DataGridTextColumn Header="采样时间" Binding="{Binding SamplingDate}" />
                         <DataGridTextColumn Header="采样地点" Binding="{Binding SamplingLocation}" />
+                        <DataGridTextColumn Header="备注" Binding="{Binding Comment}" IsReadOnly="True"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </GroupBox>
@@ -71,9 +72,13 @@
                             <Label Content="申请人"/>
                             <TextBox Width="140" Text="{Binding SampleRecordModel.UserName}" IsEnabled="False"/>
                         </StackPanel>
+                        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
+                            <Label Content="申请状态"/>
+                            <TextBox Width="140" Text="{Binding SampleRecordModel.StateStr}" IsEnabled="False"/>
+                        </StackPanel>
                     </Grid>
                 </GroupBox>
-                <Grid Grid.Row="1" x:Name="ControllerGrid">
+                <Grid Grid.Row="1" x:Name="AdminControllerGrid" Margin="0 10 0 10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
@@ -81,8 +86,18 @@
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <Button Grid.Column="1" Content="同意审批" Command="{Binding}"/>
-                    <Button Grid.Column="3" Content="拒绝审批" Command="{Binding}"/>
+                    <Button Grid.Column="1" Content="同意" Command="{Binding RequsetApprovalCommand}" CommandParameter="{Binding ElementName=SampleRecordDetailWindow}"/>
+                    <Button Grid.Column="3" Content="拒绝" Command="{Binding RequestRejectCommand}" CommandParameter="{Binding ElementName=SampleRecordDetailWindow}"/>
+                </Grid>
+                <Grid Grid.Row="1" x:Name="NormalUserControllerGrid" Margin="0 10 0 10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="1" Content="取消申请" Command="{Binding CancelRequestCommand}" CommandParameter="{Binding ElementName=SampleRecordDetailWindow}"/>
                 </Grid>
             </Grid>
         </Grid>

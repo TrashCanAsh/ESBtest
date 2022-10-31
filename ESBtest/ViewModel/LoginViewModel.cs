@@ -23,6 +23,9 @@ namespace ESBtest.ViewModel
         public CommandBase SigninCommand { get; set; }
         public CommandBase GuestLoginCommand { get; set; }
 
+        /// <summary>
+        /// 构造函数
+        /// </summary>
         public LoginViewModel()
         {
             Initialization();
@@ -59,7 +62,7 @@ namespace ESBtest.ViewModel
             this.LoginCommand.ExecuteAction = new Action<object>(LoginFunc);
             //注册命令
             this.SigninCommand.ExecuteAction = new Action<object>(SigninFunc);
-            //
+            //游客登录命令
             this.GuestLoginCommand.ExecuteAction = new Action<object>(GuestLoginFunc);
         }
         /// <summary>

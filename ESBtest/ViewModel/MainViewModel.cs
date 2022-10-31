@@ -83,7 +83,7 @@ namespace ESBtest.ViewModel
             this.ComboBoxCategory = new ObservableCollection<string>() { "null", "solid", "liquid", "gas", "bio" };
             this.ComboBoxState = new ObservableCollection<string>() { "unknown", "in stock", "locked", "out on loan" };
             //创建表格数据源实例
-            this.SampleModelList = new ObservableCollection<SampleModel>() ;
+            this.SampleModelList = null;
         }
         /// <summary>
         /// 命令合集
@@ -266,6 +266,7 @@ namespace ESBtest.ViewModel
             if(!GlobalFunc.AdminRight())
             {
                 SampleRequestWindow.ToolAdminApproval.Visibility = Visibility.Hidden;
+                SampleRequestWindow.ToolAdminHistory.Visibility = Visibility.Hidden;
             }
             SampleRequestWindow.ShowDialog();
         }

@@ -79,7 +79,6 @@
                     <Button Content="加入购物车" Command="{Binding AddIntoCartCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
                     <Separator/>
                     <Button x:Name="AdminDeleteButton" Content="删除" Command="{Binding DeleteSelectedSampleCommand}" CommandParameter="{Binding ElementName=MainWindow}" />
-                    <Separator/>
                 </ToolBar>
                 <Button Grid.Column="1" Content="i" Command="{Binding UserInfoCommand}"/>
                 <Label Grid.Column="2" Content="{Binding Name, Source={x:Static common:GlobalValue.CurrentUser}}"/>

@@ -72,9 +72,9 @@ namespace ESBtest.ViewModel
 
             //表格全选or全不选命令
             this.CheckAllCommand.ExecuteAction = new Action<object>(CheckAll);
-            //删除选中样品的购物车信息
+            //删除购物车内选中样品命令
             this.DeleteCartCommand.ExecuteAction = new Action<object>(DeleteCart);
-            //
+            //申请购物车中样品命令
             this.SampleRequestCommand.ExecuteAction = new Action<object>(SampleRequest);
             #endregion 功能命令
         }
@@ -123,7 +123,7 @@ namespace ESBtest.ViewModel
             }
         }
         /// <summary>
-        /// 删除选中样品的购物车信息
+        /// 删除购物车内选中样品
         /// </summary>
         /// <param name="w">CartView</param>
         private void DeleteCart(object w)
@@ -138,10 +138,19 @@ namespace ESBtest.ViewModel
                 }
             }
         }
-        
+        /// <summary>
+        /// 申请借出购物车中样品
+        /// </summary>
+        /// <param name="w">CartView</param>
         private void SampleRequest(object w)
         {
-
+            SampleRequestView SampleRequestWindow = new SampleRequestView();
+            if (!GlobalFunc.AdminRight())
+            {
+                SampleRequestWindow.ToolAdminApproval.Visibility = Visibility.Hidden;
+            }
+            (w as Window).Close();
+            SampleRequestWindow.ShowDialog();
         }
         #endregion 功能命令实现
     }

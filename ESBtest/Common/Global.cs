@@ -18,7 +18,7 @@ namespace ESBtest.Common
         public static UserModel CurrentUser;
         public static ObservableCollection<string> SampleCategory = new ObservableCollection<string>() { "null", "solid", "liquid", "gas", "bio" };
         public static ObservableCollection<string> SampleState = new ObservableCollection<string>() { "unknown", "in stock", "locked", "out on loan" };
-        public static ObservableCollection<string> RecordState = new ObservableCollection<string>() { "unknown", "in approval", "approved", "out on loan", "returned", "approval failed", "6", "7", "8", "9" };
+        public static ObservableCollection<string> RecordState = new ObservableCollection<string>() { "unknown", "in approval", "approved", "out on loan", "returned", "5", "6", "7", "8", "approval failed", "user canceled" };
     }
     /// <summary>
     /// 地点类
