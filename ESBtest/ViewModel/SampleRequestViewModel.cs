@@ -174,7 +174,7 @@ namespace ESBtest.ViewModel
                 return;
             }
             string requestDate = SampleRecord.RequestDate.ToShortDateString().ToString();
-            if (dBControl.InsertIntoSampleRecordTable(iList, requestDate, GlobalValue.CurrentUser.UserID, 1) > 0)
+            if (dBControl.InsertIntoSampleRecordTable(iList, requestDate, SampleRecord.RequestComment, GlobalValue.CurrentUser.UserID, 1) > 0)
             {
                 if (dBControl.DeleteCartTable(GlobalValue.CurrentUser.UserID) > 0)
                 {

@@ -12,16 +12,11 @@ namespace ESBtest.Model
     /// </summary>
     public class UserModel:NotifyBase
     {
-        #region 私人变量
-        private string userName;
-        private string password;
-        private string passwordCheck;
-        private string name;
-        private int userRight;
-
-        #endregion
-
         #region property
+        /// <summary>
+        /// 真实姓名
+        /// </summary>
+        private string name;
         public string Name
         {
             get { return name; }
@@ -31,8 +26,10 @@ namespace ESBtest.Model
                 RaisePropertyChanged();
             }
         }
-
-
+        /// <summary>
+        /// 用户名
+        /// </summary>
+        private string userName;
         public string UserName
         {
             get { return userName; }
@@ -42,7 +39,10 @@ namespace ESBtest.Model
                 this.RaisePropertyChanged();
             }
         }
-
+        /// <summary>
+        /// 密码
+        /// </summary>
+        private string password;
         public string Password
         {
             get { return password; }
@@ -52,7 +52,11 @@ namespace ESBtest.Model
                 this.RaisePropertyChanged();
             }
         }
-
+        /// <summary>
+        /// 重复输入密码
+        /// 注册相关
+        /// </summary>
+        private string passwordCheck;
         public string PasswordCheck
         {
             get { return passwordCheck; }
@@ -62,13 +66,13 @@ namespace ESBtest.Model
                 RaisePropertyChanged();
             }
         }
-
         /// <summary>
         /// 用户权限
         /// 0 - 游客
         /// 1 - 普通用户
         /// 2 - 管理员
         /// </summary>
+        private int userRight;
         public int UserRight
         {
             get { return userRight; }
@@ -78,9 +82,10 @@ namespace ESBtest.Model
                 RaisePropertyChanged();
             }
         }
-
+        /// <summary>
+        /// 用户ID
+        /// </summary>
         private int userID;
-
         public int UserID
         {
             get { return userID; }
@@ -90,9 +95,13 @@ namespace ESBtest.Model
                 RaisePropertyChanged();
             }
         }
-
-
         #endregion
+
+        //构造函数
+        public UserModel()
+        {
+
+        }
 
     }
 }

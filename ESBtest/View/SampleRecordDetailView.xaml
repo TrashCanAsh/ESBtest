@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ESBtest.View"
         mc:Ignorable="d" Name="SampleRecordDetailWindow"
-        Title="SampleRecordDetailWindow" Height="400" Width="600"
+        Title="SampleRecordDetailWindow" Height="600" Width="600"
         WindowStartupLocation="CenterScreen"  WindowStyle="None"
         AllowsTransparency="True" Background="{x:Null}" ResizeMode="NoResize">
     
@@ -52,11 +52,13 @@
             <Grid Grid.Row="2" >
                 <Grid.RowDefinitions>
                     <RowDefinition/>
+                    <RowDefinition/>
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
                 <GroupBox Header="申请信息">
                     <Grid>
                         <Grid.RowDefinitions>
+                            <RowDefinition/>
                             <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
@@ -76,9 +78,16 @@
                             <Label Content="申请状态"/>
                             <TextBox Width="140" Text="{Binding SampleRecordModel.StateStr}" IsEnabled="False"/>
                         </StackPanel>
+                        <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal">
+                            <Label Content="申请备注"/>
+                            <TextBox Text="{Binding SampleRecord.RequestComment}" Height="80" Width="410" TextWrapping="WrapWithOverflow" IsEnabled="False"/>
+                        </StackPanel>
                     </Grid>
                 </GroupBox>
-                <Grid Grid.Row="1" x:Name="AdminControllerGrid" Margin="0 10 0 10">
+                <GroupBox Grid.Row="1" x:Name="ApprovalInfo" Header="审批信息">
+                    
+                </GroupBox>
+                <Grid Grid.Row="2" x:Name="AdminControllerGrid" Margin="0 10 0 10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
@@ -89,7 +98,7 @@
                     <Button Grid.Column="1" Content="同意" Command="{Binding RequsetApprovalCommand}" CommandParameter="{Binding ElementName=SampleRecordDetailWindow}"/>
                     <Button Grid.Column="3" Content="拒绝" Command="{Binding RequestRejectCommand}" CommandParameter="{Binding ElementName=SampleRecordDetailWindow}"/>
                 </Grid>
-                <Grid Grid.Row="1" x:Name="NormalUserControllerGrid" Margin="0 10 0 10">
+                <Grid Grid.Row="2" x:Name="NormalUserControllerGrid" Margin="0 10 0 10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>

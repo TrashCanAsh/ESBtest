@@ -85,7 +85,7 @@ namespace ESBtest.ViewModel
         {
             if(MessageBox.Show("确认同意此申请？","审批提示",MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
-                if(dBControl.UpdateRecordTable(SampleRecordModel.IdRecord, SampleRecordModel.IdUser, DateTime.Now.ToShortDateString(), null, null, 2) > 0)
+                if(dBControl.UpdateRecordTable(SampleRecordModel.IdRecord, SampleRecordModel.IdUser, DateTime.Now.ToShortDateString(), GlobalValue.CurrentUser.UserID, null, 2) > 0)
                 {
                     MessageBox.Show("已同意此申请\n即将关闭此界面...", "审批提示");
                     (w as Window).Close();
@@ -101,7 +101,7 @@ namespace ESBtest.ViewModel
         {
             if(MessageBox.Show("确认拒绝此申请？", "审批提示", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
-                if (dBControl.UpdateRecordTable(SampleRecordModel.IdRecord, SampleRecordModel.IdUser, DateTime.Now.ToShortDateString(), null, null, 9) > 0)
+                if (dBControl.UpdateRecordTable(SampleRecordModel.IdRecord, SampleRecordModel.IdUser, DateTime.Now.ToShortDateString(), GlobalValue.CurrentUser.UserID, null, 9) > 0)
                 {
                     MessageBox.Show("已拒绝此申请\n即将关闭此界面...", "审批提示");
                     (w as Window).Close();
@@ -121,7 +121,7 @@ namespace ESBtest.ViewModel
         {
             if (MessageBox.Show("确认取消此条申请记录?", "提示", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
-                if (dBControl.UpdateRecordTable(SampleRecordModel.IdRecord, SampleRecordModel.IdUser, null, null, null, 10) > 0)
+                if (dBControl.UpdateRecordTable(SampleRecordModel.IdRecord, SampleRecordModel.IdUser, null, GlobalValue.CurrentUser.UserID, null, 10) > 0)
                 {
                     MessageBox.Show("取消成功\n正在返回上一界面...", "提示");
                     (w as Window).Close();

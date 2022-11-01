@@ -16,6 +16,8 @@ namespace ESBtest.ViewModel
         private DBControl dBControl;
 
         public UserModel userModel { get; set; }
+        public bool isNormalUser { get; set; }
+        public bool isAdmin { get; set; }
 
         public CommandBase CloseWindowCommand { get; set; }
         public CommandBase MinWindowCommand { get; set; }
@@ -41,6 +43,9 @@ namespace ESBtest.ViewModel
             this.dBControl = new DBControl();
             //创建用户数据实例
             this.userModel = new UserModel();
+            //设置初始用户身份选择
+            this.isNormalUser = true;
+            this.isAdmin = false;
         }
         /// <summary>
         /// 命令合集
@@ -71,32 +76,76 @@ namespace ESBtest.ViewModel
         /// <param name="w"></param>
         private void LoginFunc(object w)
         {
-            //Console.WriteLine(userModel.UserName + userModel.Password);
-            if (dBControl.IsUserNameExist(userModel.UserName))
+            //普通用户登录入口
+            if(isNormalUser)
             {
-                if (dBControl.IsUserNameAndPasswordMatch(userModel.UserName, userModel.Password))
+                //（用户表）查找用户名是否存在
+                if (dBControl.IsUserNameExist(userModel.UserName))
                 {
-                    MessageBox.Show((w as Window), "登录成功", "登录提示");
-                    GlobalValue.CurrentUser = dBControl.GetUserInformation(userModel.UserName);
-                    MainView mainWindow = new MainView();
-                    //权限设置
-                    if(!GlobalFunc.AdminRight())
+                    //（用户表）查找用户名和密码是否能对应
+                    if (dBControl.IsUserNameAndPasswordMatch(userModel.UserName, userModel.Password))
                     {
-                        mainWindow.MenuItemInsert.Visibility = Visibility.Collapsed;
-                        mainWindow.AdminDeleteButton.Visibility = Visibility.Collapsed;
+                        MessageBox.Show((w as Window), "登录成功", "登录提示");
+                        //获取用户信息
+                        GlobalValue.CurrentUser = dBControl.GetUserInformation(userModel.UserName);
+                        //权限设置
+                        GlobalValue.CurrentUser.UserRight = 1;
                     }
-                    mainWindow.Show();
-                    (w as Window).Close();
+                    else
+                    {
+                        MessageBox.Show((w as Window), "登录失败：密码错误", "登录提示");
+                        return;
+                    }
                 }
                 else
                 {
-                    MessageBox.Show((w as Window), "密码错误", "登录提示");
+                    MessageBox.Show((w as Window), "登录失败：用户名不存在", "登录提示");
+                    return;
+                }
+            }
+            //管理员登录入口
+            else if(isAdmin)
+            {
+                //（用户表）查找用户名是否存在
+                if (dBControl.IsAdminNameExist(userModel.UserName))
+                {
+                    //（用户表）查找用户名和密码是否能对应
+                    if (dBControl.IsAdminNameAndPasswordMatch(userModel.UserName, userModel.Password))
+                    {
+                        MessageBox.Show((w as Window), "管理员登录成功", "登录提示");
+                        //获取用户信息
+                        GlobalValue.CurrentUser = dBControl.GetAdminInformation(userModel.UserName);
+                        //权限设置
+                        GlobalValue.CurrentUser.UserRight = 2;
+                    }
+                    else
+                    {
+                        MessageBox.Show((w as Window), "管理员登录失败：密码错误", "登录提示");
+                        return;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show((w as Window), "管理员登录失败：用户名不存在", "登录提示");
+                    return;
                 }
             }
             else
             {
-                MessageBox.Show((w as Window), "用户名不存在", "登录提示");
+                MessageBox.Show((w as Window), "登录失败：未知错误", "登录提示");
+                return;
             }
+            //创建主界面窗口
+            MainView mainWindow = new MainView();
+            //管理员权限以下，隐藏部分控件
+            if (GlobalValue.CurrentUser.UserRight < 2)
+            {
+                mainWindow.MenuItemInsert.Visibility = Visibility.Collapsed;
+                mainWindow.AdminDeleteButton.Visibility = Visibility.Collapsed;
+            }
+            //窗口显示
+            mainWindow.Show();
+            (w as Window).Close();
         }
         /// <summary>
         /// 注册命令->打开注册界面

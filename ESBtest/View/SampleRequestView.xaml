@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ESBtest.View"
         mc:Ignorable="d" Name="SampleRequestWindow"
-        Title="SampleRequestWindow" Height="450" Width="500" MinHeight="300" MinWidth="500"
+        Title="SampleRequestWindow" Height="500" Width="500" MinHeight="300" MinWidth="500"
         WindowStartupLocation="CenterScreen"  WindowStyle="None"
         AllowsTransparency="True" Background="{x:Null}" ResizeMode="CanResizeWithGrip">
     
@@ -68,9 +68,13 @@
                                     <RowDefinition Height="auto"/>
                                     <RowDefinition Height="auto"/>
                                 </Grid.RowDefinitions>
-                                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0 0 0 10">
                                     <Label Content="选择借出日期" />
                                     <DatePicker SelectedDate="{Binding SampleRecord.RequestDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                </StackPanel>
+                                <StackPanel Grid.Row="1" Orientation="Horizontal">
+                                    <Label Content="备注"/>
+                                    <TextBox Text="{Binding SampleRecord.RequestComment}" Height="80" Width="410" TextWrapping="WrapWithOverflow"/>
                                 </StackPanel>
                             </Grid>
                             <StackPanel Grid.Row="2" Orientation="Horizontal">

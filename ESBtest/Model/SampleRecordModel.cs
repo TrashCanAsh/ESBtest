@@ -99,6 +99,20 @@ namespace ESBtest.Model
         }
 
         /// <summary>
+        /// 申请备注
+        /// </summary>
+        private string requestComment;
+        public string RequestComment
+        {
+            get { return requestComment; }
+            set
+            {
+                requestComment = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        /// <summary>
         /// 申请通过日期
         /// </summary>
         private DateTime approvalDate;
@@ -113,29 +127,29 @@ namespace ESBtest.Model
         }
 
         /// <summary>
-        /// 借出日期
+        /// 审批人管理员ID
         /// </summary>
-        private DateTime outDate;
-        public DateTime OutDate
+        private int idAdmin;
+        public int IdAdmin
         {
-            get { return outDate; }
+            get { return idAdmin; }
             set
             {
-                outDate = value;
+                idAdmin = value;
                 RaisePropertyChanged();
             }
         }
 
         /// <summary>
-        /// 还入日期
+        /// 审批备注
         /// </summary>
-        private DateTime inDate;
-        public DateTime InDate
+        private string approvalComment;
+        public string ApprovalComment
         {
-            get { return inDate; }
+            get { return approvalComment; }
             set
             {
-                inDate = value;
+                approvalComment = value;
                 RaisePropertyChanged();
             }
         }
@@ -175,8 +189,6 @@ namespace ESBtest.Model
         {
             this.RequestDate = DateTime.Now;
             this.ApprovalDate = DateTime.Now;
-            this.OutDate = DateTime.Now;
-            this.InDate = DateTime.Now;
         }
 
 

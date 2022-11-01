@@ -303,10 +303,11 @@ namespace ESBtest.Common
         /// </summary>
         /// <param name="sList">样品ID列表</param>
         /// <param name="requestDate">申请日期</param>
+        /// <param name="requestcomment">申请备注</param>
         /// <param name="userID">申请用户ID</param>
         /// <param name="state">申请状态</param>
         /// <returns></returns>
-        public int InsertIntoSampleRecordTable(List<int> sList, string requestDate, int userID, int state)
+        public int InsertIntoSampleRecordTable(List<int> sList, string requestDate, string requestcomment, int userID, int state)
         {
             try
             {
@@ -316,8 +317,8 @@ namespace ESBtest.Common
                 string sqlcmd = "";
                 foreach (int s in sList)
                 {
-                    sqlcmd += "INSERT INTO samplesrecord (idsamplesrecord, idrecord, iduser, idsamples, requestdate, state) VALUES (" + num++ + "," + idrecord + "," 
-                        + userID + "," + s + ",'" + requestDate + "'," + state + ");\n";
+                    sqlcmd += "INSERT INTO samplesrecord (idsamplesrecord, idrecord, iduser, idsamples, requestdate, requestcomment, state) VALUES (" + num++ + "," + idrecord + "," 
+                        + userID + "," + s + ",'" + requestDate + "','" + requestcomment + "'," + state + ");\n";
                 }
                 Console.WriteLine(sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
@@ -584,8 +585,9 @@ namespace ESBtest.Common
         /// <param name="inDate"></param>
         /// <param name="State"></param>
         /// <returns></returns>
-        public int UpdateRecordTable(int idRecord, int idUser, string approvalDate, string outDate, string inDate, int State)
+        public int UpdateRecordTable(int idRecord, int idUser, string approvalDate, int idadmin, string approvalcomment, int State)
         {
+            //todo
             try
             {
                 TryConnection();
@@ -600,31 +602,28 @@ namespace ESBtest.Common
                     sqlcmd += "approvaldate = '" + approvalDate + "'";
                     isFirst = false;
                 }
-                //outDate
-                if (!string.IsNullOrEmpty(outDate))
+                //approvalcomment
+                if(!string.IsNullOrEmpty(approvalcomment))
                 {
                     if(isFirst)
                     {
-                        sqlcmd += "outdate = '" + outDate + "'";
+                        sqlcmd += "approvalcomment = '" + approvalcomment + "'";
                         isFirst = false;
                     }
                     else
                     {
-                        sqlcmd += ", outdate = '" + outDate + "'";
+                        sqlcmd += ", approvalcomment = '" + approvalcomment + "'";
                     }
                 }
-                //inDate
-                if (!string.IsNullOrEmpty(inDate))
+                //idadmin
+                if(isFirst)
                 {
-                    if (isFirst)
-                    {
-                        sqlcmd += "indate = '" + inDate + "'";
-                        isFirst = false;
-                    }
-                    else
-                    {
-                        sqlcmd += ", indate = '" + inDate + "'";
-                    }
+                    sqlcmd += "idadmin = " + idadmin;
+                    isFirst = false;
+                }
+                else
+                {
+                    sqlcmd += ", idadmin = " + idadmin;
                 }
                 //state
                 if (isFirst)
@@ -673,10 +672,6 @@ namespace ESBtest.Common
                 {
                     return true;
                 }
-                else
-                {
-                    Console.WriteLine("No rows found: username not exist");
-                }
             }
             catch (Exception ex)
             {
@@ -707,10 +702,6 @@ namespace ESBtest.Common
                 if (flag)
                 {
                     return true;
-                }
-                else
-                {
-                    Console.WriteLine("No rows found: username & password not match");
                 }
             }
             catch (Exception ex)
@@ -749,9 +740,103 @@ namespace ESBtest.Common
                     };
                     return user;
                 }
-                else
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                sqlDispose();
+            }
+            return null;
+        }
+        /// <summary>
+        /// （管理员）查询用户名是否已存在
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        public bool IsAdminNameExist(string adminname)
+        {
+            try
+            {
+                TryConnection();
+                string sqlcmd = "select * from admin where adminname = '" + adminname + "'";
+                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
+                MySqlDataReader reader = mysqlCmd.ExecuteReader();
+                bool flag = reader.HasRows;
+                reader.Close();
+                if (flag)
                 {
-                    Console.WriteLine("No rows found: username not exist");
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                sqlDispose();
+            }
+            return false;
+        }
+        /// <summary>
+        /// （管理员）根据用户名和密码查找是否匹配
+        /// </summary>
+        /// <param name="adminname"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public bool IsAdminNameAndPasswordMatch(string adminname, string password)
+        {
+            try
+            {
+                TryConnection();
+                string sqlcmd = "select * from admin where adminname = '" + adminname + "' and password = '" + password + "'";
+                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
+                MySqlDataReader reader = mysqlCmd.ExecuteReader();
+                bool flag = reader.HasRows;
+                reader.Close();
+                if (flag)
+                {
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                sqlDispose();
+            }
+
+            return false;
+        }
+        /// <summary>
+        /// （管理员）根据用户名查询用户信息
+        /// </summary>
+        /// <param name="adminname"></param>
+        /// <returns></returns>
+        public UserModel GetAdminInformation(string adminname)
+        {
+            try
+            {
+                TryConnection();
+                string sqlcmd = "select * from admin where adminname = '" + adminname + "'";
+                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
+                MySqlDataReader reader = mysqlCmd.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    reader.Read();
+                    UserModel user = new UserModel()
+                    {
+                        UserID = reader.GetInt32(0),
+                        Name = reader.GetValue(1).ToString(),
+                        UserName = reader.GetValue(2).ToString()
+                    };
+                    return user;
                 }
             }
             catch (Exception ex)
@@ -1139,7 +1224,7 @@ namespace ESBtest.Common
             }
             return -1;
         }
-
+        //todotodo
         public ObservableCollection<SampleRecordModel> SearchRecord()
         {
             ObservableCollection<SampleRecordModel> srList = new ObservableCollection<SampleRecordModel>();
@@ -1147,8 +1232,7 @@ namespace ESBtest.Common
             {
                 TryConnection();
                 //select distinct username, idrecord, requestdate, state from samplesrecord, user where samplesrecord.iduser = user.iduser and samplesrecord.state = 1;
-                //选中所有“待审批”状态（state = 1）的记录
-                string sqlcmd = "SELECT DISTINCT name, idrecord, user.iduser, requestdate, state FROM samplesrecord, user WHERE samplesrecord.iduser = user.iduser AND samplesrecord.state = " + state;
+                string sqlcmd = "SELECT DISTINCT name, idrecord, user.iduser, requestdate, state FROM samplesrecord, user WHERE samplesrecord.iduser = user.iduser AND samplesrecord.state = ";
 
                 Console.WriteLine(sqlcmd);
 
@@ -1427,6 +1511,7 @@ namespace ESBtest.Common
         /// <returns></returns>
         private ObservableCollection<SampleRecordModel> GetSampleRecordList(MySqlDataReader reader)
         {
+            //todo
             ObservableCollection<SampleRecordModel> srList = new ObservableCollection<SampleRecordModel>();
             while (reader.Read())
             {
