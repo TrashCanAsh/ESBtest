@@ -1224,7 +1224,10 @@ namespace ESBtest.Common
             }
             return -1;
         }
-        //todotodo
+        /// <summary>
+        /// 搜索全部样品申请内容
+        /// </summary>
+        /// <returns></returns>
         public ObservableCollection<SampleRecordModel> SearchRecord()
         {
             ObservableCollection<SampleRecordModel> srList = new ObservableCollection<SampleRecordModel>();

@@ -103,3 +103,4 @@ D:\vs workspace\ESBtest\ESBtest\obj\Debug\View\SampleRequestView.g.cs
 D:\vs workspace\ESBtest\ESBtest\obj\Debug\View\SampleRequestView.baml
 D:\vs workspace\ESBtest\ESBtest\obj\Debug\View\SampleRecordDetailView.g.cs
 D:\vs workspace\ESBtest\ESBtest\obj\Debug\View\SampleRecordDetailView.baml
+D:\vs workspace\ESBtest\ESBtest\obj\Debug\ESBtest.csprojAssemblyReference.cache

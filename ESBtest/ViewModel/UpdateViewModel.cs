@@ -13,10 +13,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using ZXing;
-using ZXing.Common;
-using ZXing.QrCode;
-using ZXing.QrCode.Internal;
+
 
 namespace ESBtest.ViewModel
 {
@@ -112,44 +109,8 @@ namespace ESBtest.ViewModel
         {
             string msg = SampleUpdated.SampleID + ", " + SampleUpdated.SampleName + ", " + SampleUpdated.Category + ", " + SampleUpdated.SamplingDate 
                 + ", " + SampleUpdated.Longitude + ", " + SampleUpdated.Latitude + ", " + SampleUpdated.StateStr + ", " + SampleUpdated.Comment;
-            QRcode = CreateQRCode(msg, 200, 200);
+            QRcode = QRCodeControl.CreateQRCode(msg, 200, 200);
             (w as UpdateView).QRcodeImage.Source = QRcode;
         }
-        /// <summary>
-        /// 生成二维码
-        /// </summary>
-        /// <param name="content">二维码包含的内容</param>
-        /// <param name="width">二维码图像的宽度</param>
-        /// <param name="height">二维码图像的高度</param>
-        /// <returns></returns>
-        private ImageSource CreateQRCode(String content, int width, int height)
-        {
-            EncodingOptions options;//包含一些编码、大小等的设置
-            BarcodeWriter write = null;//用来生成二维码，对应的BarcodeReader用来解码
-            options = new QrCodeEncodingOptions
-            {
-                DisableECI = true,
-                CharacterSet = "UTF-8",
-                Width = width,
-                Height = height,
-                Margin = 0
-            };
-            write = new BarcodeWriter
-            {
-                Format = BarcodeFormat.QR_CODE,
-                Options = options
-            };
-            Bitmap bitmap = write.Write(content);
-            IntPtr ip = bitmap.GetHbitmap();
-            BitmapSource bitmapSource = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
-                ip, IntPtr.Zero, Int32Rect.Empty,
-                BitmapSizeOptions.FromEmptyOptions());
-            DeleteObject(ip);
-            return bitmapSource;
-        }
-
-        // 注销对象方法API
-        [DllImport("gdi32")]
-        static extern int DeleteObject(IntPtr o);
     }
 }

@@ -38,6 +38,7 @@ namespace ESBtest.ViewModel
         public CommandBase MenuFavoriteCommand { get; set; }
         public CommandBase MenuCartCommand { get; set; }
         public CommandBase MenuSampleLendCommand { get; set; }
+        public CommandBase MenuSampleManageCommand { get; set; }
         public CommandBase MenuLogOutCommand { get; set; }
 
         public CommandBase SearchCommand { get; set; }
@@ -112,6 +113,7 @@ namespace ESBtest.ViewModel
             this.MenuFavoriteCommand = new CommandBase();
             this.MenuCartCommand = new CommandBase();
             this.MenuSampleLendCommand = new CommandBase();
+            this.MenuSampleManageCommand = new CommandBase();
             this.MenuLogOutCommand = new CommandBase();
 
             //菜单栏选择样品信息搜索命令 权限：游客、普通用户、管理员
@@ -131,6 +133,9 @@ namespace ESBtest.ViewModel
             //菜单栏打开样品借出申请界面 权限：普通用户、管理员
             this.MenuSampleLendCommand.ExecuteAction = new Action<object>(MenuSampleLend);
             this.MenuSampleLendCommand.CanExecuteFunc = new Func<object, bool>(GlobalFunc.NormalUserRight);
+            //菜单栏打开样品管理界面 权限：管理员
+            this.MenuSampleManageCommand.ExecuteAction = new Action<object>();
+            this.MenuSampleManageCommand.CanExecuteFunc = new Func<object, bool>(GlobalFunc.AdminRight);
             //菜单栏登出当前用户并返回登录界面 权限：游客、普通用户、管理员
             this.MenuLogOutCommand.ExecuteAction = new Action<object>(MenuLogOut);
             #endregion 菜单栏命令
