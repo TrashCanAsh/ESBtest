@@ -1231,8 +1231,9 @@ namespace ESBtest.Common
             try
             {
                 TryConnection();
-                //select distinct username, idrecord, requestdate, state from samplesrecord, user where samplesrecord.iduser = user.iduser and samplesrecord.state = 1;
-                string sqlcmd = "SELECT DISTINCT name, idrecord, user.iduser, requestdate, state FROM samplesrecord, user WHERE samplesrecord.iduser = user.iduser AND samplesrecord.state = ";
+                //SELECT DISTINCT user.name, requestdate, requestcomment, approvaldate, admin.name, approvalcomment, state FROM samplesrecord, user, admin WHERE admin.idadmin = samplesrecord.idadmin AND user.iduser = samplesrecord.iduser; 
+
+                string sqlcmd = "SELECT DISTINCT idrecord, user.iduser, user.name, requestdate, requestcomment, approvaldate, admin.name, approvalcomment, state FROM samplesrecord, user, admin WHERE admin.idadmin = samplesrecord.idadmin AND user.iduser = samplesrecord.iduser AND user.iduser = samplesrecord.iduser";
 
                 Console.WriteLine(sqlcmd);
 
@@ -1244,12 +1245,23 @@ namespace ESBtest.Common
                     {
                         SampleRecordModel sr = new SampleRecordModel()
                         {
-                            UserName = reader.GetValue(0).ToString(),
-                            IdRecord = reader.GetInt32(1),
-                            IdUser = reader.GetInt32(2),
+                            IdRecord = reader.GetInt32(0),
+                            IdUser = reader.GetInt32(1),
+                            UserName = reader.GetValue(2).ToString(),
                             RequestDate = reader.GetDateTime(3),
-                            State = reader.GetInt32(4)
+                            RequestComment = reader.GetValue(4).ToString(),
+                            AdminName = reader.GetValue(6).ToString(),
+                            State = reader.GetInt32(8)
                         };
+                        //当值不为null时，进行取值
+                        if (reader.GetValue(5).ToString() != "")
+                        {
+                            sr.ApprovalDate = reader.GetDateTime(5);
+                        }
+                        if (reader.GetValue(7).ToString() != "")
+                        {
+                            sr.ApprovalComment = reader.GetValue(7).ToString();
+                        }
                         sr.StateStr = GlobalValue.RecordState[sr.State];
                         srList.Add(sr);
                     }
@@ -1370,9 +1382,9 @@ namespace ESBtest.Common
             try
             {
                 TryConnection();
-                //select distinct username, idrecord, requestdate, state from samplesrecord, user where user.iduser = 1 and samplesrecord.idrecord = 1;
-                string sqlcmd = "SELECT DISTINCT name, requestdate, state FROM samplesrecord, user WHERE user.iduser = " + iduser + " AND samplesrecord.idrecord = " + idrecord;
-
+                //select distinct user.name, requestdate, requestcomment, approvaldate, admin.name, approvalcomment, state from samplesrecord, user, admin where user.iduser = 1 and admin.idadmin = 1 and samplesrecord.idrecord = 1;
+                string sqlcmd = "SELECT DISTINCT user.name, requestdate, requestcomment, approvaldate, admin.name, approvalcomment, state FROM samplesrecord, user, admin" +
+                    " WHERE user.iduser = " + iduser + " AND samplesrecord.idrecord = " + idrecord + " AND admin.idadmin = samplesrecord.idadmin AND user.iduser = samplesrecord.iduser";
                 Console.WriteLine(sqlcmd);
                 SampleRecordModel sr = null;
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
@@ -1386,8 +1398,19 @@ namespace ESBtest.Common
                         IdUser = iduser,
                         UserName = reader.GetValue(0).ToString(),
                         RequestDate = reader.GetDateTime(1),
-                        State = reader.GetInt32(2),
+                        RequestComment = reader.GetValue(2).ToString(),
+                        AdminName = reader.GetValue(4).ToString(),
+                        State = reader.GetInt32(6),
                     };
+                    //当值不为null时，进行取值
+                    if(reader.GetValue(3).ToString() != "")
+                    {
+                        sr.ApprovalDate = reader.GetDateTime(3);
+                    }
+                    if(reader.GetValue(5).ToString() != "")
+                    {
+                        sr.ApprovalComment = reader.GetValue(5).ToString();
+                    }
                     sr.StateStr = GlobalValue.RecordState[sr.State];
                 }
                 return sr;

@@ -41,7 +41,7 @@
                 <Button x:Name="ToolAdminHistory" Content="历史记录" Command="{Binding ToolHistoryTab}" CommandParameter="{Binding ElementName=SampleRequestWindow}"/>
                 <Button x:Name="ToolAdminApproval" Content="管理员审批" Command="{Binding ToolApprovalTab}" CommandParameter="{Binding ElementName=SampleRequestWindow}"/>
             </ToolBar>
-            <TabControl Grid.Row="2" Name="TabControlFunction">
+            <TabControl Grid.Row="2" Name="TabControlFunction" SelectedIndex="{Binding TabIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                 <!--  申请填写  -->
                 <TabItem Header="申请填写" Visibility="Collapsed">
                     <GroupBox Header="样品借出申请">
@@ -134,19 +134,12 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="审批时间" IsReadOnly="True">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding ApprovalDate, StringFormat='{}{0:yyyy-MM-dd}'}" />
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
                             <DataGridTextColumn Header="当前状态" Binding="{Binding StateStr}" />
                             <DataGridTemplateColumn>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Content="详情" Command="{Binding Path=DataContext.CheckDetailsCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
-                                                    CommandParameter= "{Binding Path=SelectedItem, RelativeSource={RelativeSource AncestorType= DataGrid}}"/>
+                                                    CommandParameter= "{Binding ElementName=HistoryDataGrid}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -178,7 +171,7 @@
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <Button Content="详情" Command="{Binding Path=DataContext.AdminCheckDetailsCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
-                                                    CommandParameter= "{Binding Path=SelectedItem, RelativeSource={RelativeSource AncestorType= DataGrid}}"/>
+                                                    CommandParameter= "{Binding ElementName=ApprovalDataGrid}"/>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>

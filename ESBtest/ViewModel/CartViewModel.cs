@@ -148,6 +148,7 @@ namespace ESBtest.ViewModel
             if (!GlobalFunc.AdminRight())
             {
                 SampleRequestWindow.ToolAdminApproval.Visibility = Visibility.Hidden;
+                SampleRequestWindow.ToolAdminHistory.Visibility = Visibility.Hidden;
             }
             (w as Window).Close();
             SampleRequestWindow.ShowDialog();

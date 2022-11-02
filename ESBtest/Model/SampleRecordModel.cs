@@ -127,15 +127,15 @@ namespace ESBtest.Model
         }
 
         /// <summary>
-        /// 审批人管理员ID
+        /// 管理员名称
         /// </summary>
-        private int idAdmin;
-        public int IdAdmin
+        private string adminName;
+        public string AdminName
         {
-            get { return idAdmin; }
+            get { return adminName; }
             set
             {
-                idAdmin = value;
+                adminName = value;
                 RaisePropertyChanged();
             }
         }

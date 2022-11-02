@@ -18,6 +18,7 @@ namespace ESBtest.ViewModel
         private DBControl dBControl;
 
         public SampleRecordModel SampleRecord { get; set; }
+        public int TabIndex { get; set; }
 
         public ObservableCollection<SampleModel> SampleModelList { get; set; }
         public ObservableCollection<SampleRecordModel> SampleRecordModelList { get; set; }
@@ -61,6 +62,8 @@ namespace ESBtest.ViewModel
             this.SampleModelList = dBControl.SearchSample(dBControl.SearchInCart(GlobalValue.CurrentUser.UserID));
             //创建样品申请记录列表实例
             this.SampleRecordModelList = null;
+            //初始化标签页索引
+            this.TabIndex = 0;
         }
         /// <summary>
         /// 命令合集
@@ -122,6 +125,10 @@ namespace ESBtest.ViewModel
             }
             else if (flag == 2)
             {
+                this.SampleRecordModelList = dBControl.SearchRecord();
+            }
+            else if(flag == 3)
+            {
                 this.SampleRecordModelList = dBControl.SearchRecord("1");
             }
             dg.ItemsSource = this.SampleRecordModelList;
@@ -150,7 +157,7 @@ namespace ESBtest.ViewModel
         private void HistoryTab(object w)
         {
             (w as SampleRequestView).TabControlFunction.SelectedIndex = 2;
-
+            RefreshSampleRecordDataGrid((w as SampleRequestView).HistoryDataGrid, 2);
         }
         /// <summary>
         /// 切换到审批界面
@@ -159,7 +166,7 @@ namespace ESBtest.ViewModel
         private void ApprovalTab(object w)
         {
             (w as SampleRequestView).TabControlFunction.SelectedIndex = 3;
-            RefreshSampleRecordDataGrid((w as SampleRequestView).ApprovalDataGrid, 2);
+            RefreshSampleRecordDataGrid((w as SampleRequestView).ApprovalDataGrid, 3);
         }
         /// <summary>
         /// 提交样品申请
@@ -204,26 +211,29 @@ namespace ESBtest.ViewModel
             List<int> iList = dBControl.SearchSampleRecord(sr.IdRecord, sr.IdUser);
             (srdv.DataContext as SampleRecordDetailViewModel).SampleModelList = dBControl.SearchSample(iList);
             (srdv.DataContext as SampleRecordDetailViewModel).SampleRecordModel = dBControl.SearchRecord(sr.IdRecord, sr.IdUser);
-            if((srdv.DataContext as SampleRecordDetailViewModel).SampleRecordModel.State>1)
+            //如果已经经过审批，那么用户无法取消此申请
+            if ((srdv.DataContext as SampleRecordDetailViewModel).SampleRecordModel.State > 1)
             {
                 srdv.NormalUserControllerGrid.Visibility = Visibility.Collapsed;
+                srdv.ApprovalInfo.Visibility = Visibility.Visible;
             }
             srdv.ShowDialog();
-            RefreshSampleRecordDataGrid(w as DataGrid, 1);
+            RefreshSampleRecordDataGrid(w as DataGrid, (TabIndex + 1));
         }
         /// <summary>
         /// 管理员审批界面查看选中的样品申请的详情，并进行审批
         /// </summary>
-        /// <param name="w"></param>
+        /// <param name="w">DataGrid</param>
         private void AdminCheckDetails(object w)
         {
+            SampleRecordModel sr = (SampleRecordModel)(w as DataGrid).SelectedItem;
             SampleRecordDetailView srdv = new SampleRecordDetailView();
             srdv.NormalUserControllerGrid.Visibility = Visibility.Collapsed;
-            List<int> iList = dBControl.SearchSampleRecord((w as SampleRecordModel).IdRecord, (w as SampleRecordModel).IdUser);
+            List<int> iList = dBControl.SearchSampleRecord(sr.IdRecord, sr.IdUser);
             (srdv.DataContext as SampleRecordDetailViewModel).SampleModelList = dBControl.SearchSample(iList);
-            (srdv.DataContext as SampleRecordDetailViewModel).SampleRecordModel = dBControl.SearchRecord((w as SampleRecordModel).IdRecord, (w as SampleRecordModel).IdUser);
+            (srdv.DataContext as SampleRecordDetailViewModel).SampleRecordModel = dBControl.SearchRecord(sr.IdRecord, sr.IdUser);
             srdv.ShowDialog();
-            RefreshSampleRecordDataGrid((w as SampleRequestView).ApprovalDataGrid, 2);
+            RefreshSampleRecordDataGrid(w as DataGrid, 2);
         }
         #endregion
 

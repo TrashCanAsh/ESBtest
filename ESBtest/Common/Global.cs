@@ -17,8 +17,8 @@ namespace ESBtest.Common
         public static DateTime FirstSamplingTime = new DateTime(2022, 08, 10);
         public static UserModel CurrentUser;
         public static ObservableCollection<string> SampleCategory = new ObservableCollection<string>() { "null", "solid", "liquid", "gas", "bio" };
-        public static ObservableCollection<string> SampleState = new ObservableCollection<string>() { "unknown", "in stock", "locked", "out on loan" };
-        public static ObservableCollection<string> RecordState = new ObservableCollection<string>() { "unknown", "in approval", "approved", "out on loan", "returned", "5", "6", "7", "8", "approval failed", "user canceled" };
+        public static ObservableCollection<string> SampleState = new ObservableCollection<string>() { "未知", "在库", "锁定", "已借出" };
+        public static ObservableCollection<string> RecordState = new ObservableCollection<string>() { "未知", "审批中", "审批通过", "已借出", "已返还", "5", "6", "7", "8", "审批未通过", "用户取消" };
     }
     /// <summary>
     /// 地点类

@@ -73,14 +73,17 @@ namespace ESBtest.ViewModel
             this.RequsetApprovalCommand.ExecuteAction = new Action<object>(RequsetApproval);
             //拒绝申请命令
             this.RequestRejectCommand.ExecuteAction = new Action<object>(RequestReject);
-            //
+            //取消申请命令
             this.CancelRequestCommand.ExecuteAction = new Action<object>(CancelRequest);
 
             #endregion 功能命令
         }
 
         #region 功能命令实现
-
+        /// <summary>
+        /// 同意此样品申请
+        /// </summary>
+        /// <param name="w"></param>
         private void RequsetApproval(object w)
         {
             if(MessageBox.Show("确认同意此申请？","审批提示",MessageBoxButton.YesNo) == MessageBoxResult.Yes)
@@ -96,7 +99,10 @@ namespace ESBtest.ViewModel
                 }
             }
         }
-
+        /// <summary>
+        /// 拒绝此样品申请
+        /// </summary>
+        /// <param name="w"></param>
         private void RequestReject(object w)
         {
             if(MessageBox.Show("确认拒绝此申请？", "审批提示", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
@@ -112,7 +118,6 @@ namespace ESBtest.ViewModel
                 }
             }
         }
-
         /// <summary>
         /// 取消选中的样品申请
         /// </summary>
