@@ -334,6 +334,37 @@ namespace ESBtest.Common
             }
             return -1;
         }
+        /// <summary>
+        /// 向操作历史记录表中添加数据
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="useridentity"></param>
+        /// <param name="command"></param>
+        /// <param name="datetime"></param>
+        /// <returns></returns>
+        public int InsertIntoHistoryTable(string username, int useridentity, string command, string datetime)
+        {
+            try
+            {
+                string num = (NumOfLastID("samples") + 1).ToString();
+                TryConnection();
+                string sqlcmd = "INSERT INTO history (idhistory, username, useridentity, command, datetime) VALUES (" + num + ",'" + username + "','" + useridentity
+                    + "','" + command + "','" + datetime + "')";
+                Console.WriteLine(sqlcmd);
+                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
+                return mysqlCmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                sqlDispose();
+            }
+            return -1;
+
+        }
         #endregion 增
 
         #region 删

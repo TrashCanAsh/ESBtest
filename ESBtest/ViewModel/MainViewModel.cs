@@ -134,7 +134,7 @@ namespace ESBtest.ViewModel
             this.MenuSampleLendCommand.ExecuteAction = new Action<object>(MenuSampleLend);
             this.MenuSampleLendCommand.CanExecuteFunc = new Func<object, bool>(GlobalFunc.NormalUserRight);
             //菜单栏打开样品管理界面 权限：管理员
-            this.MenuSampleManageCommand.ExecuteAction = new Action<object>();
+            this.MenuSampleManageCommand.ExecuteAction = new Action<object>(MenuSampleManage);
             this.MenuSampleManageCommand.CanExecuteFunc = new Func<object, bool>(GlobalFunc.AdminRight);
             //菜单栏登出当前用户并返回登录界面 权限：游客、普通用户、管理员
             this.MenuLogOutCommand.ExecuteAction = new Action<object>(MenuLogOut);
@@ -274,6 +274,14 @@ namespace ESBtest.ViewModel
                 SampleRequestWindow.ToolAdminHistory.Visibility = Visibility.Hidden;
             }
             SampleRequestWindow.ShowDialog();
+        }
+        /// <summary>
+        /// 打开样品管理界面
+        /// </summary>
+        /// <param name="w"></param>
+        private void MenuSampleManage(object w)
+        {
+
         }
         /// <summary>
         /// 登出当前用户
