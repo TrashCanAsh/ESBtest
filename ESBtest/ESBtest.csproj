@@ -110,6 +110,7 @@
     <Compile Include="Common\Global.cs" />
     <Compile Include="Common\PasswordBoxHelper.cs" />
     <Compile Include="Common\QRCodeControl.cs" />
+    <Compile Include="Common\TCPControl.cs" />
     <Compile Include="Common\TextBoxAttachedProperties.cs" />
     <Compile Include="Model\SampleModel.cs" />
     <Compile Include="Model\SampleRecordModel.cs" />
