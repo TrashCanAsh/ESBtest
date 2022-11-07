@@ -281,7 +281,8 @@ namespace ESBtest.ViewModel
         /// <param name="w"></param>
         private void MenuSampleManage(object w)
         {
-
+            SampleManageView SampleManageView = new SampleManageView();
+            SampleManageView.ShowDialog();
         }
         /// <summary>
         /// 登出当前用户

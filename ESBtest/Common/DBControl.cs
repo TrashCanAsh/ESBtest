@@ -1316,7 +1316,7 @@ namespace ESBtest.Common
         /// 根据申请状态查询对应的申请记录
         /// </summary>
         /// <returns></returns>
-        public ObservableCollection<SampleRecordModel> SearchRecord(string state)
+        public ObservableCollection<SampleRecordModel> SearchRecord(string op, string state)
         {
             ObservableCollection<SampleRecordModel> srList = new ObservableCollection<SampleRecordModel>();
             try
@@ -1324,7 +1324,7 @@ namespace ESBtest.Common
                 TryConnection();
                 //select distinct username, idrecord, requestdate, state from samplesrecord, user where samplesrecord.iduser = user.iduser and samplesrecord.state = 1;
                 //选中所有“待审批”状态（state = 1）的记录
-                string sqlcmd = "SELECT DISTINCT name, idrecord, user.iduser, requestdate, state FROM samplesrecord, user WHERE samplesrecord.iduser = user.iduser AND samplesrecord.state = " + state;
+                string sqlcmd = "SELECT DISTINCT name, idrecord, user.iduser, requestdate, state FROM samplesrecord, user WHERE samplesrecord.iduser = user.iduser AND samplesrecord.state " + op + " " + state + " AND samplesrecord.state < 5";
 
                 Console.WriteLine(sqlcmd);
 

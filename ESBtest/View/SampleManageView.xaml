@@ -16,7 +16,6 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition/>
-                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
@@ -33,70 +32,93 @@
                 <Button x:Name="ButtonClose" Style="{StaticResource CloseWindowButtonStyle}" 
                         Command="{Binding CloseWindowCommand}" CommandParameter="{Binding ElementName=SampleManageWindow}" Grid.Column="3"/>
             </Grid>
-            <DataGrid Grid.Row="1">
-                <DataGrid.RowStyle >
-                    <Style TargetType="DataGridRow">
-                        <Setter Property="Background" Value="White"/>
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="LightGray"/>
-                            </Trigger>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Background" Value="White"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </DataGrid.RowStyle>
-                <DataGrid.CellStyle>
-                    <Style TargetType="DataGridCell">
-                        <Style.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Background" Value="Transparent"/>
-                                <Setter Property="Foreground" Value="Black"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </DataGrid.CellStyle>
-                <DataGrid.Columns>
-                    <DataGridCheckBoxColumn Binding="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                        <DataGridCheckBoxColumn.HeaderTemplate >
-                            <DataTemplate>
-                                <CheckBox HorizontalAlignment="Center" VerticalAlignment="Center" Command= "{Binding Path=DataContext.CheckAllCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                              CommandParameter= "{Binding Path=IsChecked, RelativeSource={RelativeSource Self}}"/>
-                            </DataTemplate>
-                        </DataGridCheckBoxColumn.HeaderTemplate>
-                        <DataGridCheckBoxColumn.ElementStyle>
-                            <Style TargetType="CheckBox"/>
-                        </DataGridCheckBoxColumn.ElementStyle>
-                        <DataGridCheckBoxColumn.CellStyle>
-                            <Style>
-                                <Setter Property="CheckBox.VerticalAlignment"  Value="Center"/>
-                                <Setter Property="CheckBox.HorizontalAlignment"  Value="Center"/>
-                            </Style>
-                        </DataGridCheckBoxColumn.CellStyle>
-                    </DataGridCheckBoxColumn>
-                    <DataGridTextColumn Header="编号" Binding="{Binding SampleID}" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="名称" Binding="{Binding SampleName}" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="种类" Binding="{Binding Category}" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="采样时间" Binding="{Binding SamplingDate}" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="采样地点" Binding="{Binding SamplingLocation}" IsReadOnly="True"/>
-                </DataGrid.Columns>
-            </DataGrid>
-            <Grid Grid.Row="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <StackPanel Grid.Row="0" Orientation="Horizontal" Width="400" Margin="10">
-                    <Label Content="扫描路径"/>
-                    <TextBox Text="{Binding a}" Width="300" IsReadOnly="True"/>
-                    <Button Content="扫描" Command="{Binding OpenQRCodeImageCommand}"/>
-                </StackPanel>
-                <StackPanel Grid.Row="1" Orientation="Horizontal" Width="150" Margin="10">
-                    <Button Content="出库" Width="60" Command="{Binding CheckOutCommand}" Margin="0 0 30 0"/>
-                    <Button Content="入库" Width="60" Command="{Binding }"/>
-                </StackPanel>
-            </Grid>
+            
+            <TabControl Grid.Row="1" Name="TabControlRecord">
+                <TabItem Header="申请记录查看" Visibility="Collapsed">
+                    <DataGrid Name="RecordDataGrid" Grid.Row="0" ItemsSource="{Binding SampleRecordModelList, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" FontSize="14" 
+                          AutoGenerateColumns="False" CanUserAddRows="False" IsHitTestVisible="True" >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="申请编号" Binding="{Binding IdRecord}" />
+                            <DataGridTextColumn Header="申请人" Binding="{Binding UserName}" />
+                            <DataGridTemplateColumn Header="申请时间" IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding RequestDate, StringFormat='{}{0:yyyy-MM-dd}'}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="当前状态" Binding="{Binding StateStr}" />
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="管理操作" Command="{Binding Path=DataContext.ManageCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                                    CommandParameter= "{Binding ElementName=SampleManageWindow}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+
+                <TabItem Header="出入库界面" Visibility="Collapsed">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <DataGrid Name="SampleDataGrid" Grid.Row="0" ItemsSource="{Binding SampleModelList, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" FontSize="14" 
+                                  AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
+                            <DataGrid.Columns>
+                                <DataGridCheckBoxColumn Binding="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                    <DataGridCheckBoxColumn.ElementStyle>
+                                        <Style TargetType="CheckBox"/>
+                                    </DataGridCheckBoxColumn.ElementStyle>
+                                    <DataGridCheckBoxColumn.CellStyle>
+                                        <Style>
+                                            <Setter Property="CheckBox.VerticalAlignment"  Value="Center"/>
+                                            <Setter Property="CheckBox.HorizontalAlignment"  Value="Center"/>
+                                        </Style>
+                                    </DataGridCheckBoxColumn.CellStyle>
+                                </DataGridCheckBoxColumn>
+                                <DataGridTextColumn Header="编号" Binding="{Binding SampleID}" />
+                                <DataGridTextColumn Header="名称" Binding="{Binding SampleName}" />
+                                <DataGridTextColumn Header="种类" Binding="{Binding Category}" />
+                                <DataGridTextColumn Header="采样时间" Binding="{Binding SamplingDate}" />
+                                <DataGridTextColumn Header="采样地点" Binding="{Binding SamplingLocation}" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <GroupBox Header="二维码图像" Grid.Column="0">
+                                <Image Source="{Binding QRCodeImage}" Width="100" Height="100"/>
+                            </GroupBox>
+                            <Grid Grid.Column="1" Margin="10">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                                    <Label Content="扫描路径"/>
+                                    <TextBox Text="{Binding QRCodePath}" Width="280" IsReadOnly="True"/>
+                                </StackPanel>
+                                <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10">
+                                    <Button Content="扫描" Width="60" Command="{Binding OpenQRCodeImageCommand}"/>
+                                    <Button Content="出库" Width="60" Command="{Binding CheckOutCommand}" Margin="10 0 10 0"/>
+                                    <Button Content="入库" Width="60" Command="{Binding PutInStroageCommand}"/>
+                                </StackPanel>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </TabItem>
+
+            </TabControl>
+
+
+
         </Grid>
     </Border>
 </Window>
