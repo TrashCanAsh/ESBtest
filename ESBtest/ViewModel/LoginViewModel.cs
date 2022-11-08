@@ -83,7 +83,9 @@ namespace ESBtest.ViewModel
                 if (dBControl.IsUserNameExist(userModel.UserName))
                 {
                     //（用户表）查找用户名和密码是否能对应
-                    if (dBControl.IsUserNameAndPasswordMatch(userModel.UserName, userModel.Password))
+                    //MD5加密
+                    string pwd = GlobalFunc.MD5ToString(userModel.UserName + "@" + userModel.Password);
+                    if (dBControl.IsUserNameAndPasswordMatch(userModel.UserName, pwd))
                     {
                         MessageBox.Show((w as Window), "登录成功", "登录提示");
                         //获取用户信息
@@ -110,7 +112,9 @@ namespace ESBtest.ViewModel
                 if (dBControl.IsAdminNameExist(userModel.UserName))
                 {
                     //（用户表）查找用户名和密码是否能对应
-                    if (dBControl.IsAdminNameAndPasswordMatch(userModel.UserName, userModel.Password))
+                    //MD5加密
+                    string pwd = GlobalFunc.MD5ToString(userModel.UserName + "@" + userModel.Password);
+                    if (dBControl.IsAdminNameAndPasswordMatch(userModel.UserName, pwd))
                     {
                         MessageBox.Show((w as Window), "管理员登录成功", "登录提示");
                         //获取用户信息

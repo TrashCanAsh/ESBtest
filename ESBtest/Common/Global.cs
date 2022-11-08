@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -97,6 +98,21 @@ namespace ESBtest.Common
         public static bool NormalUserRight(object w)
         {
             return GlobalValue.CurrentUser.UserRight > 0 ? true : false;
+        }
+        /// <summary>
+        /// 对目标字符串进行MD5加密
+        /// </summary>
+        /// <param name="argString"></param>
+        /// <returns></returns>
+        public static string MD5ToString(String argString)
+        {
+            MD5 md5 = new MD5CryptoServiceProvider();
+            byte[] data = System.Text.Encoding.Default.GetBytes(argString);
+            byte[] result = md5.ComputeHash(data);
+            String strReturn = String.Empty;
+            for (int i = 0; i < result.Length; i++)
+                strReturn += result[i].ToString("x").PadLeft(2, '0');
+            return strReturn;
         }
     }
     

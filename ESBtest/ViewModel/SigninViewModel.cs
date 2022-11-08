@@ -82,7 +82,10 @@ namespace ESBtest.ViewModel
             }
             else
             {
-                if (dBControl.InsertIntoUserTable(userModel.UserName, userModel.UserName, userModel.Password) > 0)
+                //MD5加密
+                string pwd = GlobalFunc.MD5ToString(userModel.UserName + "@" + userModel.Password);
+
+                if (dBControl.InsertIntoUserTable(userModel.UserName, userModel.UserName, pwd) > 0)
                 {
                     MessageBox.Show((w as Window), "注册成功\n正在返回登录界面...", "注册提示");
                     //注册成功后返回登录界面
