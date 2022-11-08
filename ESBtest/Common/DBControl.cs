@@ -607,6 +607,34 @@ namespace ESBtest.Common
             return -1;
         }
         /// <summary>
+        /// 修改某一样品信息（仅修改样品状态）
+        /// </summary>
+        /// <param name="sampleID"></param>
+        /// <param name="state"></param>
+        /// <returns></returns>
+        public int UpdateSampleTable(string sampleID, int state)
+        {
+            try
+            {
+                TryConnection();
+                //UPDATE table_name SET column_name1 = new_value, column_name2 = new_value, ... WHERE ( situation);
+                string sqlcmd = "UPDATE samples SET state = " + state + " WHERE idsamples = " + sampleID;
+                Console.WriteLine(sqlcmd);
+                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
+                return mysqlCmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                sqlDispose();
+            }
+            return -1;
+
+        }
+        /// <summary>
         /// 修改样品借出表中内容
         /// </summary>
         /// <param name="idRecord"></param>
@@ -616,16 +644,13 @@ namespace ESBtest.Common
         /// <param name="inDate"></param>
         /// <param name="State"></param>
         /// <returns></returns>
-        public int UpdateRecordTable(int idRecord, int idUser, string approvalDate, int idadmin, string approvalcomment, int State)
+        public int UpdateRecordTable(int idRecord, int idUser, string approvalDate, int idadmin, string approvalcomment, string outdate, string indate, int State)
         {
-            //todo
             try
             {
                 TryConnection();
                 //UPDATE table_name SET column_name1 = new_value, column_name2 = new_value, ... WHERE ( situation);
                 bool isFirst = true;
-                //string sqlcmd = "UPDATE samplesrecord SET approvaldate = '" + approvalDate + "', outdate = '" + outDate 
-                //    + "', indate = '" + inDate + "', state = " + State + " WHERE (idrecord = " + idRecord + " AND iduser = " + idUser + ")";
                 string sqlcmd = "UPDATE samplesrecord SET ";
                 //approvalDate
                 if (!string.IsNullOrEmpty(approvalDate))
@@ -646,8 +671,34 @@ namespace ESBtest.Common
                         sqlcmd += ", approvalcomment = '" + approvalcomment + "'";
                     }
                 }
+                //outdate
+                if (!string.IsNullOrEmpty(outdate))
+                {
+                    if (isFirst)
+                    {
+                        sqlcmd += "outdate = '" + outdate + "'";
+                        isFirst = false;
+                    }
+                    else
+                    {
+                        sqlcmd += ", outdate = '" + outdate + "'";
+                    }
+                }
+                //indate
+                if (!string.IsNullOrEmpty(indate))
+                {
+                    if (isFirst)
+                    {
+                        sqlcmd += "indate = '" + indate + "'";
+                        isFirst = false;
+                    }
+                    else
+                    {
+                        sqlcmd += ", indate = '" + indate + "'";
+                    }
+                }
                 //idadmin
-                if(isFirst)
+                if (isFirst)
                 {
                     sqlcmd += "idadmin = " + idadmin;
                     isFirst = false;
@@ -665,6 +716,44 @@ namespace ESBtest.Common
                 else
                 {
                     sqlcmd += ", state = " + State;
+                }
+                sqlcmd += " WHERE (idrecord = " + idRecord + " AND iduser = " + idUser + ")";
+                Console.WriteLine(sqlcmd);
+                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
+                return mysqlCmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                sqlDispose();
+            }
+            return -1;
+        }
+        /// <summary>
+        /// 修改样品借出表中内容（仅修改样品状态）
+        /// </summary>
+        /// <param name="idRecord"></param>
+        /// <param name="idUser"></param>
+        /// <param name="state"></param>
+        /// <param name="date"></param>
+        /// <returns></returns>
+        public int UpdateRecordTable(int idRecord, int idUser, int state, string date)
+        {
+            try
+            {
+                TryConnection();
+                //UPDATE table_name SET column_name1 = new_value, column_name2 = new_value, ... WHERE ( situation);
+                string sqlcmd = "UPDATE samplesrecord SET state = " + state;
+                if(state == 3)
+                {
+                    sqlcmd += ", outdate = '" + date + "'";
+                }
+                else if(state == 4)
+                {
+                    sqlcmd += ", indate = '" + date + "'";
                 }
                 sqlcmd += " WHERE (idrecord = " + idRecord + " AND iduser = " + idUser + ")";
                 Console.WriteLine(sqlcmd);
@@ -1315,8 +1404,10 @@ namespace ESBtest.Common
         /// <summary>
         /// 根据申请状态查询对应的申请记录
         /// </summary>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
         /// <returns></returns>
-        public ObservableCollection<SampleRecordModel> SearchRecord(string op, string state)
+        public ObservableCollection<SampleRecordModel> SearchRecord(string start, string end)
         {
             ObservableCollection<SampleRecordModel> srList = new ObservableCollection<SampleRecordModel>();
             try
@@ -1324,7 +1415,7 @@ namespace ESBtest.Common
                 TryConnection();
                 //select distinct username, idrecord, requestdate, state from samplesrecord, user where samplesrecord.iduser = user.iduser and samplesrecord.state = 1;
                 //选中所有“待审批”状态（state = 1）的记录
-                string sqlcmd = "SELECT DISTINCT name, idrecord, user.iduser, requestdate, state FROM samplesrecord, user WHERE samplesrecord.iduser = user.iduser AND samplesrecord.state " + op + " " + state + " AND samplesrecord.state < 5";
+                string sqlcmd = "SELECT DISTINCT name, idrecord, user.iduser, requestdate, state FROM samplesrecord, user WHERE samplesrecord.iduser = user.iduser AND samplesrecord.state >= " + start + " AND samplesrecord.state <= " + end;
 
                 Console.WriteLine(sqlcmd);
 
@@ -1539,23 +1630,7 @@ namespace ESBtest.Common
                     default:
                         break;
                 }
-                switch (s.State)
-                {
-                    case 0:
-                        s.StateStr = "unknown";
-                        break;
-                    case 1:
-                        s.StateStr = "in stock";
-                        break;
-                    case 2:
-                        s.StateStr = "locked";
-                        break;
-                    case 3:
-                        s.StateStr = "out on loan";
-                        break;
-                    default:
-                        break;
-                }
+                s.StateStr = GlobalValue.SampleState[s.State];
                 sList.Add(s);
             }
             reader.Close();

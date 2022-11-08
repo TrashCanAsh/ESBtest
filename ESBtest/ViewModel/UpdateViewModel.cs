@@ -107,8 +107,8 @@ namespace ESBtest.ViewModel
         /// <param name="w"></param>
         private void GenerateQRcode(object w)
         {
-            string msg = SampleUpdated.SampleID + ", " + SampleUpdated.SampleName + ", " + SampleUpdated.Category + ", " + SampleUpdated.SamplingDate 
-                + ", " + SampleUpdated.Longitude + ", " + SampleUpdated.Latitude + ", " + SampleUpdated.StateStr + ", " + SampleUpdated.Comment;
+            string msg = SampleUpdated.SampleID + "," + SampleUpdated.SampleName + "," + SampleUpdated.Category + "," + SampleUpdated.SamplingDate 
+                + "," + SampleUpdated.Longitude + "," + SampleUpdated.Latitude + "," + SampleUpdated.StateStr + "," + SampleUpdated.Comment;
             QRcode = QRCodeControl.CreateQRCode(msg, 200, 200);
             (w as UpdateView).QRcodeImage.Source = QRcode;
         }

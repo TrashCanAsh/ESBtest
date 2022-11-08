@@ -67,7 +67,7 @@
                             <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
                         <DataGrid Name="SampleDataGrid" Grid.Row="0" ItemsSource="{Binding SampleModelList, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" FontSize="14" 
-                                  AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
+                                  AutoGenerateColumns="False" CanUserAddRows="False" IsHitTestVisible="False">
                             <DataGrid.Columns>
                                 <DataGridCheckBoxColumn Binding="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                     <DataGridCheckBoxColumn.ElementStyle>
@@ -106,9 +106,9 @@
                                     <TextBox Text="{Binding QRCodePath}" Width="280" IsReadOnly="True"/>
                                 </StackPanel>
                                 <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10">
-                                    <Button Content="扫描" Width="60" Command="{Binding OpenQRCodeImageCommand}"/>
-                                    <Button Content="出库" Width="60" Command="{Binding CheckOutCommand}" Margin="10 0 10 0"/>
-                                    <Button Content="入库" Width="60" Command="{Binding PutInStroageCommand}"/>
+                                    <Button Content="扫描" Width="60" Command="{Binding OpenQRCodeImageCommand}" CommandParameter= "{Binding ElementName=SampleManageWindow}"/>
+                                    <Button Name="ButtonOut" Visibility="Collapsed" Content="出库" Width="60" Command="{Binding CheckOutCommand}" CommandParameter= "{Binding ElementName=SampleManageWindow}" IsEnabled="False" Margin="10 0 10 0"/>
+                                    <Button Name="ButtonIn" Visibility="Collapsed" Content="入库" Width="60" Command="{Binding PutInStorageCommand}" CommandParameter= "{Binding ElementName=SampleManageWindow}" IsEnabled="False"/>
                                 </StackPanel>
                             </Grid>
                         </Grid>

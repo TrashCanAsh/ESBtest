@@ -81,8 +81,8 @@ namespace ESBtest.ViewModel
             //创建搜索条件实例
             this.SearchModel = new SearchModel();
             //下拉框内容
-            this.ComboBoxCategory = new ObservableCollection<string>() { "null", "solid", "liquid", "gas", "bio" };
-            this.ComboBoxState = new ObservableCollection<string>() { "unknown", "in stock", "locked", "out on loan" };
+            this.ComboBoxCategory = GlobalValue.SampleCategory;
+            this.ComboBoxState = GlobalValue.SampleState;
             //创建表格数据源实例
             this.SampleModelList = null;
         }

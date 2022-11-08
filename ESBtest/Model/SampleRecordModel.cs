@@ -155,6 +155,34 @@ namespace ESBtest.Model
         }
 
         /// <summary>
+        /// 出库时间
+        /// </summary>
+        private DateTime outDate;   
+        public DateTime OutDate
+        {
+            get { return outDate; }
+            set
+            {
+                outDate = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// （还入）入库时间
+        /// </summary>
+        private DateTime inDate;
+        public DateTime InDate
+        {
+            get { return inDate; }
+            set
+            {
+                inDate = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        /// <summary>
         /// 申请状态(int)
         /// 0-未知 1-正在审批 2-审批通过 3-已借出 4-已归还 9-审批未通过
         /// 10-用户取消 

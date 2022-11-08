@@ -129,7 +129,7 @@ namespace ESBtest.ViewModel
             }
             else if(flag == 3)
             {
-                this.SampleRecordModelList = dBControl.SearchRecord("=", "1");
+                this.SampleRecordModelList = dBControl.SearchRecord("1", "1");
             }
             dg.ItemsSource = this.SampleRecordModelList;
         }

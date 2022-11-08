@@ -311,7 +311,7 @@
                         <DataGridTextColumn Header="采样地点" Binding="{Binding SamplingLocation}" IsReadOnly="True"/>
                         <DataGridTextColumn Header="样品状态" Binding="{Binding StateStr}" IsReadOnly="True"/>
                         <DataGridTextColumn Header="备注" Binding="{Binding Comment}" IsReadOnly="True"/>
-                        <DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="加入收藏">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <CheckBox IsChecked="{Binding IsFavorited, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Style="{DynamicResource CheckBoxStyleFavorites}" 
@@ -320,7 +320,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="加入购物车">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <CheckBox IsChecked="{Binding IsInCart, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Style="{DynamicResource CheckBoxStyleCart}" 
