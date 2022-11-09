@@ -3,12 +3,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:ESBtest"
         xmlns:common="clr-namespace:ESBtest.Common"
         mc:Ignorable="d" Name="SigninWindow"
         Title="注册界面" Height="400" Width="300" ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"  WindowStyle="None"
-        AllowsTransparency="True" Background="{x:Null}" >
+        AllowsTransparency="True" Background="{x:Null}" 
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Medium"
+        TextElement.FontSize="12">
 
     <Border Margin="5" Background="#EFEFEF" >
         <Border.Effect>
@@ -29,23 +33,29 @@
                 <Button x:Name="ButtonClose" Style="{StaticResource CloseWindowButtonStyle}" Command="{Binding CloseWindowCommand}" CommandParameter="{Binding ElementName=SigninWindow}"/>
             </StackPanel>
             <Label Content="欢迎注册" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="30" Grid.Row="1"/>
-            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="200" Grid.Row="2">
-                <Label Content="新用户名" VerticalContentAlignment="Center" HorizontalAlignment="Center" Width="60" />
-                <TextBox x:Name="TextBoxUsername" TextWrapping="Wrap"  Width="100" Style="{StaticResource TextBoxUsernameStyle}" Text="{Binding userModel.UserName}" HorizontalAlignment="Center"/>
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="210" Grid.Row="2">
+                <materialDesign:PackIcon Foreground="{Binding ElementName=TextBoxUsername, Path=BorderBrush}" Kind="Account" 
+                                         Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBox x:Name="TextBoxUsername" TextWrapping="Wrap"  Width="160" materialDesign:HintAssist.Hint="新用户名" 
+                         Text="{Binding userModel.UserName}" HorizontalAlignment="Center"/>
             </StackPanel>
-            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="200" Grid.Row="3">
-                <Label Content="新密码" VerticalContentAlignment="Center"  Width="60"/>
-                <PasswordBox x:Name="PasswordBoxPassword" Width="100" Style="{DynamicResource PasswordBoxStyle}"
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="210" Grid.Row="3">
+                <materialDesign:PackIcon Foreground="{Binding ElementName=PasswordBoxPassword, Path=BorderBrush}" Kind="Key" 
+                                         Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <PasswordBox x:Name="PasswordBoxPassword" Width="160" materialDesign:HintAssist.Hint="新密码" materialDesign:TextFieldAssist.HasClearButton="True" Style="{StaticResource MaterialDesignRevealPasswordBox}"
                              common:PasswordBoxHelper.Attach="True" common:PasswordBoxHelper.Password="{Binding userModel.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
-            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="200" Grid.Row="4">
-                <Label Content="确认密码" VerticalContentAlignment="Center"  Width="60"/>
-                <PasswordBox x:Name="PasswordBoxPasswordCheck"   Width="100" Style="{DynamicResource PasswordBoxStyle}"
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="210" Grid.Row="4">
+                <materialDesign:PackIcon Foreground="{Binding ElementName=PasswordBoxPasswordCheck, Path=BorderBrush}" Kind="KeyOutline" 
+                                         Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <PasswordBox x:Name="PasswordBoxPasswordCheck" Width="160" materialDesign:HintAssist.Hint="确认密码" materialDesign:TextFieldAssist.HasClearButton="True" Style="{StaticResource MaterialDesignRevealPasswordBox}"
                              common:PasswordBoxHelper.Attach="True" common:PasswordBoxHelper.Password="{Binding userModel.PasswordCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
-            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="200" Grid.Row="5">
-                <Button x:Name="ButtonSignin" Content="确认注册" Width="75" Command="{Binding SigninCommand}" CommandParameter="{Binding ElementName=SigninWindow}" Margin="0 0 20 0" />
-                <Button x:Name="ButtonBack" Content="返回" Width="75" Command="{Binding CancelCommand}" CommandParameter="{Binding ElementName=SigninWindow}"/>
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="210" Grid.Row="5">
+                <Button x:Name="ButtonSignin" Content="确认注册" Style="{StaticResource MaterialDesignPaperButton}"  Width="90" 
+                        Command="{Binding SigninCommand}" CommandParameter="{Binding ElementName=SigninWindow}" Margin="0 0 20 0" />
+                <Button x:Name="ButtonBack" Content="返回" Style="{StaticResource MaterialDesignPaperButton}"  Width="90" 
+                        Command="{Binding CancelCommand}" CommandParameter="{Binding ElementName=SigninWindow}"/>
             </StackPanel>
         </Grid>
 

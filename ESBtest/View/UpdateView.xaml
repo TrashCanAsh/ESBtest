@@ -3,12 +3,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:ESBtest.View"
         xmlns:common="clr-namespace:ESBtest.Common"
         mc:Ignorable="d" Name="UpdateWindow"
-        Title="修改界面" Height="380" Width="220" ResizeMode="NoResize"
+        Title="修改界面" Height="450" Width="250" ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"  WindowStyle="None"
-        AllowsTransparency="True" Background="{x:Null}">
+        AllowsTransparency="True" Background="{x:Null}"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Medium"
+        TextElement.FontSize="12">
     <Border Margin="5" Background="#FAFAFA" >
         <Border.Effect>
             <DropShadowEffect Color="Blue" ShadowDepth="0" BlurRadius="5" Opacity="0.2" Direction="0"/>
@@ -68,11 +72,14 @@
                         </StackPanel>
                         <StackPanel Grid.Row="6" Orientation="Horizontal" Margin="0 10 0 0">
                             <Label Content="备注"/>
-                            <TextBox x:Name="TextBoxSampleComment" Width="125" Height="50" Text="{Binding SampleUpdated.Comment}" Margin="24 0 0 0" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
+                            <TextBox x:Name="TextBoxSampleComment" Width="170" Height="100" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                     Text="{Binding SampleUpdated.Comment}" Margin="24 0 0 0" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
                         </StackPanel>
                         <StackPanel x:Name="AdminController" Grid.Row="7" Orientation="Horizontal" Margin="0 10 0 0">
-                            <Button Content="确认修改" Width="80" Margin="20 0 0 0" Command="{Binding UpdateSampleCommand}" CommandParameter="{Binding ElementName=UpdateWindow}"/>
-                            <Button Content="取消" Width="80" Margin="20 0 0 0" Command="{Binding CancelCommand}" CommandParameter="{Binding ElementName=UpdateWindow}"/>
+                            <Button Content="确认修改" Width="90" Margin="20 0 0 0" Style="{StaticResource MaterialDesignPaperButton}"
+                                    Command="{Binding UpdateSampleCommand}" CommandParameter="{Binding ElementName=UpdateWindow}"/>
+                            <Button Content="取消" Width="90" Margin="20 0 0 0" Style="{StaticResource MaterialDesignPaperButton}"
+                                    Command="{Binding CancelCommand}" CommandParameter="{Binding ElementName=UpdateWindow}"/>
                         </StackPanel>
                     </Grid>
                 </TabItem>
@@ -85,7 +92,8 @@
                         </Grid.RowDefinitions>
                         <Image x:Name="QRcodeImage" Grid.Row="0" Height="200" Width="200" Source="{Binding QRcode, UpdateSourceTrigger=PropertyChanged}"/>
                         <StackPanel Grid.Row="1" Orientation="Horizontal">
-                            <Button Content="生成二维码" Command="{Binding GenerateQRcodeCommand}" CommandParameter="{Binding ElementName=UpdateWindow}"/>
+                            <Button Content="生成二维码" Style="{StaticResource MaterialDesignPaperButton}"
+                                    Command="{Binding GenerateQRcodeCommand}" CommandParameter="{Binding ElementName=UpdateWindow}"/>
                         </StackPanel>
                     </Grid>
                 </TabItem>

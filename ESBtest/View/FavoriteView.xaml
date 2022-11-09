@@ -3,11 +3,15 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:ESBtest.View"
         mc:Ignorable="d" Name="FavoriteWindow"
         Title="FavoriteWindow" Height="450" Width="500" MinHeight="300" MinWidth="500"
         WindowStartupLocation="CenterScreen"  WindowStyle="None"
-        AllowsTransparency="True" Background="{x:Null}" ResizeMode="CanResizeWithGrip">
+        AllowsTransparency="True" Background="{x:Null}" ResizeMode="CanResizeWithGrip"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Medium"
+        TextElement.FontSize="12">
     
     <Border Margin="5" Background="#F0F0F0">
         <Border.Effect>
@@ -17,7 +21,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition/>
-                <RowDefinition Height="40"/>
+                <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
@@ -86,8 +90,10 @@
                 </DataGrid.Columns>
             </DataGrid>
             <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="100 5">
-                <Button Content="移除" Command="{Binding DeleteFavoriteCommand}" CommandParameter="{Binding ElementName=FavoriteWindow}" Background="#FF60C5EA" Foreground="White" Width="80" Margin="0 0 20 0"/>
-                <Button Content="添加至购物车" Command="{Binding AddToCartCommand}" CommandParameter="{Binding ElementName=FavoriteWindow}" Background="#FF60C5EA" Foreground="White" Width="80"/>
+                <Button Content="移除" Width="120" Margin="0 0 20 0" Style="{StaticResource MaterialDesignPaperButton}"
+                        Command="{Binding DeleteFavoriteCommand}" CommandParameter="{Binding ElementName=FavoriteWindow}"/>
+                <Button Content="添加至购物车" Width="120" Style="{StaticResource MaterialDesignPaperButton}"
+                        Command="{Binding AddToCartCommand}" CommandParameter="{Binding ElementName=FavoriteWindow}"/>
             </StackPanel>
         </Grid>
     </Border>

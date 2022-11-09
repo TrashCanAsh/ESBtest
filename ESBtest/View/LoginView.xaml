@@ -3,12 +3,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:ESBtest"
         xmlns:common="clr-namespace:ESBtest.Common"
         mc:Ignorable="d" Name="LoginWindow"
-        Title="登录界面" Height="400" Width="300" ResizeMode="NoResize"
+        Title="登录界面" Height="450" Width="300" ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"  WindowStyle="None"
-        AllowsTransparency="True" Background="{x:Null}" >
+        AllowsTransparency="True"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{x:Null}"
+        TextElement.FontWeight="Medium"
+        TextElement.FontSize="12">
     
     <Border Margin="5" Background="#EFEFEF" >
         <Border.Effect>
@@ -34,17 +39,20 @@
                 <Label Content="环境样品库管理系统" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="20" Margin="0 10 0 0"/>
                 <Label Content="欢迎登录" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="14" TextElement.Foreground="Blue" Margin="0 25 0 0"/>
             </StackPanel>
-            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="170" Grid.Row="2">
-                <Label Content="用户名" VerticalContentAlignment="Center"  Width="50"/>
-                <TextBox x:Name="TextBoxUsername" TextWrapping="Wrap"  Width="120" Style="{DynamicResource TextBoxUsernameStyle}" Text="{Binding userModel.UserName, UpdateSourceTrigger=PropertyChanged}" >
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="210" Grid.Row="2">
+                <materialDesign:PackIcon Foreground="{Binding ElementName=TextBoxUsername, Path=BorderBrush}" Kind="Account" 
+                                         Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBox x:Name="TextBoxUsername" TextWrapping="Wrap"  Width="160" materialDesign:HintAssist.Hint="用户名" 
+                         Text="{Binding userModel.UserName, UpdateSourceTrigger=PropertyChanged}" >
                     <TextBox.InputBindings>
                         <KeyBinding Key="Enter" Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=LoginWindow}"/>
                     </TextBox.InputBindings>
                 </TextBox>
             </StackPanel>
-            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="170" Grid.Row="3">
-                <Label Content="密码" VerticalContentAlignment="Center"  Width="50"/>
-                <PasswordBox x:Name="PasswordBoxPassword" Width="120" Style="{DynamicResource PasswordBoxStyle}"
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="210" Grid.Row="3">
+                <materialDesign:PackIcon Foreground="{Binding ElementName=PasswordBoxPassword, Path=BorderBrush}" Kind="Key" 
+                                         Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <PasswordBox x:Name="PasswordBoxPassword" Width="160" materialDesign:HintAssist.Hint="密码" materialDesign:TextFieldAssist.HasClearButton="True" Style="{StaticResource MaterialDesignRevealPasswordBox}"
                              common:PasswordBoxHelper.Attach="True" common:PasswordBoxHelper.Password="{Binding userModel.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
                     <PasswordBox.InputBindings>
                         <KeyBinding Key="Enter" Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=LoginWindow}"/>
@@ -55,12 +63,15 @@
                 <RadioButton Content="普通用户" GroupName="UserRight" IsChecked="{Binding isNormalUser}" Margin="0 0 20 0"/>
                 <RadioButton Content="管理员" GroupName="UserRight" IsChecked="{Binding isAdmin}"/>
             </StackPanel>
-            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="180" Grid.Row="5">
-                <Button x:Name="ButtonLogin" Content="登录" Width="75" Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=LoginWindow}" Margin="0 0 20 0"/>
-                <Button x:Name="ButtonSignin" Content="注册" Width="75" Command="{Binding SigninCommand}" CommandParameter="{Binding ElementName=LoginWindow}"/>
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="210" Grid.Row="5">
+                <Button x:Name="ButtonLogin" Content="登录" Style="{StaticResource MaterialDesignPaperButton}"  Width="90" 
+                        Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=LoginWindow}" Margin="0 0 10 0" />
+                <Button x:Name="ButtonSignin" Content="注册" Style="{StaticResource MaterialDesignPaperButton}" Width="90" 
+                        Command="{Binding SigninCommand}" CommandParameter="{Binding ElementName=LoginWindow}"/>
             </StackPanel>
-            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="180" Grid.Row="6" Margin="0 10 0 10">
-                <Button x:Name="ButtonGuestLogin" Content="游客登录" Width="75" Command="{Binding GuestLoginCommand}" CommandParameter="{Binding ElementName=LoginWindow}"/>
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="210" Grid.Row="6" Margin="0 10 0 10">
+                <Button x:Name="ButtonGuestLogin" Content="游客登录" Style="{StaticResource MaterialDesignPaperButton}" Width="90" 
+                        Command="{Binding GuestLoginCommand}" CommandParameter="{Binding ElementName=LoginWindow}"/>
             </StackPanel>
         </Grid>
     </Border>

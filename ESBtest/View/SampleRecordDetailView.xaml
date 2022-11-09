@@ -80,7 +80,7 @@
                         </StackPanel>
                         <StackPanel Grid.Row="2" Orientation="Horizontal">
                             <Label Content="申请备注"/>
-                            <TextBox Text="{Binding SampleRecordModel.RequestComment}" Height="80" Width="300" TextWrapping="WrapWithOverflow"/>
+                            <TextBox Text="{Binding SampleRecordModel.RequestComment}" Style="{StaticResource MaterialDesignOutlinedTextBox}" Height="80" Width="300" TextWrapping="WrapWithOverflow"/>
                         </StackPanel>
                     </Grid>
                 </GroupBox>

@@ -74,7 +74,7 @@
                                 </StackPanel>
                                 <StackPanel Grid.Row="1" Orientation="Horizontal">
                                     <Label Content="备注"/>
-                                    <TextBox Text="{Binding SampleRecord.RequestComment}" Height="80" Width="410" TextWrapping="WrapWithOverflow"/>
+                                    <TextBox Text="{Binding SampleRecord.RequestComment}" Style="{StaticResource MaterialDesignOutlinedTextBox}" Height="80" Width="410" TextWrapping="WrapWithOverflow"/>
                                 </StackPanel>
                             </Grid>
                             <StackPanel Grid.Row="2" Orientation="Horizontal">

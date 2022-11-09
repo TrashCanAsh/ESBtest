@@ -106,3 +106,8 @@ D:\vs workspace\ESBtest\ESBtest\obj\Debug\View\SampleRecordDetailView.baml
 D:\vs workspace\ESBtest\ESBtest\obj\Debug\ESBtest.csprojAssemblyReference.cache
 D:\vs workspace\ESBtest\ESBtest\obj\Debug\View\SampleManageView.g.cs
 D:\vs workspace\ESBtest\ESBtest\obj\Debug\View\SampleManageView.baml
+D:\vs workspace\ESBtest\ESBtest\bin\Debug\MaterialDesignColors.dll
+D:\vs workspace\ESBtest\ESBtest\bin\Debug\MaterialDesignThemes.Wpf.dll
+D:\vs workspace\ESBtest\ESBtest\bin\Debug\MaterialDesignColors.pdb
+D:\vs workspace\ESBtest\ESBtest\bin\Debug\MaterialDesignThemes.Wpf.pdb
+D:\vs workspace\ESBtest\ESBtest\bin\Debug\MaterialDesignThemes.Wpf.xml

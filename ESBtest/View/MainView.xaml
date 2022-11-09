@@ -3,12 +3,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:ESBtest"
         xmlns:common="clr-namespace:ESBtest.Common"
         mc:Ignorable="d" Name="MainWindow"
-        Title="MainWindow" Height="450" Width="900" MinHeight="400" MinWidth="400"
+        Title="MainWindow" Height="600" Width="1200" MinHeight="500" MinWidth="500"
         WindowStartupLocation="CenterScreen"  WindowStyle="None"
-        AllowsTransparency="True" Background="{x:Null}" ResizeMode="CanResizeWithGrip">
+        AllowsTransparency="True" Background="{x:Null}" ResizeMode="CanResizeWithGrip"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Medium"
+        TextElement.FontSize="12">
 
     <Window.Resources>
         <!--  DatePicker禁止手动输入数据  -->
@@ -36,7 +40,7 @@
                     <ColumnDefinition Width="30"/>
                 </Grid.ColumnDefinitions>
                 <Label VerticalAlignment="Top" Height="20" MouseDown="Label_MouseDown" Grid.Column="0"/>
-                <Menu VerticalAlignment="Top" Background="#EEEEEE"  Height="20" FontSize="14" HorizontalAlignment="Left">
+                <Menu VerticalAlignment="Top" Background="#EEEEEE" materialDesign:MenuAssist.TopLevelMenuItemHeight="30" FontSize="14" HorizontalAlignment="Left">
                     <MenuItem Header="功能" >
                         <MenuItem x:Name="MenuItemSearch" Header="样品查询" Command="{Binding MenuSearchSampleCommand}" CommandParameter="{Binding ElementName=MainWindow}" IsCheckable="True" IsChecked="True"/>
                         <MenuItem x:Name="MenuItemInsert" Header="数据导入" Command="{Binding MenuInsertDataCommand}" CommandParameter="{Binding ElementName=MainWindow}" IsCheckable="True"/>
@@ -45,7 +49,8 @@
                         <MenuItem Header="样品借出相关" Command="{Binding MenuSampleLendCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
                         <MenuItem Header="样品管理" Command="{Binding MenuSampleManageCommand}"  CommandParameter="{Binding ElementName=MainWindow}"/>
                         <Separator/>
-                        <MenuItem Header="登出" Command="{Binding MenuLogOutCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
+                        <MenuItem Header="登出" Icon="{materialDesign:PackIcon Kind=ExitToApp}"
+                                  Command="{Binding MenuLogOutCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
                     </MenuItem>
                     <MenuItem Header="设置" >
                         <MenuItem Header="个人信息设置" Command="{Binding UserInformationCommand}"/>
@@ -72,16 +77,22 @@
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="25"/>
+                    <ColumnDefinition Width="30"/>
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
-                <ToolBar Grid.Column="0">
-                    <Button Content="加入收藏" Command="{Binding AddFavoriteCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
-                    <Button Content="加入购物车" Command="{Binding AddIntoCartCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
-                    <Separator/>
-                    <Button x:Name="AdminDeleteButton" Content="删除" Command="{Binding DeleteSelectedSampleCommand}" CommandParameter="{Binding ElementName=MainWindow}" />
-                </ToolBar>
-                <Button Grid.Column="1" Content="i" Command="{Binding UserInfoCommand}"/>
+                <ToolBarTray Grid.Column="0">
+                    <ToolBar Style="{StaticResource MaterialDesignToolBar}" ClipToBounds="False">
+                        <Button Content="{materialDesign:PackIcon Kind=StarPlus}" ToolTip="将选中样品批量加入收藏夹"
+                            Command="{Binding AddFavoriteCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
+                        <Button Content="{materialDesign:PackIcon Kind=CartArrowDown}" ToolTip="将选中样品批量加入购物车"
+                            Command="{Binding AddIntoCartCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
+                        <Separator/>
+                        <Button x:Name="AdminDeleteButton" Content="{materialDesign:PackIcon Kind=DeleteForever}" ToolTip="删除选中样品"
+                                Command="{Binding DeleteSelectedSampleCommand}" CommandParameter="{Binding ElementName=MainWindow}" />
+                    </ToolBar>
+                </ToolBarTray>
+                <Button Grid.Column="1" Content="{materialDesign:PackIcon Kind=Information}" Style="{StaticResource MaterialDesignIconButton}" Height="30" Width="30"
+                        Command="{Binding UserInfoCommand}"/>
                 <Label Grid.Column="2" Content="{Binding Name, Source={x:Static common:GlobalValue.CurrentUser}}"/>
             </Grid>
             
@@ -113,7 +124,8 @@
                                 <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10 0 10 0">
                                     <Label Content="关键字" Margin="10 0 0 0"/>
                                     <TextBox x:Name="TextBoxKeyWord" Width="120" Text="{Binding SearchModel.KeyWord, UpdateSourceTrigger=PropertyChanged}"/>
-                                    <Button Content="搜索" Command="{Binding SearchCommand}" CommandParameter="{Binding ElementName=SampleDataGrid}"/>
+                                    <Button Content="搜索" Style="{StaticResource MaterialDesignPaperButton}"
+                                            Command="{Binding SearchCommand}" CommandParameter="{Binding ElementName=SampleDataGrid}"/>
                                 </StackPanel>
                                 <!--  种类  -->
                                 <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10 10 10 0">
@@ -141,7 +153,7 @@
                                     <StackPanel Orientation="Horizontal">
                                         <CheckBox x:Name="CheckBoxSamplingLocation" IsChecked="{Binding SearchModel.IsSamplingLocationChecked}" VerticalAlignment="Center"/>
                                         <Label Content="采样地点"/>
-                                        <Button Content="手动选择"/>
+                                        <Button Content="手动选择" Style="{StaticResource MaterialDesignPaperButton}"/>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
                                         <Label Content="x: "/>
@@ -158,9 +170,11 @@
                                     </StackPanel>
                                 </StackPanel>
                                 <!--  清空搜索条件  -->
-                                <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="50 10 0 0">
-                                    <Button Content="清空搜索条件" Command="{Binding SearchResetCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
-                                    <Button Content="清空搜索内容" Command="{Binding SearchClearCommand}" CommandParameter="{Binding ElementName=SampleDataGrid}" Margin="20 0 0 0"/>
+                                <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="20 10 0 0">
+                                    <Button Content="清空搜索条件" Style="{StaticResource MaterialDesignPaperButton}"
+                                            Command="{Binding SearchResetCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
+                                    <Button Content="清空搜索内容" Style="{StaticResource MaterialDesignPaperButton}"
+                                            Command="{Binding SearchClearCommand}" CommandParameter="{Binding ElementName=SampleDataGrid}" Margin="20 0 0 0"/>
                                 </StackPanel>
                                 <!--  留白  -->
                                 <StackPanel Grid.Row="5">
@@ -214,10 +228,12 @@
                                         </StackPanel>
                                         <StackPanel Grid.Row="5" Orientation="Horizontal" Margin="0 10 0 0">
                                             <Label Content="备注"/>
-                                            <TextBox Width="200" Height="50" Text="{Binding SampleModel.Comment}" Margin="24 0 0 0" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
+                                            <TextBox Width="220" Height="80" Text="{Binding SampleModel.Comment}" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                     Margin="24 0 0 0" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
                                         </StackPanel>
                                         <StackPanel Grid.Row="6" Margin="0 10 0 0">
-                                            <Button Content="导入" Command="{Binding InsertSampleInfoCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
+                                            <Button Content="导入" Width="80" Style="{StaticResource MaterialDesignPaperButton}"
+                                                    Command="{Binding InsertSampleInfoCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
                                         </StackPanel>
                                     </Grid>
                                 </GroupBox>
@@ -226,14 +242,18 @@
                                     <StackPanel>
                                         <Grid>
                                             <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="auto"/>
                                                 <ColumnDefinition Width="*"/>
                                                 <ColumnDefinition Width="auto"/>
                                             </Grid.ColumnDefinitions>
-                                            <TextBox x:Name="TextBoxFilePath" Grid.Column="0" IsReadOnly="True" />
-                                            <Button Grid.Column="1" Content="选择文件" Command="{Binding OpenInsertFileDialogCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
+                                            <materialDesign:PackIcon Kind="File" Grid.Column="0" VerticalAlignment="Center"/>
+                                            <TextBox x:Name="TextBoxFilePath" Grid.Column="1" IsReadOnly="True"/>
+                                            <Button Grid.Column="2" Content="选择文件" Style="{StaticResource MaterialDesignPaperButton}"
+                                                    Command="{Binding OpenInsertFileDialogCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
                                         </Grid>
                                         <StackPanel Orientation="Horizontal">
-                                            <Button Content="导入" Width="80" Margin="90 10 0 0" Command="{Binding InsertFileDataCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
+                                            <Button Content="导入" Width="80" Margin="90 10 0 0" Style="{StaticResource MaterialDesignPaperButton}"
+                                                    Command="{Binding InsertFileDataCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
                                         </StackPanel>
                                     </StackPanel>
                                 </GroupBox>
@@ -250,9 +270,11 @@
                                     <Label Grid.Column="0" Content="导出路径"/>
                                     <TextBox x:Name="TextBoxOutputFilePath" Grid.Column="1" IsReadOnly="True" />
                                 </Grid>
-                                <StackPanel Orientation="Horizontal" Margin="60 10 0 0">
-                                    <Button Content="选择路径" Width="80" Margin="0 0 20 0" Command="{Binding OpenOutputFileDialogCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
-                                    <Button Content="导出" Width="80"  Command="{Binding OutputFileDataCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
+                                <StackPanel Orientation="Horizontal" Margin="20 10 0 0">
+                                    <Button Content="选择路径" Width="90" Margin="0 0 20 0" Style="{StaticResource MaterialDesignPaperButton}"
+                                            Command="{Binding OpenOutputFileDialogCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
+                                    <Button Content="导出" Width="90" Style="{StaticResource MaterialDesignPaperButton}"
+                                            Command="{Binding OutputFileDataCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
                                 </StackPanel>
                             </StackPanel>
                         </TabItem>
@@ -366,7 +388,6 @@
                 <StatusBarItem Grid.Column="4" Background="#FFFFFF" >
                     <TextBlock x:Name="CurrentTime"/>
                 </StatusBarItem>
-                
             </StatusBar>
         </Grid>
     </Border>
