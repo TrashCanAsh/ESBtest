@@ -148,6 +148,7 @@ namespace ESBtest.ViewModel
         private void ProgressTab(object w)
         {
             (w as SampleRequestView).TabControlFunction.SelectedIndex = 1;
+            TabIndex = 1;
             RefreshSampleRecordDataGrid((w as SampleRequestView).ProgressDataGrid, 1);
         }
         /// <summary>
@@ -157,6 +158,7 @@ namespace ESBtest.ViewModel
         private void HistoryTab(object w)
         {
             (w as SampleRequestView).TabControlFunction.SelectedIndex = 2;
+            TabIndex = 2;
             RefreshSampleRecordDataGrid((w as SampleRequestView).HistoryDataGrid, 2);
         }
         /// <summary>
@@ -166,6 +168,7 @@ namespace ESBtest.ViewModel
         private void ApprovalTab(object w)
         {
             (w as SampleRequestView).TabControlFunction.SelectedIndex = 3;
+            TabIndex = 3;
             RefreshSampleRecordDataGrid((w as SampleRequestView).ApprovalDataGrid, 3);
         }
         /// <summary>
@@ -218,7 +221,7 @@ namespace ESBtest.ViewModel
                 srdv.ApprovalInfo.Visibility = Visibility.Visible;
             }
             srdv.ShowDialog();
-            RefreshSampleRecordDataGrid(w as DataGrid, (TabIndex + 1));
+            RefreshSampleRecordDataGrid(w as DataGrid, TabIndex);
         }
         /// <summary>
         /// 管理员审批界面查看选中的样品申请的详情，并进行审批
@@ -233,7 +236,7 @@ namespace ESBtest.ViewModel
             (srdv.DataContext as SampleRecordDetailViewModel).SampleModelList = dBControl.SearchSample(iList);
             (srdv.DataContext as SampleRecordDetailViewModel).SampleRecordModel = dBControl.SearchRecord(sr.IdRecord, sr.IdUser);
             srdv.ShowDialog();
-            RefreshSampleRecordDataGrid(w as DataGrid, 2);
+            RefreshSampleRecordDataGrid(w as DataGrid, 3);
         }
         #endregion
 

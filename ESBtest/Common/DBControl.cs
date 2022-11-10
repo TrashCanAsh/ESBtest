@@ -1413,7 +1413,7 @@ namespace ESBtest.Common
                 TryConnection();
                 //SELECT DISTINCT user.name, requestdate, requestcomment, approvaldate, admin.name, approvalcomment, state FROM samplesrecord, user, admin WHERE admin.idadmin = samplesrecord.idadmin AND user.iduser = samplesrecord.iduser; 
 
-                string sqlcmd = "SELECT DISTINCT idrecord, user.iduser, user.name, requestdate, requestcomment, approvaldate, admin.name, approvalcomment, state FROM samplesrecord, user, admin WHERE admin.idadmin = samplesrecord.idadmin AND user.iduser = samplesrecord.iduser AND user.iduser = samplesrecord.iduser";
+                string sqlcmd = "SELECT DISTINCT idrecord, user.iduser, user.name, requestdate, requestcomment, approvaldate, admin.name, approvalcomment, state FROM samplesrecord, user, admin WHERE admin.idadmin = samplesrecord.idadmin AND user.iduser = samplesrecord.iduser AND user.iduser = samplesrecord.iduser ORDER BY idrecord ASC";
 
                 Console.WriteLine(DateTime.Now.ToString() + sqlcmd);
 
@@ -1472,7 +1472,7 @@ namespace ESBtest.Common
                 TryConnection();
                 //select distinct username, idrecord, requestdate, state from samplesrecord, user where samplesrecord.iduser = user.iduser and samplesrecord.state = 1;
                 //选中所有“待审批”状态（state = 1）的记录
-                string sqlcmd = "SELECT DISTINCT name, idrecord, user.iduser, requestdate, state FROM samplesrecord, user WHERE samplesrecord.iduser = user.iduser AND samplesrecord.state >= " + start + " AND samplesrecord.state <= " + end;
+                string sqlcmd = "SELECT DISTINCT name, idrecord, user.iduser, requestdate, state FROM samplesrecord, user WHERE samplesrecord.iduser = user.iduser AND samplesrecord.state >= " + start + " AND samplesrecord.state <= " + end + " ORDER BY idrecord ASC";
 
                 Console.WriteLine(DateTime.Now.ToString() + sqlcmd);
 
@@ -1517,7 +1517,7 @@ namespace ESBtest.Common
             try
             {
                 TryConnection();
-                string sqlcmd = "SELECT DISTINCT idrecord, requestdate, state FROM samplesrecord WHERE iduser = " + iduser;
+                string sqlcmd = "SELECT DISTINCT idrecord, requestdate, state FROM samplesrecord WHERE iduser = " + iduser + " ORDER BY idrecord ASC";
 
                 Console.WriteLine(DateTime.Now.ToString() + sqlcmd);
 

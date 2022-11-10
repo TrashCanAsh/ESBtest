@@ -113,3 +113,5 @@ D:\vs workspace\ESBtest\ESBtest\bin\Debug\MaterialDesignThemes.Wpf.pdb
 D:\vs workspace\ESBtest\ESBtest\bin\Debug\MaterialDesignThemes.Wpf.xml
 D:\vs workspace\ESBtest\ESBtest\obj\Debug\View\UserInfoView.g.cs
 D:\vs workspace\ESBtest\ESBtest\obj\Debug\View\UserInfoView.baml
+D:\vs workspace\ESBtest\ESBtest\bin\Debug\ESBtest.exe.CodeAnalysisLog.xml
+D:\vs workspace\ESBtest\ESBtest\bin\Debug\ESBtest.exe.lastcodeanalysissucceeded

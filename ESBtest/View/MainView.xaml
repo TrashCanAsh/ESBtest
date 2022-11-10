@@ -78,7 +78,6 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="30"/>
-                    <ColumnDefinition Width="40"/>
                 </Grid.ColumnDefinitions>
                 <ToolBarTray Grid.Column="0">
                     <ToolBar Style="{StaticResource MaterialDesignToolBar}" ClipToBounds="False">
@@ -94,9 +93,6 @@
                 <!--  个人信息查看与修改  -->
                 <Button Grid.Column="1" Content="{materialDesign:PackIcon Kind=Information}" Style="{StaticResource MaterialDesignIconButton}" Height="30" Width="30"
                         Command="{Binding UserInfoCommand}"/>
-                <materialDesign:Badged Grid.Column="2" VerticalAlignment="Center" Badge="1" BadgeColorZoneMode="PrimaryDark">
-                    <Button Content="{materialDesign:PackIcon Kind=Bell}" Style="{StaticResource MaterialDesignIconButton}" Height="30" Width="30" />
-                </materialDesign:Badged>
             </Grid>
             
             <!--  主体部分  -->
@@ -125,7 +121,7 @@
                                 </Grid.RowDefinitions>
                                 <!--  文本框输入  -->
                                 <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10 0 10 0">
-                                    <Label Content="关键字" Margin="10 0 0 0"/>
+                                    <Label Content="关键字" Margin="10 0 0 0" VerticalAlignment="Center"/>
                                     <TextBox x:Name="TextBoxKeyWord" Width="120" Text="{Binding SearchModel.KeyWord, UpdateSourceTrigger=PropertyChanged}"/>
                                     <Button Content="搜索" Style="{StaticResource MaterialDesignPaperButton}"
                                             Command="{Binding SearchCommand}" CommandParameter="{Binding ElementName=SampleDataGrid}"/>
@@ -133,7 +129,7 @@
                                 <!--  种类  -->
                                 <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10 10 10 0">
                                     <CheckBox x:Name="CheckBoxCategory" IsChecked="{Binding SearchModel.IsCategoryChecked}" VerticalAlignment="Center"/>
-                                    <Label Content="种类"/>
+                                    <Label Content="种类" VerticalAlignment="Center"/>
                                     <ComboBox x:Name="ComboBoxCategory" Width="120" SelectedIndex="{Binding SearchModel.CategoryIndex, Mode=TwoWay}" 
                                           ItemsSource="{Binding ComboBoxCategory, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                                 </StackPanel>
@@ -141,7 +137,7 @@
                                 <StackPanel Grid.Row="2" Margin="10 10 10 0">
                                     <StackPanel Orientation="Horizontal">
                                         <CheckBox x:Name="CheckBoxSamplingTime" IsChecked="{Binding SearchModel.IsSamplingTimeChecked}" VerticalAlignment="Center"/>
-                                        <Label Content="采样时间"/>
+                                        <Label Content="采样时间" VerticalAlignment="Center"/>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal">
                                         <DatePicker x:Name="DatePikerStartDate" SelectedDate="{Binding SearchModel.StartDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="100"
@@ -155,7 +151,7 @@
                                 <StackPanel Grid.Row="3" Margin="10 10 10 0">
                                     <StackPanel Orientation="Horizontal">
                                         <CheckBox x:Name="CheckBoxSamplingLocation" IsChecked="{Binding SearchModel.IsSamplingLocationChecked}" VerticalAlignment="Center"/>
-                                        <Label Content="采样地点"/>
+                                        <Label Content="采样地点" VerticalAlignment="Center"/>
                                         <Button Content="手动选择" Style="{StaticResource MaterialDesignPaperButton}"/>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
