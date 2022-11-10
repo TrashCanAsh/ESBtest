@@ -78,7 +78,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="30"/>
-                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="40"/>
                 </Grid.ColumnDefinitions>
                 <ToolBarTray Grid.Column="0">
                     <ToolBar Style="{StaticResource MaterialDesignToolBar}" ClipToBounds="False">
@@ -91,9 +91,12 @@
                                 Command="{Binding DeleteSelectedSampleCommand}" CommandParameter="{Binding ElementName=MainWindow}" />
                     </ToolBar>
                 </ToolBarTray>
+                <!--  个人信息查看与修改  -->
                 <Button Grid.Column="1" Content="{materialDesign:PackIcon Kind=Information}" Style="{StaticResource MaterialDesignIconButton}" Height="30" Width="30"
                         Command="{Binding UserInfoCommand}"/>
-                <Label Grid.Column="2" Content="{Binding Name, Source={x:Static common:GlobalValue.CurrentUser}}"/>
+                <materialDesign:Badged Grid.Column="2" VerticalAlignment="Center" Badge="1" BadgeColorZoneMode="PrimaryDark">
+                    <Button Content="{materialDesign:PackIcon Kind=Bell}" Style="{StaticResource MaterialDesignIconButton}" Height="30" Width="30" />
+                </materialDesign:Badged>
             </Grid>
             
             <!--  主体部分  -->

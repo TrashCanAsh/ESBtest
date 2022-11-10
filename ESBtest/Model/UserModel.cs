@@ -95,6 +95,33 @@ namespace ESBtest.Model
                 RaisePropertyChanged();
             }
         }
+        /// <summary>
+        /// 用户所在机构
+        /// </summary>
+        private string institute;
+        public string Institute
+        {
+            get { return institute; }
+            set
+            {
+                institute = value;
+                RaisePropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 用户手机号
+        /// </summary>
+        private string phoneNumber;
+        public string PhoneNumber
+        {
+            get { return phoneNumber; }
+            set
+            {
+                phoneNumber = value;
+                RaisePropertyChanged();
+            }
+        }
+
         #endregion
 
         //构造函数

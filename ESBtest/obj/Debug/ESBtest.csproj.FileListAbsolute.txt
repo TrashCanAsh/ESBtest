@@ -111,3 +111,5 @@ D:\vs workspace\ESBtest\ESBtest\bin\Debug\MaterialDesignThemes.Wpf.dll
 D:\vs workspace\ESBtest\ESBtest\bin\Debug\MaterialDesignColors.pdb
 D:\vs workspace\ESBtest\ESBtest\bin\Debug\MaterialDesignThemes.Wpf.pdb
 D:\vs workspace\ESBtest\ESBtest\bin\Debug\MaterialDesignThemes.Wpf.xml
+D:\vs workspace\ESBtest\ESBtest\obj\Debug\View\UserInfoView.g.cs
+D:\vs workspace\ESBtest\ESBtest\obj\Debug\View\UserInfoView.baml

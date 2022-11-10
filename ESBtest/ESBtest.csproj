@@ -136,6 +136,7 @@
     <Compile Include="ViewModel\SampleRequestViewModel.cs" />
     <Compile Include="ViewModel\UpdateViewModel.cs" />
     <Compile Include="ViewModel\SigninViewModel.cs" />
+    <Compile Include="ViewModel\UserInfoViewModel.cs" />
     <Compile Include="View\CartView.xaml.cs">
       <DependentUpon>CartView.xaml</DependentUpon>
     </Compile>
@@ -156,6 +157,9 @@
     </Compile>
     <Compile Include="View\SigninView.xaml.cs">
       <DependentUpon>SigninView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\UserInfoView.xaml.cs">
+      <DependentUpon>UserInfoView.xaml</DependentUpon>
     </Compile>
     <Page Include="Style\MyCustomControl.xaml">
       <SubType>Designer</SubType>
@@ -205,6 +209,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\SigninView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\UserInfoView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

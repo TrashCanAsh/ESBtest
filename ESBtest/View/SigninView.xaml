@@ -48,7 +48,7 @@
             <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="210" Grid.Row="4">
                 <materialDesign:PackIcon Foreground="{Binding ElementName=PasswordBoxPasswordCheck, Path=BorderBrush}" Kind="KeyOutline" 
                                          Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <PasswordBox x:Name="PasswordBoxPasswordCheck" Width="160" materialDesign:HintAssist.Hint="确认密码" materialDesign:TextFieldAssist.HasClearButton="True" Style="{StaticResource MaterialDesignRevealPasswordBox}"
+                <PasswordBox x:Name="PasswordBoxPasswordCheck" Width="160" materialDesign:HintAssist.Hint="确认新密码" materialDesign:TextFieldAssist.HasClearButton="True" Style="{StaticResource MaterialDesignRevealPasswordBox}"
                              common:PasswordBoxHelper.Attach="True" common:PasswordBoxHelper.Password="{Binding userModel.PasswordCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
             <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Width="210" Grid.Row="5">

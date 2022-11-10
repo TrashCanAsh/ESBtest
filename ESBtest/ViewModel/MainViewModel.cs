@@ -268,7 +268,7 @@ namespace ESBtest.ViewModel
         private void MenuSampleLend(object w)
         {
             SampleRequestView SampleRequestWindow = new SampleRequestView();
-            if(!GlobalFunc.AdminRight())
+            if (!GlobalFunc.AdminRight())
             {
                 SampleRequestWindow.ToolAdminApproval.Visibility = Visibility.Hidden;
                 SampleRequestWindow.ToolAdminHistory.Visibility = Visibility.Hidden;
@@ -452,7 +452,7 @@ namespace ESBtest.ViewModel
             {
                 UpdateView updateView = new UpdateView();
                 (updateView.DataContext as UpdateViewModel).SampleUpdated = sample;
-                if(!GlobalFunc.AdminRight())
+                if (!GlobalFunc.AdminRight())
                 {
                     updateView.TextBoxSampleID.IsEnabled = false;
                     updateView.TextBoxSampleName.IsEnabled = false;
@@ -478,9 +478,9 @@ namespace ESBtest.ViewModel
         private void AddFavorite(object w)
         {
             List<int> iList = GetSelectedSamples((w as MainView).SampleDataGrid);
-            if(iList.Count>0)
+            if (iList.Count > 0)
             {
-                if(dBControl.InsertIntoFavoriteTable(GlobalValue.CurrentUser.UserID, iList) > 0)
+                if (dBControl.InsertIntoFavoriteTable(GlobalValue.CurrentUser.UserID, iList) > 0)
                 {
                     MessageBox.Show((w as Window), "收藏成功", "提示");
                     RefreshDataGrid((w as MainView).SampleDataGrid);
@@ -512,7 +512,7 @@ namespace ESBtest.ViewModel
         {
             List<int> iList = new List<int>();
             ObservableCollection<SampleModel> sList = (ObservableCollection<SampleModel>)dg.ItemsSource;
-            if(sList != null)
+            if (sList != null)
             {
                 foreach (SampleModel s in sList)
                 {
@@ -573,7 +573,7 @@ namespace ESBtest.ViewModel
             List<int> iList = GetSelectedSamples((w as MainView).SampleDataGrid);
             if (iList.Count > 0)
             {
-                if(FileControl.WriteFile((w as MainView).TextBoxOutputFilePath.Text, dBControl.SearchSample(iList)))
+                if (FileControl.WriteFile((w as MainView).TextBoxOutputFilePath.Text, dBControl.SearchSample(iList)))
                 {
                     MessageBox.Show((w as Window), "导出成功", "提示");
                 }
@@ -604,7 +604,7 @@ namespace ESBtest.ViewModel
         /// <param name="w">DataGrid.SelectedItem</param>
         private void Favorites(object w)
         {
-            if((w as SampleModel).IsFavorited)
+            if ((w as SampleModel).IsFavorited)
             {
                 dBControl.InsertIntoFavoriteTable(GlobalValue.CurrentUser.UserID, (w as SampleModel).SampleID);
             }
@@ -634,8 +634,10 @@ namespace ESBtest.ViewModel
         /// <param name="w"></param>
         private void UserInfo(object w)
         {
-            string str = "用户名称：" + GlobalValue.CurrentUser.Name + "\n用户权限：" + GlobalValue.CurrentUser.UserRight;
-            MessageBox.Show(str, "用户信息");
+            //string str = "用户名：" + GlobalValue.CurrentUser.Name + "\n用户权限：" + GlobalValue.CurrentUser.UserRight;
+            //MessageBox.Show(str, "用户信息");
+            UserInfoView uiv = new UserInfoView();
+            uiv.ShowDialog();
         }
         #endregion 功能命令实现
     }

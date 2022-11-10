@@ -69,6 +69,7 @@ namespace ESBtest.Common
         /// </summary>
         private void sqlDispose()
         {
+            //结束命令和连接
             if (mysqlCmd != null)
             {
                 mysqlCmd.Dispose();
@@ -99,8 +100,8 @@ namespace ESBtest.Common
             {
                 string num = (NumOfLastID("user") + 1).ToString();
                 TryConnection();
-                string sqlcmd = "insert into user (iduser, name, username, password, LOA) values (" + num + ", '" + name + "', '"
-                    + username + "', '" + password + "', 'normal_user')";
+                string sqlcmd = "insert into user (iduser, name, username, password) values (" + num + ", '" + name + "', '"
+                    + username + "', '" + password + "')";
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 //For UPDATE, INSERT, and DELETE statements
                 //返回值为受影响的列数，如果为-1则为操作失败
@@ -133,7 +134,7 @@ namespace ESBtest.Common
                 TryConnection();
                 string sqlcmd = "INSERT INTO samples (idsamples, name, category, samplingtime, longitude, latitude, state, comment) VALUES (" + num + ",'" + name + "','"
                     + category + "','" + samplingTime + "'," + lo + "," + la + "," + state + ",'" + comment + "')";
-                Console.WriteLine(sqlcmd);
+                Console.WriteLine(DateTime.Now.ToString() + sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 return mysqlCmd.ExecuteNonQuery();
             }
@@ -164,7 +165,7 @@ namespace ESBtest.Common
                     sqlcmd += "insert into samples (idsamples, name, category, samplingtime, longitude, latitude, state, comment) values (" + num++ + ",'" + sample.SampleName + "','"
                     + sample.Category + "','" + sample.SamplingDate + "'," + sample.Longitude + "," + sample.Latitude + "," + sample.State + ",'" + sample.Comment + "');\n";
                 }
-                Console.WriteLine(sqlcmd);
+                Console.WriteLine(DateTime.Now.ToString() + sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 return mysqlCmd.ExecuteNonQuery();
             }
@@ -191,7 +192,7 @@ namespace ESBtest.Common
                 string num = (NumOfLastID("userfavorites") + 1).ToString();
                 TryConnection();
                 string sqlcmd = "insert into userfavorites (iduserfavorites, iduser, idsamples) values (" + num + ", " + iduser + ", " + idsamples + ")";
-                Console.WriteLine(sqlcmd);
+                Console.WriteLine(DateTime.Now.ToString() + sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 //For UPDATE, INSERT, and DELETE statements
                 //返回值为受影响的列数，如果为-1则为操作失败
@@ -224,7 +225,7 @@ namespace ESBtest.Common
                 {
                     sqlcmd += "INSERT INTO userfavorites (iduserfavorites, iduser, idsamples) VALUES (" + num++ + "," + iduser + "," + i + ");\n";
                 }
-                Console.WriteLine(sqlcmd);
+                Console.WriteLine(DateTime.Now.ToString() + sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 return mysqlCmd.ExecuteNonQuery();
             }
@@ -251,7 +252,7 @@ namespace ESBtest.Common
                 string num = (NumOfLastID("usercarts") + 1).ToString();
                 TryConnection();
                 string sqlcmd = "insert into usercarts (idusercarts, iduser, idsamples) values (" + num + ", " + iduser + ", " + idsamples + ")";
-                Console.WriteLine(sqlcmd);
+                Console.WriteLine(DateTime.Now.ToString() + sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 //For UPDATE, INSERT, and DELETE statements
                 //返回值为受影响的列数，如果为-1则为操作失败
@@ -284,7 +285,7 @@ namespace ESBtest.Common
                 {
                     sqlcmd += "INSERT INTO usercarts (idusercarts, iduser, idsamples) VALUES (" + num++ + "," + iduser + "," + i + ");\n";
                 }
-                Console.WriteLine(sqlcmd);
+                Console.WriteLine(DateTime.Now.ToString() + sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 return mysqlCmd.ExecuteNonQuery();
             }
@@ -320,7 +321,7 @@ namespace ESBtest.Common
                     sqlcmd += "INSERT INTO samplesrecord (idsamplesrecord, idrecord, iduser, idsamples, requestdate, requestcomment, state) VALUES (" + num++ + "," + idrecord + "," 
                         + userID + "," + s + ",'" + requestDate + "','" + requestcomment + "'," + state + ");\n";
                 }
-                Console.WriteLine(sqlcmd);
+                Console.WriteLine(DateTime.Now.ToString() + sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 return mysqlCmd.ExecuteNonQuery();
             }
@@ -342,15 +343,15 @@ namespace ESBtest.Common
         /// <param name="command"></param>
         /// <param name="datetime"></param>
         /// <returns></returns>
-        public int InsertIntoHistoryTable(string username, int useridentity, string command, string datetime)
+        public int InsertIntoHistoryTable(string command)
         {
             try
             {
                 string num = (NumOfLastID("samples") + 1).ToString();
                 TryConnection();
-                string sqlcmd = "INSERT INTO history (idhistory, username, useridentity, command, datetime) VALUES (" + num + ",'" + username + "','" + useridentity
-                    + "','" + command + "','" + datetime + "')";
-                Console.WriteLine(sqlcmd);
+                string sqlcmd = "INSERT INTO history (idhistory, username, useridentity, command, datetime) VALUES (" + num + ",'" + GlobalValue.CurrentUser.UserName + "','" 
+                    + GlobalValue.CurrentUser.UserRight + "','" + command + "','" + DateTime.Now.ToString() + "')";
+                Console.WriteLine(DateTime.Now.ToString() + sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 return mysqlCmd.ExecuteNonQuery();
             }
@@ -394,7 +395,7 @@ namespace ESBtest.Common
                     }
                 }
                 sqlcmd += ")";
-                Console.WriteLine(sqlcmd);
+                Console.WriteLine(DateTime.Now.ToString() + sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 return mysqlCmd.ExecuteNonQuery();
             }
@@ -435,7 +436,7 @@ namespace ESBtest.Common
                     }
                 }
                 sqlcmd += "))";
-                Console.WriteLine(sqlcmd);
+                Console.WriteLine(DateTime.Now.ToString() + sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 return mysqlCmd.ExecuteNonQuery();
             }
@@ -462,7 +463,7 @@ namespace ESBtest.Common
                 TryConnection();
                 //DELETE FROM table_name WHERE (situation)
                 string sqlcmd = "DELETE FROM userfavorites WHERE ( iduser = " + iduser + " AND idsamples = " + idsamples + " )";
-                Console.WriteLine(sqlcmd);
+                Console.WriteLine(DateTime.Now.ToString() + sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 return mysqlCmd.ExecuteNonQuery();
             }
@@ -503,7 +504,7 @@ namespace ESBtest.Common
                     }
                 }
                 sqlcmd += "))";
-                Console.WriteLine(sqlcmd);
+                Console.WriteLine(DateTime.Now.ToString() + sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 return mysqlCmd.ExecuteNonQuery();
             }
@@ -530,7 +531,7 @@ namespace ESBtest.Common
                 TryConnection();
                 //DELETE FROM table_name WHERE (situation)
                 string sqlcmd = "DELETE FROM usercarts WHERE ( iduser = " + iduser + " AND idsamples = " + idsamples + " )";
-                Console.WriteLine(sqlcmd);
+                Console.WriteLine(DateTime.Now.ToString() + sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 return mysqlCmd.ExecuteNonQuery();
             }
@@ -556,7 +557,7 @@ namespace ESBtest.Common
                 TryConnection();
                 //DELETE FROM table_name WHERE (situation)
                 string sqlcmd = "DELETE FROM usercarts WHERE ( iduser = " + iduser + " )";
-                Console.WriteLine(sqlcmd);
+                Console.WriteLine(DateTime.Now.ToString() + sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 return mysqlCmd.ExecuteNonQuery();
             }
@@ -573,6 +574,60 @@ namespace ESBtest.Common
         #endregion 删
 
         #region 改
+        /// <summary>
+        /// 修改用户个人信息
+        /// </summary>
+        /// <param name="idUser"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public int UpdateUserTable(int idUser, string name, string institute, string phonenumber)
+        {
+            try
+            {
+                TryConnection();
+                //UPDATE table_name SET column_name1 = new_value, column_name2 = new_value, ... WHERE ( situation);
+                string sqlcmd = "UPDATE user SET name = '" + name + "', institute = '" + institute + "', phonenumber = '" + phonenumber + "' WHERE iduser = " + idUser;
+                Console.WriteLine(DateTime.Now.ToString() + sqlcmd);
+                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
+                return mysqlCmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                sqlDispose();
+            }
+            return -1;
+        }
+        /// <summary>
+        /// 修改用户密码
+        /// </summary>
+        /// <param name="idUser"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public int UpdateUserTable(int idUser, string password)
+        {
+            try
+            {
+                TryConnection();
+                //UPDATE table_name SET column_name1 = new_value, column_name2 = new_value, ... WHERE ( situation);
+                string sqlcmd = "UPDATE user SET password = '" + password + "' WHERE iduser = " + idUser;
+                Console.WriteLine(DateTime.Now.ToString() + sqlcmd);
+                mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
+                return mysqlCmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                sqlDispose();
+            }
+            return -1;
+        }
         /// <summary>
         /// 修改某一样品信息
         /// </summary>
@@ -592,7 +647,7 @@ namespace ESBtest.Common
                 //UPDATE table_name SET column_name1 = new_value, column_name2 = new_value, ... WHERE ( situation);
                 string sqlcmd = "UPDATE samples SET name = '" + sampleName + "', category = '" + category + "', samplingtime = '" + samplingTime + 
                     "', longitude = " + longitude + ", latitude = " + latitude + ", state = " + state + ", comment = '" + comment + "' WHERE idsamples = " + sampleID;
-                Console.WriteLine(sqlcmd);
+                Console.WriteLine(DateTime.Now.ToString() + sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 return mysqlCmd.ExecuteNonQuery();
             }
@@ -619,7 +674,7 @@ namespace ESBtest.Common
                 TryConnection();
                 //UPDATE table_name SET column_name1 = new_value, column_name2 = new_value, ... WHERE ( situation);
                 string sqlcmd = "UPDATE samples SET state = " + state + " WHERE idsamples = " + sampleID;
-                Console.WriteLine(sqlcmd);
+                Console.WriteLine(DateTime.Now.ToString() + sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 return mysqlCmd.ExecuteNonQuery();
             }
@@ -718,7 +773,7 @@ namespace ESBtest.Common
                     sqlcmd += ", state = " + State;
                 }
                 sqlcmd += " WHERE (idrecord = " + idRecord + " AND iduser = " + idUser + ")";
-                Console.WriteLine(sqlcmd);
+                Console.WriteLine(DateTime.Now.ToString() + sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 return mysqlCmd.ExecuteNonQuery();
             }
@@ -756,7 +811,7 @@ namespace ESBtest.Common
                     sqlcmd += ", indate = '" + date + "'";
                 }
                 sqlcmd += " WHERE (idrecord = " + idRecord + " AND iduser = " + idUser + ")";
-                Console.WriteLine(sqlcmd);
+                Console.WriteLine(DateTime.Now.ToString() + sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 return mysqlCmd.ExecuteNonQuery();
             }
@@ -856,7 +911,9 @@ namespace ESBtest.Common
                     {
                         UserID = reader.GetInt32(0),
                         Name = reader.GetValue(1).ToString(),
-                        UserName = reader.GetValue(2).ToString()
+                        UserName = reader.GetValue(2).ToString(),
+                        Institute = reader.GetValue(4).ToString(),
+                        PhoneNumber = reader.GetValue(5).ToString(),
                     };
                     return user;
                 }
@@ -1010,7 +1067,7 @@ namespace ESBtest.Common
                 TryConnection();
                 //SELECT * FROM table_name ORDER BY column_name DESC LIMIT 1;
                 string sqlcmd = "select * from " + tablename + " order by id" + tablename + " desc limit 1";
-                Console.WriteLine(sqlcmd);
+                Console.WriteLine(DateTime.Now.ToString() + sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 MySqlDataReader reader = mysqlCmd.ExecuteReader();
                 if(reader.HasRows)
@@ -1048,7 +1105,7 @@ namespace ESBtest.Common
                 TryConnection();
                 string sqlcmd = "select * from samples";
                 
-                Console.WriteLine(sqlcmd);
+                Console.WriteLine(DateTime.Now.ToString() + sqlcmd);
 
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 MySqlDataReader reader = mysqlCmd.ExecuteReader();
@@ -1158,7 +1215,7 @@ namespace ESBtest.Common
                 }
                 
 
-                Console.WriteLine(sqlcmd);
+                Console.WriteLine(DateTime.Now.ToString() + sqlcmd);
 
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 MySqlDataReader reader = mysqlCmd.ExecuteReader();
@@ -1212,7 +1269,7 @@ namespace ESBtest.Common
                     return null;
                 }
                 
-                Console.WriteLine(sqlcmd);
+                Console.WriteLine(DateTime.Now.ToString() + sqlcmd);
 
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 MySqlDataReader reader = mysqlCmd.ExecuteReader();
@@ -1245,7 +1302,7 @@ namespace ESBtest.Common
                 TryConnection();
                 string sqlcmd = "select * from userfavorites where iduser = " + userID;
 
-                Console.WriteLine(sqlcmd);
+                Console.WriteLine(DateTime.Now.ToString() + sqlcmd);
 
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 MySqlDataReader reader = mysqlCmd.ExecuteReader();
@@ -1282,7 +1339,7 @@ namespace ESBtest.Common
                 TryConnection();
                 string sqlcmd = "select * from usercarts where iduser = " + userID;
 
-                Console.WriteLine(sqlcmd);
+                Console.WriteLine(DateTime.Now.ToString() + sqlcmd);
 
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 MySqlDataReader reader = mysqlCmd.ExecuteReader();
@@ -1318,7 +1375,7 @@ namespace ESBtest.Common
                 TryConnection();
                 //SELECT * FROM table_name ORDER BY column_name DESC LIMIT 1;
                 string sqlcmd = "select * from samplesrecord where iduser = " + userID + " order by idrecord desc limit 1 ";
-                Console.WriteLine(sqlcmd);
+                Console.WriteLine(DateTime.Now.ToString() + sqlcmd);
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 MySqlDataReader reader = mysqlCmd.ExecuteReader();
                 if (reader.HasRows)
@@ -1358,7 +1415,7 @@ namespace ESBtest.Common
 
                 string sqlcmd = "SELECT DISTINCT idrecord, user.iduser, user.name, requestdate, requestcomment, approvaldate, admin.name, approvalcomment, state FROM samplesrecord, user, admin WHERE admin.idadmin = samplesrecord.idadmin AND user.iduser = samplesrecord.iduser AND user.iduser = samplesrecord.iduser";
 
-                Console.WriteLine(sqlcmd);
+                Console.WriteLine(DateTime.Now.ToString() + sqlcmd);
 
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 MySqlDataReader reader = mysqlCmd.ExecuteReader();
@@ -1417,7 +1474,7 @@ namespace ESBtest.Common
                 //选中所有“待审批”状态（state = 1）的记录
                 string sqlcmd = "SELECT DISTINCT name, idrecord, user.iduser, requestdate, state FROM samplesrecord, user WHERE samplesrecord.iduser = user.iduser AND samplesrecord.state >= " + start + " AND samplesrecord.state <= " + end;
 
-                Console.WriteLine(sqlcmd);
+                Console.WriteLine(DateTime.Now.ToString() + sqlcmd);
 
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 MySqlDataReader reader = mysqlCmd.ExecuteReader();
@@ -1462,7 +1519,7 @@ namespace ESBtest.Common
                 TryConnection();
                 string sqlcmd = "SELECT DISTINCT idrecord, requestdate, state FROM samplesrecord WHERE iduser = " + iduser;
 
-                Console.WriteLine(sqlcmd);
+                Console.WriteLine(DateTime.Now.ToString() + sqlcmd);
 
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 MySqlDataReader reader = mysqlCmd.ExecuteReader();
@@ -1510,7 +1567,7 @@ namespace ESBtest.Common
                 //select distinct user.name, requestdate, requestcomment, approvaldate, admin.name, approvalcomment, state from samplesrecord, user, admin where user.iduser = 1 and admin.idadmin = 1 and samplesrecord.idrecord = 1;
                 string sqlcmd = "SELECT DISTINCT user.name, requestdate, requestcomment, approvaldate, admin.name, approvalcomment, state FROM samplesrecord, user, admin" +
                     " WHERE user.iduser = " + iduser + " AND samplesrecord.idrecord = " + idrecord + " AND admin.idadmin = samplesrecord.idadmin AND user.iduser = samplesrecord.iduser";
-                Console.WriteLine(sqlcmd);
+                Console.WriteLine(DateTime.Now.ToString() + sqlcmd);
                 SampleRecordModel sr = null;
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 MySqlDataReader reader = mysqlCmd.ExecuteReader();
@@ -1564,7 +1621,7 @@ namespace ESBtest.Common
                 TryConnection();
                 string sqlcmd = "SELECT idsamples FROM samplesrecord WHERE iduser = " + iduser + " AND idrecord = " + idrecord;
 
-                Console.WriteLine(sqlcmd);
+                Console.WriteLine(DateTime.Now.ToString() + sqlcmd);
 
                 mysqlCmd = new MySqlCommand(sqlcmd, mysqlConn);
                 MySqlDataReader reader = mysqlCmd.ExecuteReader();
